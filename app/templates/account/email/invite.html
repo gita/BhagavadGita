@@ -1,0 +1,17 @@
+<p>Dear {{ user.full_name() }},</p>
+
+<p>You are invited to join <b>{{ config.APP_NAME }}</b>!</p>
+
+<p>To set your password, please <a href="{{ invite_link }}">click here</a>.</p>
+
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+
+<p>{{ invite_link }}</p>
+
+<p>Once completed, please log in as {{ user.email }} with the password you set.</p>
+
+<p>Sincerely,</p>
+
+<p>The {{ config.APP_NAME }} Team</p>
+
+<p><small>Note: replies to this email address are not monitored.</small></p>

@@ -1,0 +1,92 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block content %}
+{% set flashes = {
+    'error':   get_flashed_messages(category_filter=['form-error']),
+    'warning': get_flashed_messages(category_filter=['form-check-email']),
+    'info':    get_flashed_messages(category_filter=['form-info']),
+    'success': get_flashed_messages(category_filter=['form-success'])
+} %}
+
+<nav class="breadcrumb" style="margin-top: -2.5rem;">
+<a class="breadcrumb-item" href="/">Home</a>
+<a class="breadcrumb-item" href="/account/manage/apps">All Apps</a>
+<span class="breadcrumb-item active">{{app_name}}</span>
+</nav>
+    <div class="container mt-10" align="center" style="margin-bottom: 2rem;">
+
+      <section class="form-gradient">
+
+          <!--Form with header-->
+          <div class="card" style="width: 23rem;">
+
+              <!--Header-->
+              <div class="header pt-3 peach-gradient">
+
+                  <div class="row d-flex justify-content-center">
+                      <h3 class="white-text mb-3 pt-3 font-bold">{{app_name}}</h3>
+                  </div>
+
+              </div>
+              <!--Header-->
+
+              <div class="card-body mt-4" style="margin-left: 1rem; margin-right: 0.5rem;">
+
+                <p align="left">Client ID</p>
+                <p align="left" style="font-size: 12px;">{{client_id}}</p>
+                <p align="left">Client Secret</p>
+                <p align="left" style="font-size: 12px;">{{client_secret}}</p>
+
+                <hr>
+
+                {{ f.begin_form(form, flashes) }}
+                    <!--Body-->
+                    <div class="md-form">
+                        <p align="left" style="margin-bottom: -1rem;">{{form.application_name.label.text}}</p>
+                        {{ f.render_form_field(form.application_name) }}
+
+                        <p align="left" style="margin-bottom: -0.2rem;">{{form.application_description.label.text}}</p>
+                        {{ f.render_form_field(form.application_description) }}
+
+                        <p align="left" style="margin-bottom: -1rem;">{{form.application_website.label.text}}</p>
+                        {{ f.render_form_field(form.application_website) }}
+
+                        <p align="left" style="margin-bottom: -1rem;">{{form.callback.label.text}}</p>
+                        {{ f.render_form_field(form.callback) }}
+
+                    </div>
+
+
+                    <!--Grid row-->
+                    <div align="center">
+
+                      {{ f.form_message(flashes['error'], header='Something went wrong.', class='danger') }}
+                      {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                      {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                      {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+                      {{ f.render_form_field(form.submit) }}
+                    </div>
+                    <!--Grid row-->
+                   {{ f.end_form(form) }}
+
+              </div>
+
+          </div>
+          <!--/Form with header-->
+
+      </section>
+
+    <style>
+      body {
+        background: #EEEEEE;
+      }
+      a {
+        color: #FFC107;
+      }
+      a:hover {
+        color: #FF9800;
+      }
+    </style>
+{% endblock %}

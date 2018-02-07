@@ -1,0 +1,150 @@
+// Semantic UI breakpoints
+$mobile-breakpoint:        768px;
+$tablet-breakpoint:        992px;
+$small-monitor-breakpoint: 1200px;
+
+// General nav
+nav {
+    margin-bottom: 40px !important;
+}
+
+// Desktop nav
+.ui.fixed.main.menu .right.menu > .item:last-of-type {
+    border-right: 1px solid rgba(34, 36, 38, 0.0980392);
+}
+
+// Mobile nav
+nav .mobile.only.row {
+    .ui.vertical.menu {
+        margin-top: 40px;
+        display: none;
+    }
+}
+
+// Flashes
+.flashes > .ui.message:last-of-type {
+    margin-bottom: 2rem;
+}
+
+// Tables
+table.selectable tr:hover {
+    cursor: pointer !important;
+}
+
+
+/**
+ * @file
+ * Main stylesheet file.
+ */
+
+
+/*****************************************************************************
+ * Main elements
+ ****************************************************************************/
+html {
+  overflow-y: scroll;
+}
+a {
+  cursor: pointer;
+}
+::selection {
+  background: #555;
+  color: #FFF;
+}
+::-moz-selection {
+  background: #555;
+  color: #FFF;
+}
+::-webkit-selection {
+  background: #555;
+  color: #FFF;
+}
+main {
+    margin-top: 3rem;
+}
+/* Main elements end */
+
+
+/*****************************************************************************
+ * Various other styles
+ ****************************************************************************/
+
+ .form-signin {
+   max-width: 330px;
+   padding: 15px;
+   margin: 0 auto;
+ }
+ .form-signin .form-signin-heading,
+ .form-signin .checkbox {
+   margin-bottom: 10px;
+ }
+ .form-signin .checkbox {
+   font-weight: 400;
+ }
+ .form-signin .form-control {
+   position: relative;
+   box-sizing: border-box;
+   height: auto;
+   padding: 10px;
+   font-size: 16px;
+ }
+ .form-signin .form-control:focus {
+   z-index: 2;
+ }
+ .form-signin input[type="email"] {
+   margin-bottom: -1px;
+   border-bottom-right-radius: 0;
+   border-bottom-left-radius: 0;
+ }
+ .form-signin input[type="password"] {
+   margin-bottom: 10px;
+   border-top-left-radius: 0;
+   border-top-right-radius: 0;
+ }
+
+ .invalid-feedback {
+   display: block;
+ }
+
+ .peach-gradient {
+    background: -webkit-linear-gradient(50deg,#ffd86f,#fc6262);
+    background: linear-gradient(40deg,#ffd86f,#fc6262);
+}
+
+.icons-sm {
+    padding: .5rem;
+    margin: .5rem;
+    font-size: 1.2rem;
+}
+
+.justify-content-center {
+    -webkit-box-pack: center!important;
+    -ms-flex-pack: center!important;
+    justify-content: center!important;
+}
+
+.btn-rounded {
+    border-radius: 10em;
+}
+
+.align-items-start {
+    -webkit-box-align: start!important;
+    -ms-flex-align: start!important;
+    align-items: flex-start!important;
+}
+
+.d-flex {
+    display: -webkit-box!important;
+    display: -ms-flexbox!important;
+    display: flex!important;
+}
+
+.form-gradient .font-small {
+    font-size: 0.8rem;
+}
+
+.justify-content-end {
+    -webkit-box-pack: end!important;
+    -ms-flex-pack: end!important;
+    justify-content: flex-end!important;
+}

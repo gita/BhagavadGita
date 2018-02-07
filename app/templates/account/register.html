@@ -1,0 +1,83 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+{% import 'macros/check_password.html' as check %}
+
+{% block content %}
+    <div class="container mt-10" align="center" style="margin-bottom: 2rem;">
+
+      {% set flashes = {
+          'error':   get_flashed_messages(category_filter=['form-error']),
+          'warning': get_flashed_messages(category_filter=['form-check-email']),
+          'info':    get_flashed_messages(category_filter=['form-info']),
+          'success': get_flashed_messages(category_filter=['form-success'])
+      } %}
+
+      <section class="form-gradient">
+
+          <!--Form with header-->
+          <div class="card" style="width: 23rem;">
+
+              <!--Header-->
+              <div class="header pt-3 peach-gradient">
+
+                  <div class="row d-flex justify-content-center">
+                      <h3 class="white-text mb-3 pt-3 font-bold">Create an account</h3>
+                  </div>
+
+                  <div class="row mt-2 mb-3 d-flex justify-content-center">
+                      <!--Facebook-->
+                      <a class="icons-sm fb-ic"><i class="fa fa-facebook white-text fa-lg"> </i></a>
+                      <!--Twitter-->
+                      <a class="icons-sm tw-ic"><i class="fa fa-twitter white-text fa-lg"> </i></a>
+                      <!--Google +-->
+                      <a class="icons-sm gplus-ic"><i class="fa fa-google-plus white-text fa-lg"> </i></a>
+                  </div>
+
+              </div>
+              <!--Header-->
+
+              <div class="card-body mt-4" style="margin-left: 1rem; margin-right: 0.5rem;">
+              {{ f.begin_form(form, flashes) }}
+                  <!--Body-->
+                  <div class="md-form">
+                      {{ f.render_form_field(form.email) }}
+
+                      {{ f.render_form_field(form.first_name) }}
+
+                      {{ f.render_form_field(form.last_name) }}
+                  </div>
+
+                  <div class="md-form pb-1 pb-md-3">
+                      {{ f.render_form_field(form.password) }}
+
+                      {{ f.render_form_field(form.password2) }}
+                  </div>
+
+
+                  <!--Grid row-->
+                  <div align="center">
+
+                    {{ f.form_message(flashes['error'], header='Something went wrong.', class='danger') }}
+                    {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                    {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                    {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+                    <button type="submit" class="btn btn-grey btn-rounded z-depth-1a" value="Register" style="border-radius: 10em;">Register</button>
+                    <p class="font-small grey-text mt-3">Already have an account? <a href="/account/login" class="dark-grey-text ml-1 font-bold"> Log in</a></p>
+
+                  </div>
+                  <!--Grid row-->
+                 {{ f.end_form(form) }}
+              </div>
+
+          </div>
+          <!--/Form with header-->
+          {{ check.password_check('password', 0) }}
+      </section>
+
+    <style>
+      body {
+        background: #EEEEEE;
+      }
+    </style>
+{% endblock %}

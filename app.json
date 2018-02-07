@@ -1,0 +1,30 @@
+{
+  "name": "bhagavad-gita",
+  "description": "",
+  "scripts": {
+    "postdeploy": "python manage.py && python manage.py setup_prod"
+  },
+  "env": {
+    "FLASK_CONFIG": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "generator": "secret"
+    },
+    "MAIL_USERNAME": {
+      "required": true
+    },
+    "MAIL_PASSWORD": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "heroku-postgresql",
+    "redistogo"
+  ],
+  "buildpacks": [
+
+  ]
+}

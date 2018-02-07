@@ -1,0 +1,11 @@
+Dear {{ user.full_name() }},
+
+To confirm your new email address click on the following link:
+
+{{ change_email_link }}
+
+Sincerely,
+
+The {{ config.APP_NAME }} Team
+
+Note: replies to this email address are not monitored.

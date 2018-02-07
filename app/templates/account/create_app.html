@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block content %}
+    <div class="container mt-10" align="center" style="margin-bottom: 2rem;">
+
+      {% set flashes = {
+          'error':   get_flashed_messages(category_filter=['form-error']),
+          'warning': get_flashed_messages(category_filter=['form-check-email']),
+          'info':    get_flashed_messages(category_filter=['form-info']),
+          'success': get_flashed_messages(category_filter=['form-success'])
+      } %}
+
+      <section class="form-gradient">
+
+          <!--Form with header-->
+          <div class="card" style="width: 23rem;">
+
+              <!--Header-->
+              <div class="header pt-3 peach-gradient">
+
+                  <div class="row d-flex justify-content-center">
+                      <h3 class="white-text mb-3 pt-3 font-bold">Create an application</h3>
+                  </div>
+
+              </div>
+              <!--Header-->
+
+              <div class="card-body mt-4" style="margin-left: 1rem; margin-right: 0.5rem;">
+
+                  {{ f.render_form(form) }}
+
+              </div>
+
+          </div>
+          <!--/Form with header-->
+
+      </section>
+
+    <style>
+      body {
+        background: #EEEEEE;
+      }
+    </style>
+{% endblock %}

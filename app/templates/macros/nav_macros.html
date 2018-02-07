@@ -1,0 +1,78 @@
+{# This macro is called on the user dashboards. In this case the administrator dashboard
+   at the route admin.index
+#}
+
+{% macro render_menu_items(endpoints) %}
+    {% for endpoint, name, icon in endpoints %}
+        <a class="nav-item nav-link {% if request.endpoint == endpoint %}active{% endif %}" href="{{ url_for(endpoint) }}">{{ name | safe }}</a>
+    {% endfor %}
+{% endmacro %}
+
+{# This is called for all users (including anonymous users). It renders the basic left side of the
+   navigation bar. In the default case, the left hand side will read 'Flask-Base'. In the logged in
+   admin case, there will also be an item that links to admin/ route. I have added an example use of
+   render_menu_items.
+#}
+
+{% macro header_items(current_user) %}
+    {% set endpoints = [
+      ('main.index', config.APP_NAME, 'home'),
+      ('main.about', 'About', 'info')
+    ]%}
+    {% set user = [] %}
+    {% if current_user.is_authenticated %}
+      {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
+    {% endif %}
+    {{ render_menu_items( endpoints +  user ) }}
+{% endmacro %}
+
+{# This renders the right hand side of the navigation bar. If the user is logged in, it links to
+   manage their account and logout (account routes). Otherwise, it links to register and login.
+#}
+{% macro account_items(current_user) %}
+    {% if current_user.is_authenticated %}
+      {% set endpoints = [
+        ('account.manage', 'Your Account', 'settings'),
+        ('account.logout', 'Log out', 'sign out')
+      ] %}
+      {{ render_menu_items(endpoints) }}
+    {% else %}
+      {% set endpoints = [
+        ('account.register', 'Register', 'list layout'),
+        ('account.login', 'Log In', 'sign in')
+      ] %}
+      {{ render_menu_items(endpoints) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro create_dropdown(dropdown) %}
+  {% for item in dropdown %}
+    {% if item | length == 3 %}
+      {{ render_menu_items([item]) }}
+    {% elif item | length == 2 %}
+      <div class="ui dropdown item" onClick="changeMenu(this)">{{ item[0] }} <i class="dropdown icon"></i>
+        <div class="inverted black menu">
+          {{ create_dropdown(item[1]) }}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro render_nav(current_user, dropdown=[]) %}
+    <nav class="navbar navbar-expand-lg navbar-dark amber">
+      <a class="navbar-brand" href="#">RadhaKrishna</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav mr-auto">
+          {{ header_items(current_user) }}
+          {{ create_dropdown(dropdown) }}
+        </div>
+        <div class="navbar-nav">
+            {{ account_items(current_user) }}
+        </div>
+      </div>
+    </nav>
+{% endmacro %}
