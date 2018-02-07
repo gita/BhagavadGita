@@ -31,7 +31,7 @@ class Config:
     # Email
 
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
-    MAIL_PORT = 25
+    MAIL_PORT = 465
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') or True
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL') or False
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
