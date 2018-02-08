@@ -1,8 +1,14 @@
-from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
+from flask_restful import Resource
 from ...models.verse import VerseModel
 from ...models.chapter import ChapterModel
 from ... import oauth
+from ...schemas.chapter import ChapterSchema
+from ...schemas.verse import VerseSchema
+from flask import jsonify
+
+
+verse_schema = VerseSchema()
+verses_schema = VerseSchema(many=True)
 
 # class Verse(Resource):
 #     parser = reqparse.RequestParser()
@@ -46,7 +52,9 @@ from ... import oauth
 class VerseList(Resource):
     @oauth.require_oauth()
     def get(self):
-        return {'verses': [verse.json() for verse in VerseModel.query.all()]}
+        verses = VerseModel.query.all()
+        result = verses_schema.dump(verses)
+        return jsonify(result.data)
 
 
 class VerseListByChapter(Resource):
@@ -54,7 +62,9 @@ class VerseListByChapter(Resource):
     def get(self, chapter_number):
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
         if chapter:
-            return {'verses': [verse.json() for verse in VerseModel.query.filter_by(chapter_number=chapter_number)]}
+            verses = VerseModel.query.filter_by(chapter_number=chapter_number)
+            result = verses_schema.dump(verses)
+            return jsonify(result.data)
         return {'message': 'Chapter not found'}, 404
 
 
@@ -65,6 +75,7 @@ class VerseByChapter(Resource):
         if chapter:
             verse = VerseModel.find_by_chapter_number_verse_number(chapter_number, verse_number)
             if verse:
-                return verse.json()
+                result = verse_schema.dump(verse)
+                return jsonify(result.data)
             return {'message': 'Verse not found'}, 404
         return {'message': 'Chapter not found'}, 404
