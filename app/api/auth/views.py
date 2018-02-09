@@ -117,10 +117,59 @@ def save_token(token, request, *args, **kwargs):
     return tok
 
 
-@auth.route('/oauth/token', methods=['GET', 'POST'])
+@auth.route('/oauth/token', methods=['POST'])
 @oauth.token_handler
 @csrf.exempt
 def access_token():
+    """
+    Send client credentials and get an access token.
+    ---
+    tags:
+    - auth
+    parameters:
+    - name: client_id
+      in: formData
+      required: 'True'
+      type: 'string'
+      description: "Your app's client_id. Get from API dashboard."
+    - name: client_secret
+      in: formData
+      required: 'True'
+      type: 'string'
+      description: "Your app's client_secret. Get from API dashboard."
+    - name: grant_type
+      in: formData
+      required: 'True'
+      type: 'string'
+      default: 'client_credentials'
+      description: "Grant Type."
+    - name: scope
+      in: formData
+      required: 'True'
+      type: 'string'
+      default: verse chapter
+      description: "The resources that you would like to access."
+    consumes:
+    - application/x-www-form-urlencoded
+    produces:
+    - application/json
+    responses:
+      200:
+        description: 'Success: Everything worked as expected.'
+        examples:
+          - access_token: "cN31b7gClnImuQg8OeMGsUWYGsA0we"
+            token_type: "Bearer"
+            scope: "email"
+      400:
+        description: 'Bad Request: The request was unacceptable due to wrong parameter(s).'
+      401:
+        description: 'Unauthorized: Invalid access_token used.'
+      402:
+        description: 'Request Failed.'
+      500:
+        description: 'Server Error: Something went wrong on our end.'
+
+    """
     return None
 
 
