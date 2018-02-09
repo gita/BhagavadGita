@@ -21,7 +21,7 @@ Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-SSLify==0.1.5
 Flask-WTF==0.11
-functools32==3.2.3.post2
+functools32
 gunicorn==19.6.0
 honcho==0.7.1
 ipaddress==1.0.19
