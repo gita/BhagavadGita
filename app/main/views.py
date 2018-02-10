@@ -1,16 +1,21 @@
-from flask import render_template
-from ..models import EditableHTML
-
+from flask import render_template, jsonify, current_app
+from app.models.verse import VerseModel
+from app.models.chapter import ChapterModel
 from . import main
+from app import db
 
 
 @main.route('/')
 def index():
-    return render_template('main/index.html')
+    chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
+    return render_template('main/index.html', chapters=chapters)
 
 
 @main.route('/about')
 def about():
-    editable_html_obj = EditableHTML.get_editable_html('about')
-    return render_template('main/about.html',
-                           editable_html_obj=editable_html_obj)
+    # chapters = ChapterModel.query.all()
+    # for chapter in chapters:
+    #     chapter.name_english = (chapter.name_english).lstrip("u'").rstrip("'")
+    #     chapter.name_english = '"' + chapter.name_english + '"'
+    # db.session.commit()
+    return "RadhaKrishna"

@@ -8,7 +8,7 @@ from . import admin
 from .. import db
 from ..decorators import admin_required
 from ..email import send_email
-from ..models import Role, User, EditableHTML
+from ..models import Role, User
 
 
 @admin.route('/')
