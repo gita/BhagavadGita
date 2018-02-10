@@ -11,11 +11,18 @@ def index():
     return render_template('main/index.html', chapters=chapters)
 
 
+@main.route('/chapter/<int:chapter_number>')
+def chapter(chapter_number):
+    chapter = ChapterModel.find_by_chapter_number(chapter_number)
+    verses = VerseModel.query.order_by(VerseModel.verse_number).filter_by(chapter_number=chapter_number)
+    return render_template('main/chapter.html', chapter=chapter, verses=verses)
+
+
 @main.route('/about')
 def about():
-    # chapters = ChapterModel.query.all()
-    # for chapter in chapters:
-    #     chapter.name_english = (chapter.name_english).lstrip("u'").rstrip("'")
-    #     chapter.name_english = '"' + chapter.name_english + '"'
+    # verses = VerseModel.query.all()
+    # for verse in verses:
+    #     verse.transliteration = (verse.transliteration).lstrip("u'").rstrip("'")
+    #     verse.transliteration = '"' + verse.transliteration + '"'
     # db.session.commit()
     return "RadhaKrishna"

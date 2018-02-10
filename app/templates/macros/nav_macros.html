@@ -16,7 +16,6 @@
 
 {% macro header_items(current_user) %}
     {% set endpoints = [
-      ('main.index', config.APP_NAME, 'home'),
       ('main.about', 'About', 'info')
     ]%}
     {% set user = [] %}
@@ -60,8 +59,8 @@
 {% endmacro %}
 
 {% macro render_nav(current_user, dropdown=[]) %}
-    <nav class="navbar navbar-expand-lg navbar-dark amber">
-      <a class="navbar-brand" href="#">RadhaKrishna</a>
+    <nav class="navbar navbar-expand-lg navbar-dark amber darken-2">
+      <a class="navbar-brand" href="/"><strong>BHAGAVAD GITA</strong></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
