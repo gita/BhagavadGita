@@ -3,8 +3,6 @@ from .. import db
 class ChapterModel(db.Model):
 
     __tablename__ = 'chapters'
-    __searchable__ = ['name', 'name_transliterated', 'name_transliterated_simple', 'name_english']
-
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)

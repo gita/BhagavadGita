@@ -48,6 +48,12 @@ def create_app(config_name):
     RQ(app)
     api = Api(app)
 
+    import flask_whooshalchemy as wa
+    from app.models.chapter import ChapterModel
+    from app.models.verse import VerseModel
+    wa.whoosh_index(app, VerseModel)
+    wa.whoosh_index(app, ChapterModel)
+
     # Register Jinja template functions
     from .utils import register_template_utils
     register_template_utils(app)
@@ -123,7 +129,7 @@ def create_app(config_name):
     app.add_url_rule('/v1/chapters/<int:chapter_number>/verses', view_func=verse_list_chapter_view)
 
     verse_chapter_view = VerseByChapter.as_view('VerseChapter')
-    app.add_url_rule('/v1/chapters/<int:chapter_number>/verses/<int:verse_number>', view_func=verse_chapter_view)
+    app.add_url_rule('/v1/chapters/<int:chapter_number>/verses/<string:verse_number>', view_func=verse_chapter_view)
 
     chapter_view = Chapter.as_view('Chapter')
     app.add_url_rule('/v1/chapters/<int:chapter_number>', view_func=chapter_view)

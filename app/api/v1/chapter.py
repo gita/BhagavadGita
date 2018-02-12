@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask_restful import Resource
 from ...models.chapter import ChapterModel
 from ... import oauth, csrf
 from ...schemas.chapter import ChapterSchema

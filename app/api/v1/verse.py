@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask_restful import Resource
 from ...models.verse import VerseModel
 from app.models.chapter import ChapterModel
 from ... import oauth, csrf
@@ -171,7 +170,7 @@ class VerseByChapter(SwaggerView):
           description: Which Chapter Number to filter?
         - name: verse_number
           in: path
-          type: int
+          type: string
           enum:
           - 1
           - 2
