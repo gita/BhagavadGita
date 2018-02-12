@@ -8,7 +8,6 @@ from . import main
 from app import db
 
 import sys
-reload(sys)
 sys.setdefaultencoding('utf8')
 
 verse_dict = {

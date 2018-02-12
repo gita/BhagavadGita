@@ -3,7 +3,7 @@
 {% import 'macros/check_password.html' as check %}
 
 {% block content %}
-    <div class="container mt-10" align="center" style="margin-bottom: 2rem;">
+    <div class="container" align="center">
 
       {% set flashes = {
           'error':   get_flashed_messages(category_filter=['form-error']),
@@ -12,7 +12,7 @@
           'success': get_flashed_messages(category_filter=['form-success'])
       } %}
 
-      <section class="form-gradient">
+      <section class="form-gradient" style="margin-top: 3rem;">
 
           <!--Form with header-->
           <div class="card" style="width: 23rem;">
@@ -79,5 +79,9 @@
       body {
         background: #EEEEEE;
       }
+      .peach-gradient {
+         background: -webkit-linear-gradient(50deg,#ffd86f,#fc6262);
+         background: linear-gradient(40deg,#ffd86f,#fc6262);
+     }
     </style>
 {% endblock %}
