@@ -7,8 +7,6 @@ from app.models.chapter import ChapterModel
 from . import main
 from app import db
 
-import sys
-sys.setdefaultencoding('utf8')
 
 verse_dict = {
   1:{
