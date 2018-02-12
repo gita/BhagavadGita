@@ -8,6 +8,12 @@ from . import main
 from app import db
 
 
+import sys
+if sys.version_info[0] < 3:
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
+
 verse_dict = {
   1:{
     4:"4-6",
