@@ -67,7 +67,7 @@ class Config:
     RQ_DEFAULT_PASSWORD = url.password
     RQ_DEFAULT_DB = 0
 
-    WHOOSH_BASE = 'search'
+    WHOOSH_BASE = 'bhagavadgitasearch'
 
     @staticmethod
     def init_app(app):

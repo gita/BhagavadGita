@@ -170,10 +170,8 @@ def index():
 
 @main.route('/search')
 def search():
-    chapter = ChapterModel.find_by_chapter_number(1)
-    chapters = ChapterModel.query.whoosh_search(request.args.get('query')).all()
     verses = VerseModel.query.whoosh_search(request.args.get('query')).all()
-    return render_template('main/chapter.html', chapter=chapter, verses=verses)
+    return render_template('main/search.html', verses=verses, query=request.args.get('query'))
 
 
 @main.route('/chapter/<int:chapter_number>')
