@@ -48,7 +48,7 @@ def create_app(config_name):
     RQ(app)
     api = Api(app)
 
-    import flask_whooshalchemy as wa
+    import app.flask_whooshalchemy as wa
     from app.models.chapter import ChapterModel
     from app.models.verse import VerseModel
     wa.whoosh_index(app, VerseModel)
