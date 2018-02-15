@@ -59,6 +59,7 @@
                       <div class="text-center">
                           <input type="text" name="verse-number" value=""/>
                           <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
+                          <a class="btn btn-warning btn-rounded waves-effect waves-light" id="shareFacebook">RadhaKrishna</a>
                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit iusto nulla aperiam blanditiis ad consequatur in dolores culpa, dignissimos, eius non possimus fugiat. Esse ratione fuga, enim,
                               ab officiis totam.</p>
                       </div>
@@ -153,9 +154,27 @@ a.waves-effect, a.waves-light {
     line-height: 47px;
     text-align: center;
 }
+.modal-dialog.modal-notify.modal-warning .modal-header {
+    background-color: #FDB22B;
+}
+.modal-header {
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
   </style>
 
   <script>
+  $(document).ready(function() {
+    $.ajaxSetup({ cache: true });
+    $.getScript('https://connect.facebook.net/en_US/sdk.js', function(){
+      FB.init({
+        appId: '145393166088568',
+        version: 'v2.7' // or v2.1, v2.2, v2.3, ...
+      });
+      $('#loginbutton,#feedbutton').removeAttr('disabled');
+    });
+  });
+
   $('a').tooltip({
     trigger: 'click',
     placement: 'bottom'
@@ -188,6 +207,13 @@ a.waves-effect, a.waves-light {
     $('#radhakrishna').on('show.bs.modal', function(e) {
         var verse_number = $(e.relatedTarget).data('verse_number');
         $(e.currentTarget).find('input[name="verse-number"]').val(verse_number);
+    });
+
+    $('#shareFacebook').click(function(){
+      FB.ui({
+        method: 'share',
+        href: 'https://developers.facebook.com/docs/',
+      }, function(response){});
     });
   </script>
 {% endblock %}

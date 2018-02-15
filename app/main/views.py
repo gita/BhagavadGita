@@ -201,12 +201,20 @@ def chapter(chapter_number):
 def verse(chapter_number, verse_number):
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
     verse = VerseModel.find_by_chapter_number_verse_number(chapter_number, verse_number)
+    max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
+    previous_verse_number = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number).first().verse_number
+    # if verse_number==max_verse_number:
+    #     next_verse_number = 0
+    #     previous_verse_number = verse_number - 1
+    # else:
+    #     next_verse_number = verse_number + 1
+    #     previous_verse_number = verse_number - 1
     # word_meanings = verse.word_meanings
     # word_meaning = word_meanings.split(';')
     # for meaning in word_meaning:
     #     hanuman = meaning.partition("—")[0]
     #     current_app.logger.info(hanuman)
-    return render_template('main/verse.html', chapter=chapter, verse=verse)
+    return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse_number=next_verse_number, previous_verse_number=previous_verse_number)
 
 
 @main.route('/about')

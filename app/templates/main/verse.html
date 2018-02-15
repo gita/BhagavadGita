@@ -15,24 +15,27 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="card amber darken-1 text-center z-depth-2 h-100">
+        <div class="card orange lighten-3 text-center z-depth-2 h-100">
           <div class="card-body">
               <h4 class="font-up font-bold mt-2 mb-3"><strong>BG - Chapter {{verse.chapter_number}}, Verse {{verse.verse_number}}</strong></h4>
               <hr>
               <div class="sanskrit-text" align="center" style="margin-bottom: -5rem;">
                 <p style="font-size: 1.5rem;"><b>{{verse.text  | replace('"', "")}}</b></p>
               </div>
-              <div class="transliteration" align="center" style="margin-bottom: -5rem;">
-                <p style="font-size: 1rem;"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
+              <div class="transliteration" align="center" style="margin-bottom: -5rem; font-family: Noto Serif;">
+                <p style="font-size: 1.2rem;"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
               </div>
-              <div class="word-meanings" align="center" style="margin-bottom: -1rem;">
-                <p style="font-size: 1rem;"><i>dhṛtarāṣṭraḥ uvāca — King Dhṛtarāṣṭra said; dharma-kṣetre — in the place of pilgrimage; kuru-kṣetre — in the place named Kurukṣetra; samavetāḥ — assembled; yuyutsavaḥ — desiring to fight; māmakāḥ — my party (sons); pāṇḍavāḥ — the sons of Pāṇḍu; ca — and; eva — certainly; kim — what; akurvata — did they do; sañjaya — O Sañjaya.</i></p>
+              <div class="word-meanings" align="center" style="margin-bottom: -1rem; font-family: Noto Serif;">
+                <p style="font-size: 1.2rem;"><i>dhṛtarāṣṭraḥ uvāca — King Dhṛtarāṣṭra said; dharma-kṣetre — in the place of pilgrimage; kuru-kṣetre — in the place named Kurukṣetra; samavetāḥ — assembled; yuyutsavaḥ — desiring to fight; māmakāḥ — my party (sons); pāṇḍavāḥ — the sons of Pāṇḍu; ca — and; eva — certainly; kim — what; akurvata — did they do; sañjaya — O Sañjaya.</i></p>
               </div>
               <h4><b><u>Translation</u></b></h4>
               <div class="meaning_english" align="center" style="margin-bottom: -5rem; margin-top: -2rem;">
                 <p style="font-size: 1rem;"><b>{{verse.meaning_english  | replace('"', "")}}</b></p>
               </div>
               <br>
+              <p></p>
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse_number}}" style="float: left;"><i class="fa fa-arrow-left"></i> PREVIOUS VERSE</a>
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse_number}}" style="float: right;">NEXT VERSE <i class="fa fa-arrow-right"></i></a>
           </div>
         </div>
       </div>

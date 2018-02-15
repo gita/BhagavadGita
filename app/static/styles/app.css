@@ -1,177 +1,166 @@
-@media -sass-debug-info{filename{}line{font-family:\000037}}
-.ui.fixed.main.menu .right.menu > .item:last-of-type {
-  border-right: 1px solid rgba(34, 36, 38, 0.0980392);
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000313}}
-nav .mobile.only.row .ui.vertical.menu {
-  margin-top: 40px;
-  display: none;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000320}}
-.flashes > .ui.message:last-of-type {
-  margin-bottom: 2rem;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000325}}
-table.selectable tr:hover {
-  cursor: pointer !important;
-}
-
-/**
- * @file
- * Main stylesheet file.
- */
-/*****************************************************************************
- * Main elements
- ****************************************************************************/
-@media -sass-debug-info{filename{}line{font-family:\0000339}}
-html {
-  overflow-y: scroll;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000342}}
-a {
-  cursor: pointer;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000345}}
-::selection {
-  background: #555;
-  color: #FFF;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000349}}
-::-moz-selection {
-  background: #555;
-  color: #FFF;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000353}}
-::-webkit-selection {
-  background: #555;
-  color: #FFF;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000357}}
-main {
-  margin-top: 3rem;
-}
-
-/* Main elements end */
-/*****************************************************************************
- * Various other styles
- ****************************************************************************/
-@media -sass-debug-info{filename{}line{font-family:\0000367}}
-.form-signin {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000372}}
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 10px;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000376}}
-.form-signin .checkbox {
-  font-weight: 400;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000379}}
-.form-signin .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000386}}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000389}}
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\0000394}}
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003100}}
-.invalid-feedback {
-  display: block;
-}
-
-
-@media -sass-debug-info{filename{}line{font-family:\00003109}}
-.icons-sm {
-  padding: .5rem;
-  margin: .5rem;
-  font-size: 1.2rem;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003115}}
-.justify-content-center {
-  -webkit-box-pack: center !important;
-  -ms-flex-pack: center !important;
-  justify-content: center !important;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003125}}
-.align-items-start {
-  -webkit-box-align: start !important;
-  -ms-flex-align: start !important;
-  align-items: flex-start !important;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003131}}
-.d-flex {
-  display: -webkit-box !important;
-  display: -ms-flexbox !important;
-  display: flex !important;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003137}}
-.form-gradient .font-small {
-  font-size: 0.8rem;
-}
-
-@media -sass-debug-info{filename{}line{font-family:\00003141}}
-.justify-content-end {
-  -webkit-box-pack: end !important;
-  -ms-flex-pack: end !important;
-  justify-content: flex-end !important;
-}
-
-
-.btn.krishna-gradient {
-  background: -webkit-linear-gradient(50deg, #FF5722, #FFC107)!important;
-  background: linear-gradient(40deg, #FF5722, #FFC107)!important;
-    -webkit-transition: .5s ease;
-    transition: .5s ease;
+@media -sass-debug-info{filename{}line{font-family:\0000312}}
+.ui.fixed.main.menu .right.menu > .item:last-of-type {
+  border-right: 1px solid rgba(34, 36, 38, 0.0980392);
 }
 
+@media -sass-debug-info{filename{}line{font-family:\0000318}}
+nav .mobile.only.row .ui.vertical.menu {
+  margin-top: 40px;
+  display: none;
+}
 
-.waves-effect {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    z-index: 1;
+@media -sass-debug-info{filename{}line{font-family:\0000325}}
+.flashes > .ui.message:last-of-type {
+  margin-bottom: 2rem;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000330}}
+table.selectable tr:hover {
+  cursor: pointer !important;
+}
+
+/**
+ * @file
+ * Main stylesheet file.
+ */
+/*****************************************************************************
+ * Main elements
+ ****************************************************************************/
+@media -sass-debug-info{filename{}line{font-family:\0000344}}
+html {
+  overflow-y: scroll;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000347}}
+a {
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000350}}
+::selection {
+  background: #555;
+  color: #FFF;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000354}}
+::-moz-selection {
+  background: #555;
+  color: #FFF;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000358}}
+::-webkit-selection {
+  background: #555;
+  color: #FFF;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000362}}
+main {
+  margin-top: 3rem;
+}
+
+/* Main elements end */
+/*****************************************************************************
+ * Various other styles
+ ****************************************************************************/
+@media -sass-debug-info{filename{}line{font-family:\0000372}}
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000377}}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000381}}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000384}}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000391}}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000394}}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000399}}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003105}}
+.invalid-feedback {
+  display: block;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003109}}
+.krishna-gradient {
+  background: -webkit-linear-gradient(50deg, #F57C00, #FFC107);
+  background: linear-gradient(40deg, #F57C00, #FFC107);
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003114}}
+.icons-sm {
+  padding: .5rem;
+  margin: .5rem;
+  font-size: 1.2rem;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003120}}
+.justify-content-center {
+  -webkit-box-pack: center !important;
+  -ms-flex-pack: center !important;
+  justify-content: center !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003126}}
+.btn-rounded {
+  border-radius: 10em;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003130}}
+.align-items-start {
+  -webkit-box-align: start !important;
+  -ms-flex-align: start !important;
+  align-items: flex-start !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003136}}
+.d-flex {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003142}}
+.form-gradient .font-small {
+  font-size: 0.8rem;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003146}}
+.justify-content-end {
+  -webkit-box-pack: end !important;
+  -ms-flex-pack: end !important;
+  justify-content: flex-end !important;
 }

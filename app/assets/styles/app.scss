@@ -4,9 +4,9 @@ $tablet-breakpoint:        992px;
 $small-monitor-breakpoint: 1200px;
 
 // General nav
-nav {
-    margin-bottom: 40px !important;
-}
+// nav {
+//     margin-bottom: 40px !important;
+// }
 
 // Desktop nav
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
@@ -106,9 +106,9 @@ main {
    display: block;
  }
 
- .peach-gradient {
-    background: -webkit-linear-gradient(50deg,#ffd86f,#fc6262);
-    background: linear-gradient(40deg,#ffd86f,#fc6262);
+ .krishna-gradient {
+    background: -webkit-linear-gradient(50deg,#F57C00,#FFC107);
+    background: linear-gradient(40deg,#F57C00,#FFC107);
 }
 
 .icons-sm {

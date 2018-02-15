@@ -4,6 +4,7 @@ var tabletBreakpoint = '992px';
 var smallMonitorBreakpoint = '1200px';
 
 $(document).ready(function () {
+
   // Enable dismissable flash messages
   $('.message .close').on('click', function () {
     $(this).closest('.message').transition('fade');
@@ -43,14 +44,14 @@ $(document).ready(function () {
 })(jQuery);
 
 
-// mobile dropdown menu state change 
-// This code is used for modeling the state of the mobile dropdown menu. 
+// mobile dropdown menu state change
+// This code is used for modeling the state of the mobile dropdown menu.
 // When a mobile menu item with a dropdown is touched, the changeMenu function
 // is called. It gets all the children of the dropdown and stores them as the
 // children variable. During this time, the state of the dropdown menu is saved
 // into the currentState array for later. A 'back' item that has an onclick attr
 // calling the back() function is appended to the children variable and the
-// html of the mobile dropdown is set to the children variable. 
+// html of the mobile dropdown is set to the children variable.
 // If the back button is clicked, we get the parent menu of the submenu by popping
 // the currentState variable.
 
