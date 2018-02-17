@@ -174,6 +174,24 @@ def search():
     return render_template('main/search.html', verses=verses, query=request.args.get('query'))
 
 
+@main.route('/chapter-numbers')
+def get_all_chapter_numbers():
+    chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
+    chapter_numbers = {}
+    for chapter in chapters:
+        chapter_numbers[chapter.chapter_number] = "Chapter " + str(chapter.chapter_number)
+    return jsonify(chapter_numbers)
+
+
+@main.route('/verse-numbers/<int:chapter_number>')
+def get_all_verse_numbers(chapter_number):
+    verses = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number)
+    verse_numbers = {}
+    for verse in verses:
+        verse_numbers[verse.verse_order] = "Verse " + str(verse.verse_number)
+    return jsonify(verse_numbers)
+
+
 @main.route('/chapter/<int:chapter_number>')
 def chapter(chapter_number):
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
@@ -202,19 +220,23 @@ def verse(chapter_number, verse_number):
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
     verse = VerseModel.find_by_chapter_number_verse_number(chapter_number, verse_number)
     max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
-    previous_verse_number = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number).first().verse_number
-    # if verse_number==max_verse_number:
-    #     next_verse_number = 0
-    #     previous_verse_number = verse_number - 1
-    # else:
-    #     next_verse_number = verse_number + 1
-    #     previous_verse_number = verse_number - 1
+
+    if verse_number==max_verse_number:
+        next_verse = None
+        previous_verse_order = verse.verse_order - 1
+        previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+    else:
+        next_verse_order = verse.verse_order + 1
+        previous_verse_order = verse.verse_order - 1
+        previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+        next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
+
     # word_meanings = verse.word_meanings
     # word_meaning = word_meanings.split(';')
     # for meaning in word_meaning:
     #     hanuman = meaning.partition("—")[0]
     #     current_app.logger.info(hanuman)
-    return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse_number=next_verse_number, previous_verse_number=previous_verse_number)
+    return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse)
 
 
 @main.route('/about')

@@ -6,7 +6,7 @@
       <div class="text-white text-center d-flex align-items-center">
         <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
           <h1 class="card-title pt-3 mb-5 font-bold">BHAGAVAD GITA</h1>
-          <a class="btn krishna-gradient btn-rounded waves-effect waves-light">Explore</a>
+          <a class="btn krishna-gradient btn-rounded waves-effect waves-light" href="#bg-1">Explore</a>
         </div>
       </div>
     </div>
@@ -16,11 +16,30 @@
     <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
       <h3>Chapters</h3>
     </div>
+
+    <br>
+
+    <div data-direction="horizontal" align="center" style="color: #757575;">
+      <h6>Go To Verse</h6>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-3" style="margin-bottom: 1rem;">
+        <select class="js-example-basic-single" id="chapters" name="state" style="width: 100%;">
+          <option value="0" disabled="true" selected="true">Select Chapter</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="js-example-basic-single" id="verses" name="state" style="width: 100%;">
+          <option value="0" disabled="true" selected="true">Select Verse</option>
+        </select>
+      </div>
+    </div>
+
     <hr>
     <div class="row">
       {% for chapter in chapters %}
       <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
-        <div class="card h-100">
+        <div class="card h-100" id="bg-{{chapter.chapter_number}}">
           <div class="view overlay hm-white-slight">
               <img src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_english | replace('"', "")}}">
               <a>
@@ -118,5 +137,150 @@ a.waves-effect, a.waves-light {
     line-height: 47px;
     text-align: center;
 }
-  </style>
+
+.select2 .selection .select2-selection--single, .select2-container--default .select2-search--dropdown .select2-search__field {
+    border-width: 0 0 1px 0 !important;
+    border-radius: 0 !important;
+    height: 2.05rem;
+}
+
+.select2-container--default .select2-selection--multiple, .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-width: 0 0 1px 0 !important;
+    border-radius: 0 !important;
+}
+
+.select2-results__option {
+    color: #66bb6a;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #eee !important;
+    color: #66bb6a !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #e1e1e1 !important;
+}
+
+.select2-dropdown {
+    border: none !important;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.select2-container--default .select2-results__option[role=group] .select2-results__group {
+    background-color: #333333;
+    color: #fff;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+    margin-top: 0 !important;
+}
+
+.select2-container .select2-search--inline .select2-search__field:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.select2-container .select2-selection--multiple {
+    min-height: 2.05rem !important;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #ddd !important;
+    color: rgba(0,0,0,0.26);
+    border-bottom: 1px dotted rgba(0,0,0,0.26);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    color: #FF9800 !important;
+}
+
+.select2-results__option {
+    color: #FF9800;
+}
+
+input[type=search]:not(.browser-default):focus:not([readonly]) {
+  border-bottom: 1px solid #FF9800;
+  box-shadow: 0 1px 0 0 #FF9800;
+}
+
+</style>
+
+<script>
+  $(document).ready(function() {
+      $('.js-example-basic-single').select2();
+
+      var chapters = $('#chapters');
+
+      axios.get('/chapter-numbers')
+      .then(function (response) {
+        for (const [key, value] of Object.entries(response.data)) {
+          var option = $("<option></option>").
+               attr('selected', false).
+               text(value).
+               val(key);
+          option.appendTo(chapters);
+        }
+        chapters.trigger('change');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      var select2Options = { width: 'resolve' };
+      var apiUrl = '/verse-numbers/:parentId:';
+
+      $('select').select2(select2Options);
+      var cascadLoading = new Select2Cascade($('#chapters'), $('#verses'), apiUrl, select2Options);
+      cascadLoading.then( function(parent, child, items) {
+      });
+
+      $('#verses').on("change", function (e) {
+        var chapter_number = $( "#chapters option:selected" ).val()
+        verse = $( "#verses option:selected" ).text()
+        var verse_number = verse.replace("Verse ", "")
+        window.location.href = "/chapter/" + chapter_number + "/verse/" + verse_number;
+      })
+
+  });
+
+  var Select2Cascade = ( function(window, $) {
+
+      function Select2Cascade(parent, child, url, select2Options) {
+          var afterActions = [];
+          var options = select2Options || {};
+
+          // Register functions to be called after cascading data loading done
+          this.then = function(callback) {
+              afterActions.push(callback);
+              return this;
+          };
+
+          parent.select2(select2Options).on("change", function (e) {
+
+              child.prop("disabled", true);
+              var _this = this;
+
+              $.getJSON(url.replace(':parentId:', $(this).val()), function(items) {
+                  var newOptions = '<option value="">-- Select --</option>';
+                  for(var id in items) {
+                      newOptions += '<option value="'+ id +'">'+ items[id] +'</option>';
+                  }
+
+                  child.select2('destroy').html(newOptions).prop("disabled", false)
+                      .select2(options);
+
+                  afterActions.forEach(function (callback) {
+                      callback(parent, child, items);
+                  });
+              });
+          });
+      }
+
+      return Select2Cascade;
+
+  })( window, $);
+</script>
 {% endblock %}

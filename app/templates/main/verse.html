@@ -1,41 +1,63 @@
 {% extends 'layouts/base.html' %}
+{% block title %}RadhaKrishna{% endblock %}
+
+{% block meta_tags %}
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="{{ config.APP_NAME }}" />
+        <meta property="og:url" content="https://bhagavadgita.io{{request.path}}" />
+        <meta property="og:site_name" content="Hanuman Chalisa | All About Hanuman" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Home - Hanuman Chalisa | All About Hanuman" />
+{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <div class="container">
-      <div class="text-white text-center d-flex align-items-center">
-        <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
-          <h1 class="card-title pt-3 mb-5 font-bold">BHAGAVAD GITA</h1>
-          <a class="btn krishna-gradient btn-rounded waves-effect waves-light">Explore</a>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="container">
+  <div class="container" style="margin-top: 2rem;">
     <div class="row">
       <div class="col-md-12">
         <div class="card orange lighten-3 text-center z-depth-2 h-100">
           <div class="card-body">
               <h4 class="font-up font-bold mt-2 mb-3"><strong>BG - Chapter {{verse.chapter_number}}, Verse {{verse.verse_number}}</strong></h4>
               <hr>
-              <div class="sanskrit-text" align="center" style="margin-bottom: -5rem;">
+              <div class="sanskrit-text" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1.5rem;"><b>{{verse.text  | replace('"', "")}}</b></p>
               </div>
-              <div class="transliteration" align="center" style="margin-bottom: -5rem; font-family: Noto Serif;">
+              <h4><b><u>Transliteration</u></b></h4>
+              <div class="transliteration" align="center" style="font-family: Noto Serif;">
                 <p style="font-size: 1.2rem;"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
               </div>
-              <div class="word-meanings" align="center" style="margin-bottom: -1rem; font-family: Noto Serif;">
+              <h4><b><u>Word Meanings</u></b></h4>
+              <div class="word-meanings" align="center" style="font-family: Noto Serif;">
                 <p style="font-size: 1.2rem;"><i>dhṛtarāṣṭraḥ uvāca — King Dhṛtarāṣṭra said; dharma-kṣetre — in the place of pilgrimage; kuru-kṣetre — in the place named Kurukṣetra; samavetāḥ — assembled; yuyutsavaḥ — desiring to fight; māmakāḥ — my party (sons); pāṇḍavāḥ — the sons of Pāṇḍu; ca — and; eva — certainly; kim — what; akurvata — did they do; sañjaya — O Sañjaya.</i></p>
               </div>
               <h4><b><u>Translation</u></b></h4>
-              <div class="meaning_english" align="center" style="margin-bottom: -5rem; margin-top: -2rem;">
+              <div class="meaning_english" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1rem;"><b>{{verse.meaning_english  | replace('"', "")}}</b></p>
               </div>
               <br>
               <p></p>
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse_number}}" style="float: left;"><i class="fa fa-arrow-left"></i> PREVIOUS VERSE</a>
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse_number}}" style="float: right;">NEXT VERSE <i class="fa fa-arrow-right"></i></a>
+              {% if previous_verse != None %}
+                <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> PREVIOUS VERSE</a>
+              {% else %}
+                {% set previous_chapter = chapter.chapter_number - 1 %}
+                {% if previous_chapter == 0 %}
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> ALL CHAPTERS</a>
+                {% else %}
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> PREVIOUS CHAPTER</a>
+                {% endif %}
+              {% endif %}
+
+              {% if next_verse != None %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">NEXT VERSE <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+              {% else %}
+                {% set next_chapter = chapter.chapter_number + 1 %}
+                {% if next_chapter == 18 %}
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.13rem;">ALL CHAPTERS <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                {% else %}
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">NEXT CHAPTER <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                {% endif %}
+              {% endif %}
           </div>
         </div>
       </div>

@@ -3,13 +3,19 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="charset" content="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <title>{% block title %}{{config.APP_NAME}}{% endblock %}</title>
+        <link rel="shortcut icon" href="/static/images/radhakrishna.png" />
+
+        {% block meta_tags %}{% endblock %}
         {% include 'partials/_head.html' %}
         {# Any templates that extend this template can set custom_head_tags to add scripts to their page #}
         {% block custom_head_tags %}{% endblock %}
     </head>
     <body>
       {# Example dropdown menu setup. Uncomment lines to view
-        {% set dropdown = 
+        {% set dropdown =
           [
             ('account stuff',
               [
