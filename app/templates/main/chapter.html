@@ -12,7 +12,10 @@
 {% endblock %}
 
 {% block content %}
-
+  <nav class="breadcrumb">
+    <a class="breadcrumb-item" href="/">Home</a>
+    <span class="breadcrumb-item active">Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}</span>
+  </nav>
   <div class="container" style="margin-top: 2rem;">
     <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
       <h2><b>Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}</b></h2>

@@ -12,7 +12,11 @@
 {% endblock %}
 
 {% block content %}
-
+  <nav class="breadcrumb">
+    <a class="breadcrumb-item" href="/">Home</a>
+    <a class="breadcrumb-item" href="/chapter/{{chapter.chapter_number}}">Chapter {{chapter.chapter_number}}</a>
+    <span class="breadcrumb-item active">Verse {{verse.verse_number}}</span>
+  </nav>
   <div class="container" style="margin-top: 2rem;">
     <div class="row">
       <div class="col-md-12">
