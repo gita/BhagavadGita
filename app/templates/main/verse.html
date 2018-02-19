@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %}RadhaKrishna{% endblock %}
+{% block title %} {{config.APP_NAME}} Chapter 1 Verse {{verse.verse_number}} - BhagavadGita.io {% endblock %}
 
 {% block meta_tags %}
         <meta property="og:locale" content="en_US" />
@@ -36,6 +36,7 @@
                 <p style="font-size: 1.2rem;"><i>dhṛtarāṣṭraḥ uvāca — King Dhṛtarāṣṭra said; dharma-kṣetre — in the place of pilgrimage; kuru-kṣetre — in the place named Kurukṣetra; samavetāḥ — assembled; yuyutsavaḥ — desiring to fight; māmakāḥ — my party (sons); pāṇḍavāḥ — the sons of Pāṇḍu; ca — and; eva — certainly; kim — what; akurvata — did they do; sañjaya — O Sañjaya.</i></p>
               </div>
               <h4><b><u>Translation</u></b></h4>
+              <br>
               <div class="meaning_english" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1rem;"><b>{{verse.meaning_english  | replace('"', "")}}</b></p>
               </div>

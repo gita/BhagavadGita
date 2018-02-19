@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %} {{config.APP_NAME}} Chapter 1 - {{chapter.name_english | replace('"', "")}} {% endblock %}
+{% block title %} {{config.APP_NAME}} Chapter 1 - {{chapter.name_english | replace('"', "")}} - BhagavadGita.io{% endblock %}
 
 {% block meta_tags %}
         <meta property="og:locale" content="en_US" />
@@ -22,6 +22,8 @@
       <br>
       <h3>{{chapter.name_english | replace('"', "")}}</h3>
     </div>
+    <br>
+    <p>{{chapter.chapter_summary | replace('"', "")}}</p>
     <br>
     <div data-direction="horizontal" align="center" style="color: #757575;">
       <h6>Go To Verse</h6>

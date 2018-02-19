@@ -1,4 +1,55 @@
 {% extends 'layouts/base.html' %}
+{% block title %}Bhagavad Gita - Free Searchable Online Bhagavad Gita{% endblock %}
+
+{% block meta_tags %}
+        <meta name="description" content="Read, study and recite the Bhagavad Gita Online in a simple, beautiful and easy to use interface. Bhagavad Gita - "The Song of The Lord" is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)." />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Bhagavad Gita - Free Searchable Online Bhagavad Gita" />
+        <meta property="og:description" content="Read, study and recite the Bhagavad Gita Online in a simple, beautiful and easy to use interface. Bhagavad Gita - "The Song of The Lord" is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)." />
+        <meta property="og:url" content="https://bhagavadgita.io{{request.path}}" />
+        <meta property="og:site_name" content="Bhagavad Gita" />
+        <meta property="og:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Bhagavad Gita - Free Searchable Online Bhagavad Gita" />
+        <meta name="twitter:description" content="Read, study and recite the Bhagavad Gita Online in a simple, beautiful and easy to use interface. Bhagavad Gita - "The Song of The Lord" is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)." />
+        <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+
+        <meta name="google-site-verification" content="FafB0VlsAZd51s-bIT0hsgtAY9xdb8PNxCNQ9tsqDqE">
+        <meta name="p:domain_verify" content="86b9068ad74e4daa8e1c5e4760021cb0">
+        <meta name="msvalidate.01" content="0451A734F7E9BD838957319E106DE363">
+
+        <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Organization","@id":"#organization","name":"Bhagavad Gita","url":"https:\/\/bhagavadgita.io","logo":"https:\/\/bhagavadgita.io\/static\/images\/radhakrishna.png"}</script>
+        <script type="application/ld+json">
+          {
+            "@context": "http://schema.org",
+            "@type": "WebSite",
+            "@id": "#website",
+            "name": "Bhagavad Gita - Free Searchable Online Bhagavad Gita",
+            "url": "https://bhagavadgita.io",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://bhagavadgita.io/search?query={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          }
+        </script>
+        <script type="application/ld+json">{
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": {
+                        "@id": "https://bhagavadgita.io",
+                        "name": "Home"
+                    }
+                }
+            ]
+        }
+        </script>
+{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
@@ -6,7 +57,7 @@
       <div class="text-white text-center d-flex align-items-center">
         <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
           <h1 class="card-title pt-3 mb-5 font-bold">BHAGAVAD GITA</h1>
-          <a class="btn krishna-gradient btn-rounded waves-effect waves-light" href="#bg-1">Explore</a>
+          <a class="btn btn-warning krishna-gradient btn-rounded waves-effect waves-light" href="#bg-1">Explore</a>
         </div>
       </div>
     </div>

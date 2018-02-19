@@ -14,9 +14,10 @@ class ChapterModel(db.Model):
     chapter_number = db.Column(db.Integer)
     name_english = db.Column(db.String)
     image_name = db.Column(db.String)
+    chapter_summary = db.Column(db.String)
     verses = db.relationship('VerseModel', lazy='dynamic')
 
-    def __init__(self, name, name_transliterated, name_transliterated_simple, verses_count, chapter_number, name_english, image_name):
+    def __init__(self, name, name_transliterated, name_transliterated_simple, verses_count, chapter_number, name_english, image_name, chapter_summary):
         self.name = name
         self.name_transliterated = name_transliterated
         self.name_transliterated_simple = name_transliterated_simple
@@ -24,6 +25,7 @@ class ChapterModel(db.Model):
         self.chapter_number = chapter_number
         self.name_english = name_english
         self.image_name = image_name
+        self.chapter_summary = chapter_summary
 
     def json(self):
         return {'name': self.name, 'name_transliterated': self.name_transliterated, 'name_transliterated_simple': self.name_transliterated_simple, 'verses_count': self.verses_count, 'chapter_number': self.chapter_number, 'name_english': self.name_english}
