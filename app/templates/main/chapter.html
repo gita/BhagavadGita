@@ -1,14 +1,51 @@
 {% extends 'layouts/base.html' %}
-{% block title %} {{config.APP_NAME}} Chapter 1 - {{chapter.name_english | replace('"', "")}} - BhagavadGita.io{% endblock %}
+{% block title %} {{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}} - BhagavadGita.io{% endblock %}
 
 {% block meta_tags %}
+        <meta name="description" content="{{chapter.chapter_summary | replace('"', "") | truncate(300)}}" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="{{config.APP_NAME}} Chapter 1 - {{chapter.name_english | replace('"', "")}}" />
+        <meta property="og:title" content="{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}" />
+        <meta property="og:description" content="{{chapter.chapter_summary | replace('"', "") | truncate(300)}}" />
         <meta property="og:url" content="https://bhagavadgita.io{{request.path}}" />
-        <meta property="og:site_name" content="{{config.APP_NAME}}" />
+        <meta property="og:site_name" content="Bhagavad Gita" />
+        <meta property="article:publisher" content="https://www.facebook.com/radhakrishnablog/" />
+        <meta property="article:tag" content="Krishna" />
+        <meta property="article:tag" content="Bhagavad Gita" />
+        <meta property="article:tag" content="Bhagwad Gita" />
+        <meta property="article:section" content="Bhagavad Gita" />
+        <meta property="og:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        <meta property="og:image:secure_url" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        <meta property="og:image:width" content="1920" />
+        <meta property="og:image:height" content="1080" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="{{config.APP_NAME}} Chapter 1 - {{chapter.name_english | replace('"', "")}}" />
+        <meta name="twitter:description" content="{{chapter.chapter_summary | replace('"', "") | truncate(300)}}" />
+        <meta name="twitter:title" content="{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}" />
+        <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+
+        <script type="application/ld+json">{
+        "@context": "http://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                    "@id": "https://bhagavadgita.io",
+                    "name": "Home"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                    "@id": "https://bhagavadgita.io{{request.path}}",
+                    "name": "{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}",
+                    "image": "https://bhagavadgita.io/static/images/sribhagavadgita.jpg"
+                }
+            }
+        ]
+    }</script>
 {% endblock %}
 
 {% block content %}
