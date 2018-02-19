@@ -35,6 +35,24 @@
         </select>
       </div>
     </div>
+    <br>
+    <div class="text-center">
+      <div class="btn-group">
+        {% set previous_chapter = chapter.chapter_number - 1 %}
+        {% if previous_chapter == 0 %}
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> ALL CHAPTERS</a>
+        {% else %}
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> CHAPTER {{previous_chapter}}</a>
+        {% endif %}
+
+        {% set next_chapter = chapter.chapter_number + 1 %}
+        {% if next_chapter == 18 %}
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">ALL CHAPTERS <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+        {% else %}
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">CHAPTER {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+        {% endif %}
+      </div>
+    </div>
     <hr>
     <div class="row">
       {% for verse in verses %}
