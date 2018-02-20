@@ -60,6 +60,10 @@
       <h3>{{chapter.name_english | replace('"', "")}}</h3>
     </div>
     <br>
+    <div class="text-center">
+      <div class="addthis_inline_share_toolbox"></div>
+    </div>
+    <br>
     <p>{{chapter.chapter_summary | replace('"', "")}}</p>
     <br>
     <div data-direction="horizontal" align="center" style="color: #757575;">
@@ -99,8 +103,8 @@
               <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-clipboard-text="{{verse.meaning_english}}" style="float: left;">
                 <i class="fa fa-copy" style="color: #fff;"></i>
               </a>
-              <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna" data-verse_number="{{verse.verse_number}}" style="float: right;">
-                <i class="fa fa-share" style="color: #fff;"></i>
+              <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-clipboard-text="https://bhagavadgita.io/chapter/{{chapter.chapter_number}}/verse/{{verse.verse_number}}" style="float: right;">
+                <i class="fa fa-link" style="color: #fff;"></i>
               </a>
               <h4 class="font-up font-bold white-text mt-2 mb-3"><strong>Verse {{verse.verse_number}}</strong></h4>
               <hr>
@@ -112,39 +116,6 @@
     {% endfor %}
     </div>
   </div>
-
-  <div class="modal fade" id="radhakrishna" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-notify modal-warning" role="document">
-              <!--Content-->
-              <div class="modal-content">
-                  <!--Header-->
-                  <div class="modal-header">
-                      <p class="heading lead">Share</p>
-
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true" class="white-text">&times;</span>
-                      </button>
-                  </div>
-
-                  <!--Body-->
-                  <div class="modal-body">
-                      <div class="text-center">
-                          <input type="text" name="verse-number" value=""/>
-                          <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
-                          <a class="btn btn-warning btn-rounded waves-effect waves-light" id="shareFacebook">RadhaKrishna</a>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit iusto nulla aperiam blanditiis ad consequatur in dolores culpa, dignissimos, eius non possimus fugiat. Esse ratione fuga, enim,
-                              ab officiis totam.</p>
-                      </div>
-                  </div>
-
-                  <!--Footer-->
-                  <div class="modal-footer justify-content-center">
-                      <a class="btn krishna-gradient btn-rounded waves-effect waves-light">Close</a>
-                  </div>
-              </div>
-              <!--/.Content-->
-          </div>
-      </div>
 
   <style>
   .jumbotron {
@@ -226,13 +197,6 @@ a.waves-effect, a.waves-light {
     line-height: 47px;
     text-align: center;
 }
-.modal-dialog.modal-notify.modal-warning .modal-header {
-    background-color: #FDB22B;
-}
-.modal-header {
-  border-top-left-radius: 0rem;
-  border-top-right-radius: 0rem;
-}
 
 .select2 .selection .select2-selection--single, .select2-container--default .select2-search--dropdown .select2-search__field {
     border-width: 0 0 1px 0 !important;
@@ -305,14 +269,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
   <script>
   $(document).ready(function() {
-    $.ajaxSetup({ cache: true });
-    $.getScript('https://connect.facebook.net/en_US/sdk.js', function(){
-      FB.init({
-        appId: '153654658590446',
-        version: 'v2.7' // or v2.1, v2.2, v2.3, ...
-      });
-      $('#loginbutton,#feedbutton').removeAttr('disabled');
-    });
 
     $('.js-example-basic-single').select2();
 
@@ -369,18 +325,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     clipboard.on('error', function(e) {
     setTooltip(e.trigger, 'Failed!');
     hideTooltip(e.trigger);
-    });
-
-    $('#radhakrishna').on('show.bs.modal', function(e) {
-        var verse_number = $(e.relatedTarget).data('verse_number');
-        $(e.currentTarget).find('input[name="verse-number"]').val(verse_number);
-    });
-
-    $('#shareFacebook').click(function(){
-      FB.ui({
-        method: 'share',
-        href: 'https://developers.facebook.com/docs/',
-      }, function(response){});
     });
   </script>
 {% endblock %}

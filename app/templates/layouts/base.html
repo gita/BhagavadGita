@@ -80,16 +80,16 @@
                     <div class="col-md-2 col-lg-2 text-center">
                         <h5 class="title mb-4 font-bold">Follow Us</h5>
                         <div class="social-section mt-2 ">
-                          <a class="btn btn-social-icon btn-facebook">
+                          <a class="btn btn-social-icon btn-facebook" href="https://www.facebook.com/radhakrishnablog">
                             <span class="fa fa-facebook"></span>
                           </a>
-                          <a class="btn btn-social-icon btn-youtube">
+                          <a class="btn btn-social-icon btn-youtube" href="https://www.youtube.com/c/krsna">
                             <span class="fa fa-youtube"></span>
                           </a>
-                          <a class="btn btn-social-icon btn-instagram">
+                          <a class="btn btn-social-icon btn-instagram" href="https://www.instagram.com/radhakrishnablog/">
                             <span class="fa fa-instagram"></span>
                           </a>
-                          <a class="btn btn-social-icon btn-github">
+                          <a class="btn btn-social-icon btn-github" href="https://github.com/gita">
                             <span class="fa fa-github"></span>
                           </a>
                         </div>
@@ -101,6 +101,24 @@
                     © 2018 Copyright: <a href="https://bhagavadgita.io"> BhagavadGita.io </a>
                 </div>
             </div>
+            <a href="#" class="go-top"><i class="fa fa-arrow-up"></i></a>
         </footer>
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-594279785d694e1a"></script>
+        <script>
+          $(document).ready(function() {
+            $(window).scroll(function() {
+              if ($(this).scrollTop() > 200) {
+                $('.go-top').fadeIn(200);
+              } else {
+                $('.go-top').fadeOut(200);
+              }
+            });
+            $('.go-top').click(function(event) {
+              event.preventDefault();
+
+              $('html, body').animate({scrollTop: 0}, 300);
+            })
+          });
+        </script>
     </body>
 </html>

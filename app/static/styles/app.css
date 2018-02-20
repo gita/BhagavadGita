@@ -176,3 +176,21 @@ main {
 a.breadcrumb-item {
   color: #FD9F28 !important;
 }
+
+@media -sass-debug-info{filename{}line{font-family:\00003162}}
+.go-top {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  text-decoration: none;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+  padding: 1em;
+  display: none;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003174}}
+.go-top:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
