@@ -85,6 +85,9 @@
         </select>
       </div>
     </div>
+    <div class="text-center">
+      <a class="btn btn-sm btn-warning krishna-gradient btn-rounded waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna"><i class="fa fa-cog"></i></a>
+    </div>
 
     <hr>
     <div class="row">
@@ -106,6 +109,35 @@
         </div>
       </div>
     {% endfor %}
+    </div>
+  </div>
+
+  <div class="modal fade" id="radhakrishna" tabindex="-1" role="dialog" aria-labelledby="radhakrishnaTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="radhakrishnaTitle">Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <h5><b>Font Size</b></h5>
+          <div class="slidecontainer">
+            <input type="range" min="0.5" max="2" value="1" step="0.1" class="slider" id="myRange">
+            <p>Value: <span id="demo"></span></p>
+          </div>
+          <hr>
+          <h5><b>Language</b></h5>
+          <div>
+            <select class="js-example-basic-single" id="languages" name="state" style="width: 100%;">
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -257,11 +289,77 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   box-shadow: 0 1px 0 0 #FF9800;
 }
 
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FDB22B;
+    cursor: pointer;
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FDB22B;
+    cursor: pointer;
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+}
+
 </style>
 
 <script>
   $(document).ready(function() {
       $('.js-example-basic-single').select2();
+
+      var languages = $('#languages');
+      axios.get('/languages')
+      .then(function (response) {
+        for (const [key, value] of Object.entries(response.data)) {
+          var option = $("<option></option>").
+               attr('selected', false).
+               text(value).
+               val(key);
+          option.appendTo(languages);
+        }
+        <!-- languages.trigger('change'); -->
+        languages.trigger('change.select2');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      $('#languages').on("change", function (e) {
+        language = $( "#languages option:selected" ).val()
+        if (language != "en") {
+          window.location.href = "/" + language + "/";
+        } else {
+          window.location.href = "/";
+        }
+      })
 
       var chapters = $('#chapters');
 
@@ -333,5 +431,15 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       return Select2Cascade;
 
   })( window, $);
+
+  var slider = document.getElementById("myRange");
+  var output = document.getElementById("demo");
+  output.innerHTML = slider.value;
+
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+    var size = this.value;
+    $('.card-text').css("font-size", size + "rem");
+  }
 </script>
 {% endblock %}

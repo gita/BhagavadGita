@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import render_template, jsonify, current_app, request
+from flask import render_template, jsonify, current_app, request, make_response
 from app.models.verse import VerseModel
 from app.models.chapter import ChapterModel
 from . import main
@@ -183,6 +183,14 @@ def get_all_chapter_numbers():
     return jsonify(chapter_numbers)
 
 
+@main.route('/languages')
+def get_all_languages():
+    languages = {}
+    languages['en'] = "English"
+    languages['hi'] = "Hindi"
+    return jsonify(languages)
+
+
 @main.route('/verse-numbers/<int:chapter_number>')
 def get_all_verse_numbers(chapter_number):
     verses = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number)
@@ -195,7 +203,17 @@ def get_all_verse_numbers(chapter_number):
 @main.route('/chapter/<int:chapter_number>')
 def chapter(chapter_number):
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
-    verses = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number)
+
+    sql = """
+            SELECT *
+            FROM verses v
+            JOIN verses_translation vt
+            ON v.meaning = vt.id
+            WHERE v.chapter_number = %s
+            ORDER BY v.verse_order
+        """ % (chapter_number)
+
+    verses = db.session.execute(sql)
 
     # for i in range(0, chapter.verses_count):
     #     for verse_range in verse_dict[chapter_number]:
@@ -218,7 +236,19 @@ def chapter(chapter_number):
 @main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>')
 def verse(chapter_number, verse_number):
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
-    verse = VerseModel.find_by_chapter_number_verse_number(chapter_number, verse_number)
+
+    sql = """
+            SELECT *
+            FROM verses v
+            JOIN verses_translation vt
+            ON v.meaning = vt.id
+            WHERE v.chapter_number = %s
+            AND v.verse_number = '%s'
+            ORDER BY v.verse_order
+        """ % (chapter_number, verse_number)
+
+    verse = db.session.execute(sql).first()
+
     max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
 
     if verse_number==max_verse_number:
