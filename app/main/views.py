@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, jsonify, current_app, request, make_response
-from app.models.verse import VerseModel
+from app.models.verse import VerseModel, RadhaKrishnaModel
 from app.models.chapter import ChapterModel
 from . import main
 from app import db
@@ -207,8 +207,6 @@ def chapter(chapter_number):
     sql = """
             SELECT *
             FROM verses v
-            JOIN verses_translation vt
-            ON v.meaning = vt.id
             WHERE v.chapter_number = %s
             ORDER BY v.verse_order
         """ % (chapter_number)
@@ -240,8 +238,6 @@ def verse(chapter_number, verse_number):
     sql = """
             SELECT *
             FROM verses v
-            JOIN verses_translation vt
-            ON v.meaning = vt.id
             WHERE v.chapter_number = %s
             AND v.verse_number = '%s'
             ORDER BY v.verse_order
@@ -275,6 +271,11 @@ def about():
     # for verse in verses:
     #     verse.word_meanings = (verse.word_meanings).lstrip("u'").rstrip("'")
     #     verse.word_meanings = '"' + verse.word_meanings + '"'
+    # db.session.commit()
+
+    # verses = RadhaKrishnaModel.query.all()
+    # for verse in verses:
+    #     verse.verse_number = verse.verse_order
     # db.session.commit()
 
     return "RadhaKrishna"
