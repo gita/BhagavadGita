@@ -56,8 +56,8 @@
     <div class="container">
       <div class="text-white text-center d-flex align-items-center">
         <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
-          <h1 class="card-title pt-3 mb-5 font-bold">BHAGAVAD GITA</h1>
-          <a class="btn btn-warning krishna-gradient btn-rounded waves-effect waves-light" href="#bg-1">Explore</a>
+          <h1 class="card-title pt-3 mb-5 font-bold">{{ _('BHAGAVAD GITA') }}</h1>
+          <a class="btn btn-warning krishna-gradient btn-rounded waves-effect waves-light" href="#bg-1">{{ _('Explore') }}</a>
         </div>
       </div>
     </div>
@@ -65,23 +65,23 @@
 
   <div class="container">
     <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
-      <h3>Chapters</h3>
+      <h3>{{ _('Chapters') }}</h3>
     </div>
 
     <br>
 
     <div data-direction="horizontal" align="center" style="color: #757575;">
-      <h6>Go To Verse</h6>
+      <h6>{{ _('Go to Verse') }}</h6>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-3" style="margin-bottom: 1rem;">
         <select class="js-example-basic-single" id="chapters" name="state" style="width: 100%;">
-          <option value="0" disabled="true" selected="true">Select Chapter</option>
+          <option value="0" disabled="true" selected="true">{{ _('Select Chapter') }}</option>
         </select>
       </div>
       <div class="col-md-3">
         <select class="js-example-basic-single" id="verses" name="state" style="width: 100%;">
-          <option value="0" disabled="true" selected="true">Select Verse</option>
+          <option value="0" disabled="true" selected="true">{{ _('Select Verse') }}</option>
         </select>
       </div>
     </div>
@@ -95,16 +95,16 @@
       <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
         <div class="card h-100" id="bg-{{chapter.chapter_number}}">
           <div class="view overlay hm-white-slight">
-              <img src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_english | replace('"', "")}}">
+              <img src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_meaning | replace('"', "")}}">
               <a>
                   <div class="mask waves-effect waves-light"></div>
               </a>
           </div>
           <a class="btn-floating btn-action waves-effect waves-light" href="/chapter/{{chapter.chapter_number}}"><i class="fa fa-chevron-right"></i></a>
           <div class="card-body">
-              <h4 class="card-title"><b>Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}</b></h4>
+              <h4 class="card-title"><b>{{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}</b></h4>
               <hr>
-              <p class="card-text">{{chapter.name_english | replace('"', "")}}</p>
+              <p class="card-text">{{chapter.name_meaning | replace('"', "")}}</p>
           </div>
         </div>
       </div>
@@ -116,26 +116,25 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="radhakrishnaTitle">Settings</h5>
+          <h5 class="modal-title" id="radhakrishnaTitle">{{ _('Settings') }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body text-center">
-          <h5><b>Font Size</b></h5>
+          <h5><b>{{ _('Font Size') }}</b></h5>
           <div class="slidecontainer">
             <input type="range" min="0.5" max="2" value="1" step="0.1" class="slider" id="myRange">
-            <p>Value: <span id="demo"></span></p>
           </div>
           <hr>
-          <h5><b>Language</b></h5>
+          <h5><b>{{ _('Language') }}</b></h5>
           <div>
             <select class="js-example-basic-single" id="languages" name="state" style="width: 100%;">
             </select>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-warning" data-dismiss="modal">{{ _('Close') }}</button>
         </div>
       </div>
     </div>
@@ -333,9 +332,18 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
 <script>
   $(document).ready(function() {
+      if (document.cookie.indexOf("settings=") >= 0) {
+        var settings = JSON.parse(getCookie('settings'));
+        if (settings['font']) {
+          $('.card-text').css("font-size", settings['font'] + "rem");
+          $('#myRange').val(settings['font']);
+        }
+      }
+
       $('.js-example-basic-single').select2();
 
       var languages = $('#languages');
+
       axios.get('/languages')
       .then(function (response) {
         for (const [key, value] of Object.entries(response.data)) {
@@ -345,7 +353,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
                val(key);
           option.appendTo(languages);
         }
-        <!-- languages.trigger('change'); -->
+        if (settings) {
+          if (settings['font']) {
+            languages.val(settings['language']);
+          }
+        }
         languages.trigger('change.select2');
       })
       .catch(function (error) {
@@ -353,11 +365,19 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       });
 
       $('#languages').on("change", function (e) {
-        language = $( "#languages option:selected" ).val()
-        if (language != "en") {
-          window.location.href = "/" + language + "/";
+        language = $( "#languages option:selected" ).val();
+        if (language === "en") {
+          window.location.href = "/"
         } else {
-          window.location.href = "/";
+          window.location.href = "/" + language;
+        }
+
+        if (document.cookie.indexOf("settings=") >= 0) {
+          var settings = JSON.parse(getCookie('settings'));
+          var size = settings['font'];
+          setCookie('settings',JSON.stringify({font: size, language: language}),30);
+        } else {
+          setCookie('settings',JSON.stringify({font: 1, language: language}),30);
         }
       })
 
@@ -434,12 +454,41 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
   var slider = document.getElementById("myRange");
   var output = document.getElementById("demo");
-  output.innerHTML = slider.value;
 
   slider.oninput = function() {
-    output.innerHTML = this.value;
     var size = this.value;
     $('.card-text').css("font-size", size + "rem");
+    if (document.cookie.indexOf("settings=") >= 0) {
+      var settings = JSON.parse(getCookie('settings'));
+      var language = settings['language'];
+      setCookie('settings',JSON.stringify({font: size, language: language}),30);
+    } else {
+      setCookie('settings',JSON.stringify({font: size, language: "en"}),30);
+    }
+  }
+
+  function setCookie(name,value,days) {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days*24*60*60*1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  function getCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1,c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+  }
+  function eraseCookie(name) {
+      document.cookie = name+'=; Max-Age=-99999999;';
   }
 </script>
 {% endblock %}

@@ -1,11 +1,11 @@
 {% extends 'layouts/base.html' %}
-{% block title %} {{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}} - BhagavadGita.io{% endblock %}
+{% block title %} {{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}} - BhagavadGita.io{% endblock %}
 
 {% block meta_tags %}
         <meta name="description" content="{{chapter.chapter_summary | replace('"', "") | truncate(300)}}" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}" />
+        <meta property="og:title" content="{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}" />
         <meta property="og:description" content="{{chapter.chapter_summary | replace('"', "") | truncate(300)}}" />
         <meta property="og:url" content="https://bhagavadgita.io{{request.path}}" />
         <meta property="og:site_name" content="Bhagavad Gita" />
@@ -20,7 +20,7 @@
         <meta property="og:image:height" content="1080" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:description" content="{{chapter.chapter_summary | replace('"', "") | truncate(300)}}" />
-        <meta name="twitter:title" content="{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}" />
+        <meta name="twitter:title" content="{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}" />
         <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
 
         <script type="application/ld+json">{
@@ -40,7 +40,7 @@
                 "position": 2,
                 "item": {
                     "@id": "https://bhagavadgita.io{{request.path}}",
-                    "name": "{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}",
+                    "name": "{{config.APP_NAME}} Chapter {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}",
                     "image": "https://bhagavadgita.io/static/images/sribhagavadgita.jpg"
                 }
             }
@@ -50,14 +50,14 @@
 
 {% block content %}
   <nav class="breadcrumb">
-    <a class="breadcrumb-item" href="/">Home</a>
-    <span class="breadcrumb-item active">Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}</span>
+    <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+    <span class="breadcrumb-item active">{{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}</span>
   </nav>
   <div class="container" style="margin-top: 2rem;">
     <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
-      <h2><b>Chapter {{chapter.chapter_number}} - {{chapter.name_transliterated_simple | replace('"', "")}}</b></h2>
+      <h2><b>{{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}</b></h2>
       <br>
-      <h3>{{chapter.name_english | replace('"', "")}}</h3>
+      <h3>{{chapter.name_meaning | replace('"', "")}}</h3>
     </div>
     <br>
     <div class="text-center">
@@ -67,30 +67,34 @@
     <p>{{chapter.chapter_summary | replace('"', "")}}</p>
     <br>
     <div data-direction="horizontal" align="center" style="color: #757575;">
-      <h6>Go To Verse</h6>
+      <h6>{{ _('Go to Verse') }}</h6>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-3">
         <select class="js-example-basic-single" id="verses" name="state" style="width: 100%;">
-          <option value="0" disabled="true" selected="true">Select Verse</option>
+          <option value="0" disabled="true" selected="true">{{ _('Select Verse') }}</option>
         </select>
       </div>
+    </div>
+    <br>
+    <div class="text-center">
+      <a class="btn btn-sm btn-warning krishna-gradient btn-rounded waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna"><i class="fa fa-cog"></i></a>
     </div>
     <br>
     <div class="text-center">
       <div class="btn-group">
         {% set previous_chapter = chapter.chapter_number - 1 %}
         {% if previous_chapter == 0 %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> ALL CHAPTERS</a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('ALL CHAPTERS') }}</a>
         {% else %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> CHAPTER {{previous_chapter}}</a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('CHAPTER') }} {{previous_chapter}}</a>
         {% endif %}
 
         {% set next_chapter = chapter.chapter_number + 1 %}
         {% if next_chapter == 18 %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">ALL CHAPTERS <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
         {% else %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">CHAPTER {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('CHAPTER') }} {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
         {% endif %}
       </div>
     </div>
@@ -106,14 +110,42 @@
               <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-clipboard-text="https://bhagavadgita.io/chapter/{{chapter.chapter_number}}/verse/{{verse.verse_number}}" style="float: right;">
                 <i class="fa fa-link" style="color: #fff;"></i>
               </a>
-              <h4 class="font-up font-bold white-text mt-2 mb-3"><strong>Verse {{verse.verse_number}}</strong></h4>
+              <h4 class="font-up font-bold white-text mt-2 mb-3"><strong>{{ _('Verse') }} {{verse.verse_number}}</strong></h4>
               <hr>
-              <p class="white-text mb-0">{{verse.meaning | replace('"', "")}}</p>
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}">OPEN VERSE</a>
+              <p class="white-text mb-0 verse-meaning">{{verse.meaning | replace('"', "")}}</p>
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}">{{ _('OPEN VERSE') }}</a>
           </div>
         </div>
       </div>
     {% endfor %}
+    </div>
+  </div>
+
+  <div class="modal fade" id="radhakrishna" tabindex="-1" role="dialog" aria-labelledby="radhakrishnaTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="radhakrishnaTitle">{{ _('Settings') }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <h5><b>{{ _('Font Size') }}</b></h5>
+          <div class="slidecontainer">
+            <input type="range" min="0.5" max="2" value="1" step="0.1" class="slider" id="myRange">
+          </div>
+          <hr>
+          <h5><b>{{ _('Language') }}</b></h5>
+          <div>
+            <select class="js-example-basic-single" id="languages" name="state" style="width: 100%;">
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-dismiss="modal">{{ _('Close') }}</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -265,12 +297,97 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   border-bottom: 1px solid #FF9800;
   box-shadow: 0 1px 0 0 #FF9800;
 }
+
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FDB22B;
+    cursor: pointer;
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FDB22B;
+    cursor: pointer;
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+}
   </style>
 
   <script>
   $(document).ready(function() {
+    if (document.cookie.indexOf("settings=") >= 0) {
+      var settings = JSON.parse(getCookie('settings'));
+      if (settings['font']) {
+        $('.verse-meaning').css("font-size", settings['font'] + "rem");
+        $('#myRange').val(settings['font']);
+      }
+    }
 
     $('.js-example-basic-single').select2();
+
+    var languages = $('#languages');
+
+    axios.get('/languages')
+    .then(function (response) {
+      for (const [key, value] of Object.entries(response.data)) {
+        var option = $("<option></option>").
+             attr('selected', false).
+             text(value).
+             val(key);
+        option.appendTo(languages);
+      }
+      if (settings) {
+        if (settings['font']) {
+          languages.val(settings['language']);
+        }
+      }
+      languages.trigger('change.select2');
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    $('#languages').on("change", function (e) {
+      language = $( "#languages option:selected" ).val();
+      if (language === "en") {
+        window.location.href = "{{request.path}}".slice(0,-3);
+      } else {
+        window.location.href = "{{request.path}}" + language + '/';
+      }
+      if (document.cookie.indexOf("settings=") >= 0) {
+        var settings = JSON.parse(getCookie('settings'));
+        var size = settings['font'];
+        setCookie('settings',JSON.stringify({font: size, language: language}),30);
+      } else {
+        setCookie('settings',JSON.stringify({font: 1, language: language}),30);
+      }
+    })
 
     var verses = $('#verses');
     var chapter_number = {{chapter.chapter_number}}
@@ -291,7 +408,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
     $('#verses').on("change", function (e) {
       verse = $( "#verses option:selected" ).text()
-      if (verse != "Select Verse") {
+      if (verse != "{{ _('Select Verse') }}") {
         var verse_number = verse.replace("Verse ", "")
         window.location.href = "/chapter/" + chapter_number + "/verse/" + verse_number;
       }
@@ -326,5 +443,43 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     setTooltip(e.trigger, 'Failed!');
     hideTooltip(e.trigger);
     });
+
+    var slider = document.getElementById("myRange");
+
+    slider.oninput = function() {
+      var size = this.value;
+      $('.verse-meaning').css("font-size", size + "rem");
+      if (document.cookie.indexOf("settings=") >= 0) {
+        var settings = JSON.parse(getCookie('settings'));
+        var language = settings['language'];
+        setCookie('settings',JSON.stringify({font: size, language: language}),30);
+      } else {
+        setCookie('settings',JSON.stringify({font: size, language: "en"}),30);
+      }
+    }
+
+    function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {
+        document.cookie = name+'=; Max-Age=-99999999;';
+    }
   </script>
 {% endblock %}

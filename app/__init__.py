@@ -10,6 +10,7 @@ from flask_rq import RQ
 from flask_oauthlib.provider import OAuth2Provider
 from flask_wtf import CsrfProtect
 from flask_restful import Api
+from flask_babel import Babel
 
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
@@ -22,6 +23,8 @@ csrf = CsrfProtect()
 compress = Compress()
 csrf = CsrfProtect()
 oauth = OAuth2Provider()
+babel = Babel()
+
 
 # Set up Flask-Login
 login_manager = LoginManager()
@@ -47,6 +50,7 @@ def create_app(config_name):
     oauth.init_app(app)
     RQ(app)
     api = Api(app)
+    babel.init_app(app)
 
     import app.flask_whooshalchemy as wa
     from app.models.chapter import ChapterModel

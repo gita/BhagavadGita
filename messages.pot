@@ -1,0 +1,132 @@
+# Translations template for PROJECT.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-02-25 18:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: app/main/views.py:370 app/templates/macros/nav_macros.html:63
+#: app/templates/main/index.html:59
+msgid "BHAGAVAD GITA"
+msgstr ""
+
+#: app/templates/macros/nav_macros.html:73
+msgid "Search"
+msgstr ""
+
+#: app/templates/main/chapter.html:53 app/templates/main/verse.html:59
+msgid "Home"
+msgstr ""
+
+#: app/templates/main/chapter.html:54 app/templates/main/chapter.html:58
+#: app/templates/main/index.html:105 app/templates/main/verse.html:2
+#: app/templates/main/verse.html:7 app/templates/main/verse.html:20
+#: app/templates/main/verse.html:60 app/templates/main/verse.html:68
+msgid "Chapter"
+msgstr ""
+
+#: app/templates/main/chapter.html:70 app/templates/main/index.html:74
+msgid "Go to Verse"
+msgstr ""
+
+#: app/templates/main/chapter.html:75 app/templates/main/chapter.html:411
+#: app/templates/main/index.html:84
+msgid "Select Verse"
+msgstr ""
+
+#: app/templates/main/chapter.html:88 app/templates/main/chapter.html:95
+#: app/templates/main/verse.html:100 app/templates/main/verse.html:111
+msgid "ALL CHAPTERS"
+msgstr ""
+
+#: app/templates/main/chapter.html:90 app/templates/main/chapter.html:97
+msgid "CHAPTER"
+msgstr ""
+
+#: app/templates/main/chapter.html:113 app/templates/main/verse.html:2
+#: app/templates/main/verse.html:7 app/templates/main/verse.html:20
+#: app/templates/main/verse.html:61 app/templates/main/verse.html:68
+msgid "Verse"
+msgstr ""
+
+#: app/templates/main/chapter.html:116
+msgid "OPEN VERSE"
+msgstr ""
+
+#: app/templates/main/chapter.html:128 app/templates/main/index.html:119
+#: app/templates/main/verse.html:126
+msgid "Settings"
+msgstr ""
+
+#: app/templates/main/chapter.html:134 app/templates/main/index.html:125
+#: app/templates/main/verse.html:132
+msgid "Font Size"
+msgstr ""
+
+#: app/templates/main/chapter.html:139 app/templates/main/index.html:130
+#: app/templates/main/verse.html:137
+msgid "Language"
+msgstr ""
+
+#: app/templates/main/chapter.html:146 app/templates/main/index.html:137
+#: app/templates/main/verse.html:144
+msgid "Close"
+msgstr ""
+
+#: app/templates/main/index.html:60
+msgid "Explore"
+msgstr ""
+
+#: app/templates/main/index.html:68
+msgid "Chapters"
+msgstr ""
+
+#: app/templates/main/index.html:79
+msgid "Select Chapter"
+msgstr ""
+
+#: app/templates/main/verse.html:2 app/templates/main/verse.html:7
+#: app/templates/main/verse.html:20
+msgid "Bhagavad Gita"
+msgstr ""
+
+#: app/templates/main/verse.html:79
+msgid "Transliteration"
+msgstr ""
+
+#: app/templates/main/verse.html:84
+msgid "Word Meanings"
+msgstr ""
+
+#: app/templates/main/verse.html:88
+msgid "Translation"
+msgstr ""
+
+#: app/templates/main/verse.html:96
+msgid "PREVIOUS VERSE"
+msgstr ""
+
+#: app/templates/main/verse.html:102
+msgid "PREVIOUS CHAPTER"
+msgstr ""
+
+#: app/templates/main/verse.html:107
+msgid "NEXT VERSE"
+msgstr ""
+
+#: app/templates/main/verse.html:113
+msgid "NEXT CHAPTER"
+msgstr ""
+

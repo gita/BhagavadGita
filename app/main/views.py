@@ -1,17 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import render_template, jsonify, current_app, request, make_response
+from flask import render_template, jsonify, current_app, request, make_response, redirect
 from app.models.verse import VerseModel, RadhaKrishnaModel
 from app.models.chapter import ChapterModel
 from . import main
 from app import db
+import json
+from app import babel
+from flask_babel import gettext
 
 
 import sys
 if sys.version_info[0] < 3:
     reload(sys)
     sys.setdefaultencoding('utf8')
+
+
+LANGUAGES = {
+    'en': 'English',
+    'hi': 'हिंदी'
+}
 
 
 verse_dict = {
@@ -162,10 +171,44 @@ verse_dict = {
   },
 }
 
+@babel.localeselector
+def get_locale():
+    if "settings" in request.cookies:
+        if json.loads(request.cookies.get('settings'))["language"]:
+            return json.loads(request.cookies.get('settings'))["language"]
+    return request.accept_languages.best_match(LANGUAGES.keys())
+
+
 @main.route('/')
 def index():
-    chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
-    return render_template('main/index.html', chapters=chapters)
+    language = "en"
+    if "settings" in request.cookies:
+        if json.loads(request.cookies.get('settings'))["language"]:
+            language = json.loads(request.cookies.get('settings'))["language"]
+
+    if language == "en":
+        chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
+        return render_template('main/index.html', chapters=chapters, language=language)
+    else:
+        return redirect('/' + language + '/')
+
+
+@main.route('/<string:language>/')
+def index_radhakrishna(language):
+    chapter_table = "chapters_" + language
+    sql = """
+        SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.image_name, c.chapter_number
+        FROM %s ct
+        JOIN
+        chapters c
+        ON
+        c.chapter_number = ct.chapter_number
+        ORDER BY c.chapter_number
+    """ % (chapter_table)
+    chapters = db.session.execute(sql)
+
+    return render_template('main/index.html', chapters=chapters, language=language)
+
 
 
 @main.route('/search')
@@ -187,7 +230,7 @@ def get_all_chapter_numbers():
 def get_all_languages():
     languages = {}
     languages['en'] = "English"
-    languages['hi'] = "Hindi"
+    languages['hi'] = "हिंदी"
     return jsonify(languages)
 
 
@@ -200,48 +243,109 @@ def get_all_verse_numbers(chapter_number):
     return jsonify(verse_numbers)
 
 
-@main.route('/chapter/<int:chapter_number>')
+@main.route('/chapter/<int:chapter_number>/')
 def chapter(chapter_number):
-    chapter = ChapterModel.find_by_chapter_number(chapter_number)
+    language = "en"
+    if "settings" in request.cookies:
+        if json.loads(request.cookies.get('settings'))["language"]:
+            language = json.loads(request.cookies.get('settings'))["language"]
 
+    if language == "en":
+        chapter = ChapterModel.find_by_chapter_number(chapter_number)
+        sql = """
+                SELECT *
+                FROM verses v
+                WHERE v.chapter_number = %s
+                ORDER BY v.verse_order
+            """ % (chapter_number)
+
+        verses = db.session.execute(sql)
+        return render_template('main/chapter.html', chapter=chapter, verses=verses)
+    else:
+        return redirect('/chapter/' + str(chapter_number) + '/' + language + '/')
+
+
+@main.route('/chapter/<int:chapter_number>/<string:language>/')
+def chapter_radhakrishna(chapter_number, language):
+    chapter_table = "chapters_" + language
     sql = """
-            SELECT *
-            FROM verses v
-            WHERE v.chapter_number = %s
-            ORDER BY v.verse_order
-        """ % (chapter_number)
+        SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.image_name, c.chapter_number
+        FROM %s ct
+        JOIN
+        chapters c
+        ON
+        c.chapter_number = ct.chapter_number
+        WHERE c.chapter_number = %s
+        ORDER BY c.chapter_number
+    """ % (chapter_table, chapter_number)
+    chapter = db.session.execute(sql).first()
+
+    verses_table = "verses_" + language
+    sql = """
+            SELECT verse_number, meaning, chapter_number
+            FROM %s
+            WHERE chapter_number = %s
+            ORDER BY verse_order
+        """ % (verses_table, chapter_number)
 
     verses = db.session.execute(sql)
-
-    # for i in range(0, chapter.verses_count):
-    #     for verse_range in verse_dict[chapter_number]:
-    #         result = []
-    #         a, b = verse_range.split('-')
-    #         a, b = int(a), int(b)
-    #         result.extend(range(a, b + 1))
-    #         if verses[i].verse_number in result:
-    #             current_app.logger.info(verses[i].verse_number)
-
-    # for verse in verses:
-    #     if verse.verse_order in verse_dict[chapter_number]:
-    #         verse.verse_number = verse_dict[chapter_number][verse.verse_order]
-    #     else:
-    #         verse.verse_number = verse.verse_order
-
     return render_template('main/chapter.html', chapter=chapter, verses=verses)
 
 
-@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>')
+@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/')
 def verse(chapter_number, verse_number):
+    language = "en"
+    if "settings" in request.cookies:
+        if json.loads(request.cookies.get('settings'))["language"]:
+            language = json.loads(request.cookies.get('settings'))["language"]
+
+    if language == "en":
+        chapter = ChapterModel.find_by_chapter_number(chapter_number)
+
+        sql = """
+                SELECT *
+                FROM verses v
+                WHERE v.chapter_number = %s
+                AND v.verse_number = '%s'
+                ORDER BY v.verse_order
+            """ % (chapter_number, verse_number)
+
+        verse = db.session.execute(sql).first()
+
+        max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
+
+        if verse_number==max_verse_number:
+            next_verse = None
+            previous_verse_order = verse.verse_order - 1
+            previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+        else:
+            next_verse_order = verse.verse_order + 1
+            previous_verse_order = verse.verse_order - 1
+            previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+            next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
+
+        return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
+
+    else:
+        return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_number) + '/' + language + '/')
+
+
+@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/')
+def verse_radhakrishna(chapter_number, verse_number, language):
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
 
+    verses_table = "verses_" + language
     sql = """
-            SELECT *
-            FROM verses v
+            SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+            FROM %s vt
+            JOIN verses v
+            ON
+            vt.chapter_number = v.chapter_number
+            AND vt.verse_number = v.verse_number
             WHERE v.chapter_number = %s
             AND v.verse_number = '%s'
             ORDER BY v.verse_order
-        """ % (chapter_number, verse_number)
+        """ % (verses_table, chapter_number, verse_number)
 
     verse = db.session.execute(sql).first()
 
@@ -257,25 +361,28 @@ def verse(chapter_number, verse_number):
         previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
         next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
 
-    # word_meanings = verse.word_meanings
-    # word_meaning = word_meanings.split(';')
-    # for meaning in word_meaning:
-    #     hanuman = meaning.partition("—")[0]
-    #     current_app.logger.info(hanuman)
-    return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse)
+    return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
 
 
 @main.route('/about')
 def about():
-    # verses = VerseModel.query.all()
-    # for verse in verses:
-    #     verse.word_meanings = (verse.word_meanings).lstrip("u'").rstrip("'")
-    #     verse.word_meanings = '"' + verse.word_meanings + '"'
-    # db.session.commit()
 
-    # verses = RadhaKrishnaModel.query.all()
-    # for verse in verses:
-    #     verse.verse_number = verse.verse_order
-    # db.session.commit()
+    return gettext('BHAGAVAD GITA')
 
-    return "RadhaKrishna"
+
+@main.route('/setcookie')
+def set_cookie():
+    if "settings" not in request.cookies:
+        settings = {}
+        settings['language'] = 'en'
+        settings['font_size'] = '10'
+        response = make_response("RadhaKrishna")
+        response.set_cookie('settings', json.dumps(settings))
+
+    return response
+
+
+@main.route('/getcookie')
+def get_cookie():
+    radha = request.cookies.get('settings')
+    return radha
