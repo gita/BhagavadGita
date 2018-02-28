@@ -57,6 +57,7 @@ facebook = oauthclient.remote_app(
 def github_login():
     if 'github_token' in session:
         me = github.get('user')
+        current_app.logger.info(me.data)
         email = me.data.get('email')
         name = me.data.get('name')
         user = User.query.filter_by(email=email).first()
