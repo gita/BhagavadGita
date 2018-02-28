@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import render_template, jsonify, current_app, request, make_response, redirect
-from app.models.verse import VerseModel, RadhaKrishnaModel
+from flask import render_template, jsonify, current_app, request, make_response, redirect, flash, url_for
+from app.models.verse import VerseModel
 from app.models.chapter import ChapterModel
 from . import main
 from app import db
 import json
 from app import babel
 from flask_babel import gettext
+from .forms import ContactForm
+from flask_rq import get_queue
+from ..email import send_email
 
 
 import sys
@@ -25,149 +28,112 @@ LANGUAGES = {
 
 verse_dict = {
   1:{
-    4:"4-6",
-    5:"4-6",
-    6:"4-6",
-    16:"16-18",
-    17:"16-18",
-    18:"16-18",
-    21:"21-22",
-    22:"21-22",
-    29:"29-31",
-    30:"29-31",
-    31:"29-31",
-    32:"32-33",
-    33:"32-33",
-    34:"34-35",
-    35:"34-35",
-    36:"36-37",
-    37:"36-37",
-    38:"38-39",
-    39:"38-39",
-    45:"45-46",
-    46:"45-46",
+    '16':"16-18",
+    '17':"16-18",
+    '18':"16-18",
+    '21':"21-22",
+    '22':"21-22",
+    '32':"32-35",
+    '33':"32-35",
+    '34':"32-35",
+    '35':"32-35",
+    '37':"37-38",
+    '38':"37-38",
   },
   2:{
-    42:"42-43",
-    43:"42-43",
+    '42':"42-43",
+    '43':"42-43",
   },
   3:{
-    1:"1-2",
-    2:"1-2",
-    20:"20-21",
-    21:"20-21",
   },
   4:{
-    29:"29-30",
-    30:"29-30",
   },
   5:{
-    8:"8-9",
-    9:"8-9",
-    27:"27-28",
-    28:"27-28",
+    '8':"8-9",
+    '9':"8-9",
+    '27':"27-28",
+    '28':"27-28",
   },
   6:{
-    12:"12-13",
-    13:"12-13",
-    24:"24-25",
-    25:"24-25",
-    41:"41-42",
-    42:"41-42",
+    '11':"11-12",
+    '12':"11-12",
+    '13':"13-14",
+    '14':"13-14",
+    '20':"20-23",
+    '21':"20-23",
+    '22':"20-23",
+    '23':"20-23",
   },
   7: {},
   8:{
-    1:"1-2",
-    2:"1-2",
-    9:"9-10",
-    10:"9-10",
-    23:"23-26",
-    24:"23-26",
-    25:"23-26",
-    26:"23-26",
   },
   9:{
-    7:"7-8",
-    8:"7-8",
-    16:"16-17",
-    17:"16-17",
   },
   10:{
-    4:"4-5",
-    5:"4-5",
-    12:"12-13",
-    13:"12-13",
-    16:"16-17",
-    17:"16-17",
+    '4':"4-5",
+    '5':"4-5",
+    '12':"12-13",
+    '13':"12-13",
   },
   11:{
-    10:"10-11",
-    11:"10-11",
-    26:"26-27",
-    27:"26-27",
-    28:"28-29",
-    29:"28-29",
-    41:"41-42",
-    42:"41-42",
-    52:"52-53",
-    53:"52-53",
+    '10':"10-11",
+    '11':"10-11",
+    '26':"26-27",
+    '27':"26-27",
+    '41':"41-42",
+    '42':"41-42",
   },
   12:{
-    3:"3-4",
-    4:"3-4",
-    6:"6-7",
-    7:"6-7",
-    13:"13-14",
-    14:"13-14",
-    18:"18-19",
-    19:"18-19",
+    '3':"3-4",
+    '4':"3-4",
+    '6':"6-7",
+    '7':"6-7",
+    '13':"13-14",
+    '14':"13-14",
+    '18':"18-19",
+    '19':"18-19",
   },
   13:{
-    8:"8-12",
-    9:"8-12",
-    10:"8-12",
-    11:"8-12",
-    12:"8-12",
+    '1':"1-2",
+    '2':"1-2",
+    '6':"6-7",
+    '7':"6-7",
+    '8':"8-12",
+    '9':"8-12",
+    '10':"8-12",
+    '11':"8-12",
+    '12':"8-12",
   },
   14:{
-    3:"3-4",
-    4:"3-4",
-    11:"11-13",
-    12:"11-13",
-    13:"11-13",
-    14:"14-15",
-    15:"14-15",
-    22:"22-23",
-    23:"22-23",
-    24:"24-25",
-    25:"24-25",
+    '22':"22-25",
+    '23':"22-25",
+    '24':"22-25",
+    '25':"22-25",
   },
   15:{
-    3:"3-4",
-    4:"3-4",
+    '3':"3-4",
+    '4':"3-4",
   },
   16:{
-    1:"1-3",
-    2:"1-3",
-    3:"1-3",
-    13:"13-15",
-    14:"13-15",
-    15:"13-15",
-    19:"19-20",
-    20:"19-20",
+    '1':"1-3",
+    '2':"1-3",
+    '3':"1-3",
+    '11':"11-12",
+    '12':"11-12",
+    '13':"13-15",
+    '14':"13-15",
+    '15':"13-15",
   },
   17:{
-    5:"5-6",
-    6:"5-6",
-    26:"26-27",
-    27:"26-27",
+    '5':"5-6",
+    '6':"5-6",
+    '26':"26-27",
+    '27':"26-27",
   },
   18:{
-    15:"15-16",
-    16:"15-16",
-    51:"51-53",
-    52:"51-53",
-    53:"51-53",
+    '51':"51-53",
+    '52':"51-53",
+    '53':"51-53",
   },
 }
 
@@ -294,40 +260,44 @@ def chapter_radhakrishna(chapter_number, language):
 
 @main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/')
 def verse(chapter_number, verse_number):
-    language = "en"
-    if "settings" in request.cookies:
-        if json.loads(request.cookies.get('settings'))["language"]:
-            language = json.loads(request.cookies.get('settings'))["language"]
-
-    if language == "en":
-        chapter = ChapterModel.find_by_chapter_number(chapter_number)
-
-        sql = """
-                SELECT *
-                FROM verses v
-                WHERE v.chapter_number = %s
-                AND v.verse_number = '%s'
-                ORDER BY v.verse_order
-            """ % (chapter_number, verse_number)
-
-        verse = db.session.execute(sql).first()
-
-        max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
-
-        if verse_number==max_verse_number:
-            next_verse = None
-            previous_verse_order = verse.verse_order - 1
-            previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
-        else:
-            next_verse_order = verse.verse_order + 1
-            previous_verse_order = verse.verse_order - 1
-            previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
-            next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
-
-        return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
-
+    if verse_number in verse_dict[chapter_number]:
+        current_app.logger.info("RadhaKrishna")
+        return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_dict[chapter_number][verse_number]) + '/')
     else:
-        return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_number) + '/' + language + '/')
+        language = "en"
+        if "settings" in request.cookies:
+            if json.loads(request.cookies.get('settings'))["language"]:
+                language = json.loads(request.cookies.get('settings'))["language"]
+
+        if language == "en":
+            chapter = ChapterModel.find_by_chapter_number(chapter_number)
+
+            sql = """
+                    SELECT *
+                    FROM verses v
+                    WHERE v.chapter_number = %s
+                    AND v.verse_number = '%s'
+                    ORDER BY v.verse_order
+                """ % (chapter_number, verse_number)
+
+            verse = db.session.execute(sql).first()
+
+            max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
+
+            if verse_number==max_verse_number:
+                next_verse = None
+                previous_verse_order = verse.verse_order - 1
+                previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+            else:
+                next_verse_order = verse.verse_order + 1
+                previous_verse_order = verse.verse_order - 1
+                previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+                next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
+
+            return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
+
+        else:
+            return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_number) + '/' + language + '/')
 
 
 @main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/')
@@ -366,8 +336,33 @@ def verse_radhakrishna(chapter_number, verse_number, language):
 
 @main.route('/about')
 def about():
-
+    db.create_all()
+    db.session.commit()
     return gettext('BHAGAVAD GITA')
+
+
+@main.route('/contact/', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        args_dict = {}
+        args_dict['name'] = form.name.data
+        args_dict['email'] = form.email.data
+        args_dict['subject'] = form.subject.data
+        args_dict['message'] = form.message.data
+
+        get_queue().enqueue(
+            send_email,
+            recipient="contact@bhagavadgita.io",
+            subject=str(args_dict['subject']),
+            template='main/email/contact',
+            email_subject=args_dict['subject'],
+            name=args_dict['name'],
+            email=args_dict['email'],
+            message=args_dict['message'])
+        flash('Thank you for your message. We will try to reply as soon as possible.')
+        return redirect(url_for('main.index'))
+    return render_template('main/contact.html', form=form)
 
 
 @main.route('/setcookie')

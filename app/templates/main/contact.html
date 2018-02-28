@@ -15,22 +15,14 @@
       <section class="form-gradient" style="margin-top: 3rem;">
 
           <!--Form with header-->
-          <div class="card" style="width: 23rem;">
+          <div class="card" style="width: 23rem; margin-bottom: 5rem;">
 
               <!--Header-->
               <div class="header pt-3 hanuman-gradient">
 
                   <div class="row d-flex justify-content-center">
-                      <h3 class="white-text mb-3 pt-3 font-bold">Create an account</h3>
-                  </div>
-
-                  <div class="row mt-2 mb-3 d-flex justify-content-center">
-                      <!--Facebook-->
-                      <a class="icons-sm fb-ic"><i class="fa fa-facebook white-text fa-lg"> </i></a>
-                      <!--Twitter-->
-                      <a class="icons-sm tw-ic"><i class="fa fa-twitter white-text fa-lg"> </i></a>
-                      <!--Google +-->
-                      <a class="icons-sm gplus-ic"><i class="fa fa-google-plus white-text fa-lg"> </i></a>
+                      <h3 class="white-text mb-3 pt-3 font-bold">Contact Us</h3>
+                      <p class="white-text">Reach out with any questions you have.</p>
                   </div>
 
               </div>
@@ -40,17 +32,14 @@
               {{ f.begin_form(form, flashes) }}
                   <!--Body-->
                   <div class="md-form">
+                      {{ f.render_form_field(form.name) }}
+
                       {{ f.render_form_field(form.email) }}
-
-                      {{ f.render_form_field(form.first_name) }}
-
-                      {{ f.render_form_field(form.last_name) }}
                   </div>
 
                   <div class="md-form pb-1 pb-md-3">
-                      {{ f.render_form_field(form.password) }}
-
-                      {{ f.render_form_field(form.password2) }}
+                      {{ f.render_form_field(form.subject) }}
+                      {{ f.render_form_field(form.message) }}
                   </div>
 
 
@@ -62,8 +51,7 @@
                     {{ f.form_message(flashes['info'], header='Information', class='info') }}
                     {{ f.form_message(flashes['success'], header='Success!', class='success') }}
 
-                    <button type="submit" class="btn btn-grey btn-rounded z-depth-1a" value="Register" style="border-radius: 10em;">Register</button>
-                    <p class="font-small grey-text mt-3">Already have an account? <a href="/account/login" class="dark-grey-text ml-1 font-bold"> Log in</a></p>
+                    <button type="submit" class="btn btn-grey btn-rounded z-depth-1a" value="Send" style="border-radius: 10em;">Send</button>
 
                   </div>
                   <!--Grid row-->

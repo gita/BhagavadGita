@@ -1,0 +1,4 @@
+From: {{name}} - {{email}}
+Subject: {{email_subject}}
+
+Message Body: {{message}}

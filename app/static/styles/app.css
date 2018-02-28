@@ -121,63 +121,69 @@ main {
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003114}}
+.hanuman-gradient {
+  background: -webkit-linear-gradient(50deg, #FF9800, #FFC107);
+  background: linear-gradient(40deg, #FF9800, #FFC107);
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003119}}
 .icons-sm {
   padding: .5rem;
   margin: .5rem;
   font-size: 1.2rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003120}}
+@media -sass-debug-info{filename{}line{font-family:\00003125}}
 .justify-content-center {
   -webkit-box-pack: center !important;
   -ms-flex-pack: center !important;
   justify-content: center !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003126}}
+@media -sass-debug-info{filename{}line{font-family:\00003131}}
 .btn-rounded {
   border-radius: 10em;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003130}}
+@media -sass-debug-info{filename{}line{font-family:\00003135}}
 .align-items-start {
   -webkit-box-align: start !important;
   -ms-flex-align: start !important;
   align-items: flex-start !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003136}}
+@media -sass-debug-info{filename{}line{font-family:\00003141}}
 .d-flex {
   display: -webkit-box !important;
   display: -ms-flexbox !important;
   display: flex !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003142}}
+@media -sass-debug-info{filename{}line{font-family:\00003147}}
 .form-gradient .font-small {
   font-size: 0.8rem;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003146}}
+@media -sass-debug-info{filename{}line{font-family:\00003151}}
 .justify-content-end {
   -webkit-box-pack: end !important;
   -ms-flex-pack: end !important;
   justify-content: flex-end !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003152}}
+@media -sass-debug-info{filename{}line{font-family:\00003157}}
 .btn-youtube {
   color: #fff;
   background-color: #FC0D1B;
   border-color: rgba(0, 0, 0, 0.2);
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003158}}
+@media -sass-debug-info{filename{}line{font-family:\00003163}}
 a.breadcrumb-item {
   color: #FD9F28 !important;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003162}}
+@media -sass-debug-info{filename{}line{font-family:\00003167}}
 .go-top {
   position: fixed;
   bottom: 2em;
@@ -190,7 +196,7 @@ a.breadcrumb-item {
   display: none;
 }
 
-@media -sass-debug-info{filename{}line{font-family:\00003174}}
+@media -sass-debug-info{filename{}line{font-family:\00003179}}
 .go-top:hover {
   background-color: rgba(0, 0, 0, 0.6);
 }

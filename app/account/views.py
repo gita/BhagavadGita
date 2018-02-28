@@ -1,16 +1,61 @@
-from flask import flash, redirect, render_template, request, url_for, current_app
+from flask import flash, redirect, render_template, request, url_for, current_app, session
 from flask_login import (current_user, login_required, login_user,
                          logout_user)
 from flask_rq import get_queue
 from werkzeug.security import gen_salt
 
 from . import account
-from .. import db
+from .. import db, oauthclient
 from ..email import send_email
 from ..models import User, App, Client
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreatePasswordForm,
                     LoginForm, RegistrationForm, RequestResetPasswordForm,
                     ResetPasswordForm, CreateAppForm, UpdateAppForm)
+
+
+github = oauthclient.remote_app(
+    'github',
+    consumer_key='088ca990bf9962b9ef5e',
+    consumer_secret='dcbd8156d334d7f5cb92226492f1c4a36af438f0',
+    request_token_params={'scope': 'user:email'},
+    base_url='https://api.github.com/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://github.com/login/oauth/access_token',
+    authorize_url='https://github.com/login/oauth/authorize'
+)
+
+
+@account.route('/github')
+def index():
+    if 'github_token' in session:
+        me = github.get('user')
+        return jsonify(me.data)
+    return redirect(url_for('account.github_login'))
+
+
+@account.route('/github-login')
+def github_login():
+    return github.authorize(callback=url_for('account.authorized', _external=True))
+
+
+@account.route('/github/authorized')
+def authorized():
+    resp = github.authorized_response()
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s resp=%s' % (
+            request.args['error'],
+            request.args['error_description'],
+            resp
+        )
+    session['github_token'] = (resp['access_token'], '')
+    me = github.get('user')
+    return jsonify(me.data)
+
+
+@github.tokengetter
+def get_github_oauth_token():
+    return session.get('github_token')
 
 
 @account.route('/login', methods=['GET', 'POST'])

@@ -11,6 +11,7 @@ from flask_oauthlib.provider import OAuth2Provider
 from flask_wtf import CsrfProtect
 from flask_restful import Api
 from flask_babel import Babel
+from flask_oauthlib.client import OAuth
 
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
@@ -23,6 +24,7 @@ csrf = CsrfProtect()
 compress = Compress()
 csrf = CsrfProtect()
 oauth = OAuth2Provider()
+oauthclient = OAuth()
 babel = Babel()
 
 
@@ -48,6 +50,7 @@ def create_app(config_name):
     compress.init_app(app)
     csrf.init_app(app)
     oauth.init_app(app)
+    oauthclient.init_app(app)
     RQ(app)
     api = Api(app)
     babel.init_app(app)
