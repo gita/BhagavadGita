@@ -1,0 +1,64 @@
+{% import 'macros/page_macros.html' as page %}
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+  <span class="breadcrumb-item active">{{ _('API') }}</span>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <br>
+      <h1>Bhagavad Gita API</h1>
+      <p>The Bhagavad Gita Application Programming Interface (API) allows a web or mobile developer to use the Bhagavad Gita text in their web or mobile application(s). It is a RESTful API that follows some of the Best Practices for designing a REST API which makes it easy for developers to use and implement.</p>
+      <h3 id="current-version">Current version</h3>
+      <p>The current version of the API is v1. We encourage you to explicitly use this version in the url.</p>
+      <h3 id="schema">Schema</h3>
+      <p>All API access is over HTTPS, and accessed from <a href="https://bhagavadgita.io/api/v1">https://bhagavadgita.io/api/v1</a>. All data is sent and received as JSON.</p>
+      <h3 id="authentication">Authentication</h3>
+      <p>HTTP requests to the BHAGAVAD GITA API are protected with OAUTH2 authentication.
+      To be able to use the API, you need to be a registered <a href="https://bhagavadgita.io">BhagavadGita.io</a> user. After signing in, you can register your applications from your Account Dashboard after which you will be issued a Client ID and Client Secret specific to an application that can be used to programatically get the access_token(valid for 300sec).</p>
+      <p><strong>How to get an access token?</strong>
+      Make a POST request to <code>/auth/oauth/token</code> with these parameters sent in Headers - </p>
+      <ol>
+      <li>Client ID - Obtained from Account Dashboard after registering an app.</li>
+      <li>Client Secret - Obtained from Account Dashboard after registering an app.</li>
+      <li>Grant Type - Use <code>client credentials</code>.</li>
+      <li>Scope - Use <code>verse</code> if you just want to access the verses, <code>chapter</code> if you just want to access the chapters and <code>verse chapter</code> if you want access to both.</li>
+      </ol>
+      <p>Example - </p>
+      <p><code>curl -X POST &quot;https://bhagavadgita.io/auth/oauth/token&quot; -H &quot;accept: application/json&quot; -H &quot;content-type: application/x-www-form-urlencoded&quot; -d &quot;client_id=YOUR_CLIENT_ID&amp;client_secret=YOUR_CLIENT_SECRET&amp;grant_type=client_credentials&amp;scope=verse%20chapter&quot;</code></p>
+      <p>Then, you can use the received access_token to access any of the endpoints. You can send the access_token as a header or as a query parameter.</p>
+      <p>Examples -</p>
+      <ol>
+      <li>Query Parameter</li>
+      </ol>
+      <p><code>curl -X GET &quot;https://bhagavadgita.io/v1/chapters?access_token=YOUR_ACCESS_TOKEN&quot; -H &quot;accept: application/json&quot;</code></p>
+      <ol>
+      <li>Header</li>
+      </ol>
+      <p><code>curl -X GET \
+        https://bhagavadgita.io/v1/chapters \
+        -H &#39;Authorization: Bearer YOUR_ACCESS_TOKEN&#39;</code></p>
+      <h3 id="documentation">Documentation</h3>
+      <p>We have 2 types of documenatations available for this API, both based on the Open API specification.</p>
+      <ol>
+      <li><a href="https://bhagavadgita.io/apidocs/">Swagger UI</a></li>
+      <li><a href="https://bhagavadgita.io/docs/">ReDoc</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<style>
+.jumbotron {
+  background-image: url("/static/images/gita.jpg");
+  background-size: cover;
+}
+.breadcrumb {
+  margin-bottom: 0rem;
+}
+</style>
+{% endblock %}

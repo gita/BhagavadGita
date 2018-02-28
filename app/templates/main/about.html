@@ -2,11 +2,41 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+  <span class="breadcrumb-item active">{{ _('About') }}</span>
+</nav>
+
 <div class="jumbotron">
+  <div class="container">
+    <div class="text-white text-center d-flex align-items-center">
+      <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
+        <h1 class="card-title pt-3 mb-5 font-bold">{{ _('ABOUT BHAGAVAD GITA') }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-<h1 class="display-3">About</h1>
-<p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card warning-color text-center z-depth-2 h-100">
+        <div class="card-body">
+          <p><b>Bhagavad Gita</b>, also known as the <b>Gita</b> - <i>"The Song of The Lord"</i> is a practical guide to one's life that guides one to re-organise their life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality). It is a 700-verse text in Sanskrit which comprises chapters 23 through 40 in the Bhishma-Parva section of the <b>Mahabharata</b>.</p>
+          <p>The Bhagavad Gita is a dialogue between <b>Arjuna</b>, a supernaturally gifted warrior and his guide and charioteer <b>Lord Krishna</b> on the battlefield of Kurukshetra. As both armies stand ready for the battle, the mighty warrior Arjuna, on observing the warriors on both sides becomes overwhelmed with grief and compassion due to the fear of losing his relatives and friends and the consequent sins attributed to killing his own relatives. So, he surrenders to Lord Krishna, seeking a solution. Thus, follows the wisdom of the Bhagavad Gita. Over 18 chapters, Gita packs an intense analysis of life, emotions and ambitions, discussion of various types of yoga, including Jnana, Bhakti, Karma and Raja, the difference between Self and the material body as well as the revelation of the Ultimate Purpose of Life.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
+
+<style>
+.jumbotron {
+  background-image: url("/static/images/gita.jpg");
+  background-size: cover;
+}
+.breadcrumb {
+  margin-bottom: 0rem;
+}
+</style>
 {% endblock %}

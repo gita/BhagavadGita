@@ -334,11 +334,16 @@ def verse_radhakrishna(chapter_number, verse_number, language):
     return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
 
 
-@main.route('/about')
+@main.route('/about/')
 def about():
-    db.create_all()
-    db.session.commit()
-    return gettext('BHAGAVAD GITA')
+
+    return render_template('main/about.html')
+
+
+@main.route('/api/')
+def api():
+
+    return render_template('main/api.html')
 
 
 @main.route('/contact/', methods=['GET', 'POST'])
