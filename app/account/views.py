@@ -11,12 +11,13 @@ from ..models import User, App, Client
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreatePasswordForm,
                     LoginForm, RegistrationForm, RequestResetPasswordForm,
                     ResetPasswordForm, CreateAppForm, UpdateAppForm)
+import os
 
 
 github = oauthclient.remote_app(
     'github',
-    consumer_key='088ca990bf9962b9ef5e',
-    consumer_secret='dcbd8156d334d7f5cb92226492f1c4a36af438f0',
+    consumer_key=os.environ.get('GITHUB_KEY'),
+    consumer_secret=os.environ.get('GITHUB_SECRET'),
     request_token_params={'scope': 'user:email'},
     base_url='https://api.github.com/',
     request_token_url=None,
@@ -25,22 +26,56 @@ github = oauthclient.remote_app(
     authorize_url='https://github.com/login/oauth/authorize'
 )
 
+google = oauthclient.remote_app(
+    'google',
+    consumer_key=os.environ.get('GOOGLE_KEY'),
+    consumer_secret=os.environ.get('GOOGLE_SECRET'),
+    request_token_params={
+        'scope': 'email'
+    },
+    base_url='https://www.googleapis.com/oauth2/v1/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+)
 
-@account.route('/github')
-def index():
-    if 'github_token' in session:
-        me = github.get('user')
-        return jsonify(me.data)
-    return redirect(url_for('account.github_login'))
+facebook = oauthclient.remote_app(
+    'facebook',
+    consumer_key=os.environ.get('FACEBOOK_KEY'),
+    consumer_secret=os.environ.get('FACEBOOK_SECRET'),
+    request_token_params={'scope': 'email'},
+    base_url='https://graph.facebook.com',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    access_token_method='GET',
+    authorize_url='https://www.facebook.com/dialog/oauth'
+)
 
 
 @account.route('/github-login')
 def github_login():
-    return github.authorize(callback=url_for('account.authorized', _external=True))
+    if 'github_token' in session:
+        me = github.get('user')
+        email = me.data.get('email')
+        name = me.data.get('name')
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+        else:
+            user = User(email=email, social_id=me.data.get('id'), social_provider="github", username=me.data.get('login'), first_name=name, confirmed=True)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+    return github.authorize(callback=url_for('account.github_authorized', _external=True))
 
 
 @account.route('/github/authorized')
-def authorized():
+def github_authorized():
     resp = github.authorized_response()
     if resp is None or resp.get('access_token') is None:
         return 'Access denied: reason=%s error=%s resp=%s' % (
@@ -49,13 +84,90 @@ def authorized():
             resp
         )
     session['github_token'] = (resp['access_token'], '')
-    me = github.get('user')
-    return jsonify(me.data)
+    return redirect(url_for('account.github_login'))
 
 
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
+
+
+@account.route('/google-login')
+def google_login():
+    if 'google_token' in session:
+        me = google.get('userinfo')
+        email = me.data.get('email')
+        name = me.data.get('name')
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+        else:
+            user = User(email=email, social_id=me.data.get('id'), social_provider="google", first_name=name, confirmed=True)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+    return google.authorize(callback=url_for('account.google_authorized', _external=True))
+
+
+@account.route('/google/authorized')
+def google_authorized():
+    resp = google.authorized_response()
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s resp=%s' % (
+            request.args['error'],
+            request.args['error_description'],
+            resp
+        )
+    session['google_token'] = (resp['access_token'], '')
+    return redirect(url_for('account.google_login'))
+
+
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
+
+
+@account.route('/facebook-login')
+def facebook_login():
+    if 'facebook_token' in session:
+        me = facebook.get('/me?fields=name,email,id')
+        email = me.data.get('email')
+        name = me.data.get('name')
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+        else:
+            user = User(email=email, social_id=me.data.get('id'), social_provider="facebook", first_name=name, confirmed=True)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+    return facebook.authorize(callback=url_for('account.facebook_authorized', next=request.args.get('next') or request.referrer or None, _external=True))
+
+
+@account.route('/facebook/authorized')
+def facebook_authorized():
+    resp = facebook.authorized_response()
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s resp=%s' % (
+            request.args['error'],
+            request.args['error_description'],
+            resp
+        )
+    session['facebook_token'] = (resp['access_token'], '')
+    return redirect(url_for('account.facebook_login'))
+
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('facebook_token')
 
 
 @account.route('/login', methods=['GET', 'POST'])
