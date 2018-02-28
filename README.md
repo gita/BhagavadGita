@@ -12,6 +12,12 @@ Frontend and REST API for BhagavadGita.io
 
 The Bhagavad Gita Application Programming Interface (API) allows a web or mobile developer to use the Bhagavad Gita text in their web or mobile application(s). It is a RESTful API that follows some of the Best Practices for designing a REST API.
 
+### Current version
+The current version of the API is v1. We encourage you to explicitly use this version in the url.
+
+### Schema
+All API access is over HTTPS, and accessed from https://bhagavadgita.io/api/v1. All data is sent and received as JSON.
+
 ### Documentation
 
 We have 2 types of documenatations available for this API, both based on the Open API specification.
