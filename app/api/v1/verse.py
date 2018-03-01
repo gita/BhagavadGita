@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flasgger import SwaggerView
+from flasgger import Schema, Swagger, SwaggerView, fields
 from flask import jsonify
 
 from app.models.chapter import ChapterModel
 
 from ... import csrf, oauth
 from ...models.verse import VerseModel
+from ...schemas.chapter import ChapterSchema
 from ...schemas.verse import VerseSchema
 
 verse_schema = VerseSchema()

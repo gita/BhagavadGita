@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flasgger import SwaggerView
+from flasgger import Schema, Swagger, SwaggerView, fields
 from flask import jsonify
 
 from ... import csrf, oauth
