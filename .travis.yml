@@ -12,6 +12,5 @@ install:
 script:
   - python manage.py format
   - python manage.py test
-  - find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8
 env:
   - Flask=0.12.2

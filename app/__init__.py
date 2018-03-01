@@ -8,8 +8,6 @@ from flask_wtf import CsrfProtect
 from flask_compress import Compress
 from flask_rq import RQ
 from flask_oauthlib.provider import OAuth2Provider
-from flask_wtf import CsrfProtect
-from flask_restful import Api
 from flask_babel import Babel
 from flask_oauthlib.client import OAuth
 
@@ -51,7 +49,6 @@ def create_app(config_name):
     oauth.init_app(app)
     oauthclient.init_app(app)
     RQ(app)
-    api = Api(app)
     babel.init_app(app)
 
     import app.flask_whooshalchemy as wa
@@ -97,7 +94,7 @@ def create_app(config_name):
     from app.api.docs import docs as docs_blueprint
     app.register_blueprint(docs_blueprint)
 
-    from flasgger import APISpec, Schema, Swagger, fields
+    from flasgger import APISpec, Swagger
 
     spec = APISpec(
         title='Bhagavad Gita API',
