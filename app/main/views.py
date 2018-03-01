@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import render_template, jsonify, current_app, request, make_response, redirect, flash, url_for
+from flask import render_template, jsonify, current_app, request, make_response, redirect, flash, url_for, abort
 from app.models.verse import VerseModel
 from app.models.chapter import ChapterModel
 from . import main
@@ -145,7 +145,7 @@ def get_locale():
     return request.accept_languages.best_match(LANGUAGES.keys())
 
 
-@main.route('/')
+@main.route('/', methods=['GET'])
 def index():
     language = "en"
     if "settings" in request.cookies:
@@ -159,8 +159,10 @@ def index():
         return redirect('/' + language + '/')
 
 
-@main.route('/<string:language>/')
+@main.route('/<string:language>/', methods=['GET'])
 def index_radhakrishna(language):
+    if language not in LANGUAGES.keys():
+        abort(404)
     chapter_table = "chapters_" + language
     sql = """
         SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.image_name, c.chapter_number
@@ -177,13 +179,13 @@ def index_radhakrishna(language):
 
 
 
-@main.route('/search')
+@main.route('/search', methods=['GET', 'POST'])
 def search():
     verses = VerseModel.query.whoosh_search(request.args.get('query')).all()
     return render_template('main/search.html', verses=verses, query=request.args.get('query'))
 
 
-@main.route('/chapter-numbers')
+@main.route('/chapter-numbers', methods=['GET'])
 def get_all_chapter_numbers():
     chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
     chapter_numbers = {}
@@ -192,7 +194,7 @@ def get_all_chapter_numbers():
     return jsonify(chapter_numbers)
 
 
-@main.route('/languages')
+@main.route('/languages', methods=['GET'])
 def get_all_languages():
     languages = {}
     languages['en'] = "English"
@@ -200,7 +202,7 @@ def get_all_languages():
     return jsonify(languages)
 
 
-@main.route('/verse-numbers/<int:chapter_number>')
+@main.route('/verse-numbers/<int:chapter_number>', methods=['GET'])
 def get_all_verse_numbers(chapter_number):
     verses = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number)
     verse_numbers = {}
@@ -209,8 +211,10 @@ def get_all_verse_numbers(chapter_number):
     return jsonify(verse_numbers)
 
 
-@main.route('/chapter/<int:chapter_number>/')
+@main.route('/chapter/<int:chapter_number>/', methods=['GET'])
 def chapter(chapter_number):
+    if chapter_number not in range(1, 19):
+        abort(404)
     language = "en"
     if "settings" in request.cookies:
         if json.loads(request.cookies.get('settings'))["language"]:
@@ -231,8 +235,12 @@ def chapter(chapter_number):
         return redirect('/chapter/' + str(chapter_number) + '/' + language + '/')
 
 
-@main.route('/chapter/<int:chapter_number>/<string:language>/')
+@main.route('/chapter/<int:chapter_number>/<string:language>/', methods=['GET'])
 def chapter_radhakrishna(chapter_number, language):
+    if chapter_number not in range(1, 19):
+        abort(404)
+    if language not in LANGUAGES.keys():
+        abort(404)
     chapter_table = "chapters_" + language
     sql = """
         SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.image_name, c.chapter_number
@@ -258,8 +266,10 @@ def chapter_radhakrishna(chapter_number, language):
     return render_template('main/chapter.html', chapter=chapter, verses=verses)
 
 
-@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/')
+@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/', methods=['GET'])
 def verse(chapter_number, verse_number):
+    if chapter_number not in range(1, 19):
+        abort(404)
     if verse_number in verse_dict[chapter_number]:
         current_app.logger.info("RadhaKrishna")
         return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_dict[chapter_number][verse_number]) + '/')
@@ -282,6 +292,9 @@ def verse(chapter_number, verse_number):
 
             verse = db.session.execute(sql).first()
 
+            if verse is None:
+                abort(404)
+
             max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
 
             if verse_number==max_verse_number:
@@ -300,8 +313,10 @@ def verse(chapter_number, verse_number):
             return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_number) + '/' + language + '/')
 
 
-@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/')
+@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/', methods=['GET'])
 def verse_radhakrishna(chapter_number, verse_number, language):
+    if chapter_number not in range(1, 19):
+        abort(404)
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
 
     verses_table = "verses_" + language
@@ -319,6 +334,9 @@ def verse_radhakrishna(chapter_number, verse_number, language):
 
     verse = db.session.execute(sql).first()
 
+    if verse is None:
+        abort(404)
+
     max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
 
     if verse_number==max_verse_number:
@@ -334,13 +352,12 @@ def verse_radhakrishna(chapter_number, verse_number, language):
     return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
 
 
-@main.route('/about/')
+@main.route('/about/', methods=['GET'])
 def about():
-
     return render_template('main/about.html')
 
 
-@main.route('/api/')
+@main.route('/api/', methods=['GET'])
 def api():
 
     return render_template('main/api.html')
@@ -370,7 +387,7 @@ def contact():
     return render_template('main/contact.html', form=form)
 
 
-@main.route('/setcookie')
+@main.route('/setcookie', methods=['GET'])
 def set_cookie():
     if "settings" not in request.cookies:
         settings = {}
@@ -382,7 +399,7 @@ def set_cookie():
     return response
 
 
-@main.route('/getcookie')
+@main.route('/getcookie', methods=['GET'])
 def get_cookie():
     radha = request.cookies.get('settings')
     return radha

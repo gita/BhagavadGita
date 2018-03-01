@@ -432,19 +432,21 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
               child.prop("disabled", true);
               var _this = this;
 
-              $.getJSON(url.replace(':parentId:', $(this).val()), function(items) {
-                  var newOptions = '<option value="">-- Select --</option>';
-                  for(var id in items) {
-                      newOptions += '<option value="'+ id +'">'+ items[id] +'</option>';
-                  }
+              if ($(this).val() != null) {
+                $.getJSON(url.replace(':parentId:', $(this).val()), function(items) {
+                    var newOptions = '<option value="">-- Select --</option>';
+                    for(var id in items) {
+                        newOptions += '<option value="'+ id +'">'+ items[id] +'</option>';
+                    }
 
-                  child.select2('destroy').html(newOptions).prop("disabled", false)
-                      .select2(options);
+                    child.select2('destroy').html(newOptions).prop("disabled", false)
+                        .select2(options);
 
-                  afterActions.forEach(function (callback) {
-                      callback(parent, child, items);
-                  });
-              });
+                    afterActions.forEach(function (callback) {
+                        callback(parent, child, items);
+                    });
+                });
+              }
           });
       }
 

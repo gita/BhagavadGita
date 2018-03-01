@@ -216,6 +216,12 @@ def register():
 @account.route('/logout')
 @login_required
 def logout():
+    if 'github_token' in session:
+        session.pop('github_token')
+    if 'google_token' in session:
+        session.pop('google_token')
+    if 'facebook_token' in session:
+        session.pop('facebook_token')
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))

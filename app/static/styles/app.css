@@ -200,3 +200,24 @@ a.breadcrumb-item {
 .go-top:hover {
   background-color: rgba(0, 0, 0, 0.6);
 }
+
+@media -sass-debug-info{filename{}line{font-family:\00003183}}
+.nav-pills .nav-link.active {
+  background-color: #FD9F28;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003187}}
+input[type=email]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=text]:focus:not([readonly]) + label {
+  color: #ff6d00 !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003191}}
+input[type=email]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=text]:focus:not([readonly]) {
+  border-bottom: 1px solid #ff6d00 !important;
+  box-shadow: 0 1px 0 0 #ff6d00 !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003196}}
+.alert {
+  margin-bottom: 0;
+}

@@ -1,6 +1,70 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <h1 class="ui header">500</h1>
-    <h3 class="ui header">Internal Server Error</h3>
+
+<div class="bgimg-1">
+  <div class="caption">
+    <span class="border" id="verse">Oops! There's something wrong with our server. We'll be back as soon as possible.</span>
+    <br>
+    <a class="btn btn-warning krishna-gradient btn-rounded waves-effect waves-light" href="/">Home</a>
+  </div>
+</div>
+
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+  font: 400 15px/1.8 "Lato", sans-serif;
+  color: #777;
+}
+
+.bgimg-1, .bgimg-2, .bgimg-3 {
+  position: relative;
+  opacity: 1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+.bgimg-1 {
+  background-image: url("/static/images/krishna_arjun.jpg");
+  height: 100%;
+  margin-bottom: -2rem;
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  color: #000;
+}
+
+.caption span.border {
+  background-color: #FF9800;
+  color: #fff;
+  padding: 5px;
+  font-size: 25px;
+  letter-spacing: 10px;
+}
+
+h3 {
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font: 20px "Lato", sans-serif;
+  color: #111;
+}
+
+.border {
+    border: 1px solid #FFC107!important;
+}
+
+#verse {
+  background-color: #FFC107;
+  letter-spacing: 5px;
+  border: 1px solid #fff!important;
+}
+</style>
+
 {% endblock %}

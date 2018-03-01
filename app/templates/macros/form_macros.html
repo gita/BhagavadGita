@@ -82,7 +82,7 @@
     {% endif %}
     {% if field.type == 'SubmitField' %}
         <br>
-        <button class="btn btn-lg btn-primary btn-block mb-2" type="submit" value="{{field.label.text}}">{{field.label.text}}</button>
+        <button class="btn btn-lg btn-warning btn-block mb-2" type="submit" value="{{field.label.text}}">{{field.label.text}}</button>
     {% elif field.type == 'BooleanField' %}
         <div class="form-group">
             <input type="checkbox" id="{{field.name}}" name="{{field.name}}">
@@ -112,7 +112,7 @@
             </div>
         {% endfor %}
     {% elif field.type == 'SubmitField' %}
-        <button class="btn btn-lg btn-primary btn-block" type="submit" value="{{field.name}}">{{field.label.text}}</button>
+        <button class="btn btn-lg btn-warning btn-block" type="submit" value="{{field.name}}">{{field.label.text}}</button>
     {% elif field.type == 'FormField' %}
         {{ render_form(field) }}
     {% else %}

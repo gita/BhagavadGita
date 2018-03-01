@@ -179,3 +179,20 @@ a.breadcrumb-item {
 .go-top:hover {
 	background-color: rgba(0, 0, 0, 0.6);
 }
+
+.nav-pills .nav-link.active {
+    background-color: #FD9F28;
+}
+
+input[type=email]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=text]:focus:not([readonly]) + label {
+    color: #ff6d00!important;
+}
+
+input[type=email]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=text]:focus:not([readonly]) {
+    border-bottom: 1px solid #ff6d00!important;
+    box-shadow: 0 1px 0 0 #ff6d00!important;
+}
+
+.alert {
+  margin-bottom: 0;
+}

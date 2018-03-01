@@ -2,52 +2,81 @@
 {% import 'macros/form_macros.html' as f %}
 {% import 'macros/check_password.html' as check %}
 
+{% if user.password_hash %}
+  {% set endpoints = [
+      ('account.manage', 'Account information'),
+      ('account.change_email_request', 'Change email address'),
+      ('account.change_password', 'Change password'),
+      ('account.logout', 'Log out')
+  ] %}
+{% else %}
 {% set endpoints = [
     ('account.manage', 'Account information'),
-    ('account.change_email_request', 'Change email address'),
-    ('account.change_password', 'Change password'),
     ('account.logout', 'Log out')
 ] %}
+{% endif %}
 
 {% macro navigation(items) %}
-    <div class="ui vertical fluid secondary menu">
+    <nav class="nav nav-pills nav-justified">
         {% for route, name in items %}
             {% set href = url_for(route) %}
-            <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
+            <a class="nav-item nav-link {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
                 {{ name }}
             </a>
         {% endfor %}
-    </div>
+    </nav>
 {% endmacro %}
 
 {% macro user_info(user) %}
-    <table class="ui compact definition table">
-        <tr><td>Full name</td><td>{{ '%s %s' % (user.first_name, user.last_name) }}</td></tr>
+    <table class="table table-sm table-hover table-striped">
+        {% if user.last_name %}
+          <tr><td>Full name</td><td>{{ '%s %s' % (user.first_name, user.last_name) }}</td></tr>
+        {% else %}
+          <tr><td>Name</td><td>{{ '%s' % (user.first_name) }}</td></tr>
+        {% endif %}
         <tr><td>Email address</td><td>{{ user.email }}</td></tr>
         <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
     </table>
 {% endmacro %}
 
 {% block content %}
-    <div class="ui stackable centered grid container">
-        <div class="twelve wide column">
-            <h2 class="ui header">
-                Account Settings
-                <div class="sub header">Manage your account settings and change your login information.</div>
-            </h2>
+  <br>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card orange lighten-3 text-center z-depth-2 h-100">
+          <div class="card-body">
+              <h4 class="font-up font-bold mt-2 mb-3"><strong>Account Settings</strong></h4>
+              <h5 class="card-title">Manage your account settings and change your login information.</h5>
+              <hr>
+              <br>
+              {{ navigation(endpoints) }}
+
+              <hr>
+
+              {% if form %}
+                  {{ f.render_form(form, extra_classes='fluid') }}
+              {% else %}
+                  {{ user_info(user) }}
+              {% endif %}
+          </div>
         </div>
-        <div class="stretched divided very relaxed row">
-            <div class="four wide column">
-                {{ navigation(endpoints) }}
-            </div>
-            <div class="eight wide column">
-                {% if form %}
-                    {{ f.render_form(form, extra_classes='fluid') }}
-                {% else %}
-                    {{ user_info(user) }}
-                {% endif %}
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+
     {{ check.password_check('new_password', 0) }}
+
+<style>
+a {
+    color: #fafafa;
+}
+a:hover {
+    color: #fff;
+}
+.table td, .table th {
+    border-top: 1px solid #fafafa;
+}
+</style>
 {% endblock %}
