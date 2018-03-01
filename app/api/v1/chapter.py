@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from ...models.chapter import ChapterModel
-from ... import oauth, csrf
-from ...schemas.chapter import ChapterSchema
-from flask import jsonify
 from flasgger import Schema, Swagger, SwaggerView, fields
+from flask import jsonify
 
+from ... import csrf, oauth
+from ...models.chapter import ChapterModel
+from ...schemas.chapter import ChapterSchema
 
 chapter_schema = ChapterSchema()
 chapters_schema = ChapterSchema(many=True)

@@ -1,10 +1,12 @@
 from .. import db
 
+
 class ChapterModel(db.Model):
 
     __tablename__ = 'chapters'
-    __searchable__ = ['name', 'name_transliterated', 'name_translation', 'name_meaning']
-
+    __searchable__ = [
+        'name', 'name_transliterated', 'name_translation', 'name_meaning'
+    ]
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -17,7 +19,9 @@ class ChapterModel(db.Model):
     chapter_summary = db.Column(db.String)
     verses = db.relationship('VerseModel', lazy='dynamic')
 
-    def __init__(self, name, name_transliterated, name_translation, verses_count, chapter_number, name_meaning, image_name, chapter_summary):
+    def __init__(self, name, name_transliterated, name_translation,
+                 verses_count, chapter_number, name_meaning, image_name,
+                 chapter_summary):
         self.name = name
         self.name_transliterated = name_transliterated
         self.name_translation = name_translation
@@ -28,7 +32,14 @@ class ChapterModel(db.Model):
         self.chapter_summary = chapter_summary
 
     def json(self):
-        return {'name': self.name, 'name_transliterated': self.name_transliterated, 'name_translation': self.name_translation, 'verses_count': self.verses_count, 'chapter_number': self.chapter_number, 'name_meaning': self.name_meaning}
+        return {
+            'name': self.name,
+            'name_transliterated': self.name_transliterated,
+            'name_translation': self.name_translation,
+            'verses_count': self.verses_count,
+            'chapter_number': self.chapter_number,
+            'name_meaning': self.name_meaning
+        }
 
     @classmethod
     def find_by_chapter_number(cls, chapter_number):

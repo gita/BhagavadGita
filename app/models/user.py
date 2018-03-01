@@ -1,7 +1,7 @@
 from flask import current_app
 from flask_login import AnonymousUserMixin, UserMixin
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .. import db, login_manager
@@ -190,6 +190,7 @@ class AnonymousUser(AnonymousUserMixin):
     def is_admin(self):
         return False
 
+
 class Client(db.Model):
     client_id = db.Column(db.String(40), primary_key=True)
     client_secret = db.Column(db.String(55), nullable=False)
@@ -231,13 +232,13 @@ class Client(db.Model):
 class Grant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(
-        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE')
-    )
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User')
 
     client_id = db.Column(
-        db.String(40), db.ForeignKey('client.client_id'),
+        db.String(40),
+        db.ForeignKey('client.client_id'),
         nullable=False,
     )
     client = db.relationship('Client')
@@ -264,14 +265,13 @@ class Grant(db.Model):
 class Token(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(
-        db.String(40), db.ForeignKey('client.client_id'),
+        db.String(40),
+        db.ForeignKey('client.client_id'),
         nullable=False,
     )
     client = db.relationship('Client')
 
-    user_id = db.Column(
-        db.Integer, db.ForeignKey('users.id')
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User')
 
     # currently only bearer is supported

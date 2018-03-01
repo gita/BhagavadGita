@@ -1,12 +1,15 @@
-from flask import flash, redirect, render_template, request, url_for, session, jsonify, current_app
-from flask_rq import get_queue
-from werkzeug.security import gen_salt
 from datetime import datetime, timedelta
 
+from flask import (current_app, flash, jsonify, redirect, render_template,
+                   request, session, url_for)
+from flask_rq import get_queue
+from werkzeug.security import gen_salt
+
 from . import auth
-from ... import db, oauth, csrf
-from ...models import User, Client, Grant, Token
+from ... import csrf, db, oauth
+from ...models import Client, Grant, Token, User
 from .forms import UserForm
+
 
 def current_user():
     if 'id' in session:
@@ -46,7 +49,7 @@ def client():
             'http://127.0.0.1:8000/authorized',
             'http://127.0.1:8000/authorized',
             'http://127.1:8000/authorized',
-            ]),
+        ]),
         _default_scopes='email',
         user_id=user.id,
     )
@@ -78,8 +81,7 @@ def save_grant(client_id, code, request, *args, **kwargs):
         redirect_uri=request.redirect_uri,
         _scopes=' '.join(request.scopes),
         user=current_user(),
-        expires=expires
-    )
+        expires=expires)
     db.session.add(grant)
     db.session.commit()
     return grant
@@ -94,9 +96,7 @@ def load_token(access_token=None):
 @oauth.tokensetter
 def save_token(token, request, *args, **kwargs):
     toks = Token.query.filter_by(
-        client_id=request.client.client_id,
-        user_id=request.user.id
-    )
+        client_id=request.client.client_id, user_id=request.user.id)
     # make sure that every client has only one token connected to a user
     for t in toks:
         db.session.delete(t)

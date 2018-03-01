@@ -1,14 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from ...models.verse import VerseModel
+from flasgger import Schema, Swagger, SwaggerView, fields
+from flask import jsonify
+
 from app.models.chapter import ChapterModel
-from ... import oauth, csrf
+
+from ... import csrf, oauth
+from ...models.verse import VerseModel
 from ...schemas.chapter import ChapterSchema
 from ...schemas.verse import VerseSchema
-from flask import jsonify
-from flasgger import Schema, Swagger, SwaggerView, fields
-
 
 verse_schema = VerseSchema()
 verses_schema = VerseSchema(many=True)
@@ -208,7 +209,8 @@ class VerseByChapter(SwaggerView):
 
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
         if chapter:
-            verse = VerseModel.find_by_chapter_number_verse_number(chapter_number, verse_number)
+            verse = VerseModel.find_by_chapter_number_verse_number(
+                chapter_number, verse_number)
             if verse:
                 result = verse_schema.dump(verse)
                 return jsonify(result.data)

@@ -27,7 +27,6 @@ oauth = OAuth2Provider()
 oauthclient = OAuth()
 babel = Babel()
 
-
 # Set up Flask-Login
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -109,22 +108,17 @@ def create_app(config_name):
         ],
     )
 
-    app.config['SWAGGER'] = {
-            'title': 'Bhagavad Gita API',
-            'uiversion': 3
-    }
+    app.config['SWAGGER'] = {'title': 'Bhagavad Gita API', 'uiversion': 3}
 
     swagger = Swagger(
-            app,
-            template={
-                'swagger': '3.0',
-                'info':
-                {
-                    'title': 'Bhagavad Gita API',
-                    'version': '1.0'
-                }
+        app,
+        template={
+            'swagger': '3.0',
+            'info': {
+                'title': 'Bhagavad Gita API',
+                'version': '1.0'
             }
-    )
+        })
 
     from app.api.v1.verse import VerseList, VerseListByChapter, VerseByChapter
     from app.api.v1.chapter import Chapter, ChapterList
@@ -133,13 +127,18 @@ def create_app(config_name):
     app.add_url_rule('/v1/verses', view_func=verse_list_view)
 
     verse_list_chapter_view = VerseListByChapter.as_view('VerseListChapter')
-    app.add_url_rule('/v1/chapters/<int:chapter_number>/verses', view_func=verse_list_chapter_view)
+    app.add_url_rule(
+        '/v1/chapters/<int:chapter_number>/verses',
+        view_func=verse_list_chapter_view)
 
     verse_chapter_view = VerseByChapter.as_view('VerseChapter')
-    app.add_url_rule('/v1/chapters/<int:chapter_number>/verses/<string:verse_number>', view_func=verse_chapter_view)
+    app.add_url_rule(
+        '/v1/chapters/<int:chapter_number>/verses/<string:verse_number>',
+        view_func=verse_chapter_view)
 
     chapter_view = Chapter.as_view('Chapter')
-    app.add_url_rule('/v1/chapters/<int:chapter_number>', view_func=chapter_view)
+    app.add_url_rule(
+        '/v1/chapters/<int:chapter_number>', view_func=chapter_view)
 
     chapter_list_view = ChapterList.as_view('ChapterList')
     app.add_url_rule('/v1/chapters', view_func=chapter_list_view)

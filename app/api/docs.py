@@ -1,6 +1,4 @@
-from flask import Blueprint
-from flask import render_template
-
+from flask import Blueprint, render_template
 
 docs = Blueprint('Docs', __name__, url_prefix="/docs")
 

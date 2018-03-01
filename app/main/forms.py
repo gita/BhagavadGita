@@ -8,11 +8,14 @@ from wtforms.validators import Email, InputRequired, Length
 
 class ContactForm(Form):
     name = StringField(
-        'Your name', validators=[InputRequired(), Length(1, 64)])
+        'Your name', validators=[InputRequired(),
+                                 Length(1, 64)])
     email = EmailField(
-        'Your Email', validators=[InputRequired(), Length(1, 64), Email()])
-    subject = StringField(
-        'Subject', validators=[Length(1, 64)])
+        'Your Email', validators=[InputRequired(),
+                                  Length(1, 64),
+                                  Email()])
+    subject = StringField('Subject', validators=[Length(1, 64)])
     message = TextAreaField(
-        'Message', validators=[InputRequired(), Length(1, 200)])
+        'Message', validators=[InputRequired(),
+                               Length(1, 200)])
     submit = SubmitField('Send')

@@ -1,141 +1,135 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import render_template, jsonify, current_app, request, make_response, redirect, flash, url_for, abort
-from app.models.verse import VerseModel
-from app.models.chapter import ChapterModel
-from . import main
-from app import db
 import json
-from app import babel
-from flask_babel import gettext
-from .forms import ContactForm
-from flask_rq import get_queue
-from ..email import send_email
-
-
 import sys
+
+from flask import (abort, current_app, flash, jsonify, make_response, redirect,
+                   render_template, request, url_for)
+from flask_babel import gettext
+from flask_rq import get_queue
+
+from app import babel, db
+from app.models.chapter import ChapterModel
+from app.models.verse import VerseModel
+
+from . import main
+from ..email import send_email
+from .forms import ContactForm
+
 if sys.version_info[0] < 3:
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-
-LANGUAGES = {
-    'en': 'English',
-    'hi': 'हिंदी'
-}
-
+LANGUAGES = {'en': 'English', 'hi': 'हिंदी'}
 
 verse_dict = {
-  1:{
-    '16':"16-18",
-    '17':"16-18",
-    '18':"16-18",
-    '21':"21-22",
-    '22':"21-22",
-    '32':"32-35",
-    '33':"32-35",
-    '34':"32-35",
-    '35':"32-35",
-    '37':"37-38",
-    '38':"37-38",
-  },
-  2:{
-    '42':"42-43",
-    '43':"42-43",
-  },
-  3:{
-  },
-  4:{
-  },
-  5:{
-    '8':"8-9",
-    '9':"8-9",
-    '27':"27-28",
-    '28':"27-28",
-  },
-  6:{
-    '11':"11-12",
-    '12':"11-12",
-    '13':"13-14",
-    '14':"13-14",
-    '20':"20-23",
-    '21':"20-23",
-    '22':"20-23",
-    '23':"20-23",
-  },
-  7: {},
-  8:{
-  },
-  9:{
-  },
-  10:{
-    '4':"4-5",
-    '5':"4-5",
-    '12':"12-13",
-    '13':"12-13",
-  },
-  11:{
-    '10':"10-11",
-    '11':"10-11",
-    '26':"26-27",
-    '27':"26-27",
-    '41':"41-42",
-    '42':"41-42",
-  },
-  12:{
-    '3':"3-4",
-    '4':"3-4",
-    '6':"6-7",
-    '7':"6-7",
-    '13':"13-14",
-    '14':"13-14",
-    '18':"18-19",
-    '19':"18-19",
-  },
-  13:{
-    '1':"1-2",
-    '2':"1-2",
-    '6':"6-7",
-    '7':"6-7",
-    '8':"8-12",
-    '9':"8-12",
-    '10':"8-12",
-    '11':"8-12",
-    '12':"8-12",
-  },
-  14:{
-    '22':"22-25",
-    '23':"22-25",
-    '24':"22-25",
-    '25':"22-25",
-  },
-  15:{
-    '3':"3-4",
-    '4':"3-4",
-  },
-  16:{
-    '1':"1-3",
-    '2':"1-3",
-    '3':"1-3",
-    '11':"11-12",
-    '12':"11-12",
-    '13':"13-15",
-    '14':"13-15",
-    '15':"13-15",
-  },
-  17:{
-    '5':"5-6",
-    '6':"5-6",
-    '26':"26-27",
-    '27':"26-27",
-  },
-  18:{
-    '51':"51-53",
-    '52':"51-53",
-    '53':"51-53",
-  },
+    1: {
+        '16': "16-18",
+        '17': "16-18",
+        '18': "16-18",
+        '21': "21-22",
+        '22': "21-22",
+        '32': "32-35",
+        '33': "32-35",
+        '34': "32-35",
+        '35': "32-35",
+        '37': "37-38",
+        '38': "37-38",
+    },
+    2: {
+        '42': "42-43",
+        '43': "42-43",
+    },
+    3: {},
+    4: {},
+    5: {
+        '8': "8-9",
+        '9': "8-9",
+        '27': "27-28",
+        '28': "27-28",
+    },
+    6: {
+        '11': "11-12",
+        '12': "11-12",
+        '13': "13-14",
+        '14': "13-14",
+        '20': "20-23",
+        '21': "20-23",
+        '22': "20-23",
+        '23': "20-23",
+    },
+    7: {},
+    8: {},
+    9: {},
+    10: {
+        '4': "4-5",
+        '5': "4-5",
+        '12': "12-13",
+        '13': "12-13",
+    },
+    11: {
+        '10': "10-11",
+        '11': "10-11",
+        '26': "26-27",
+        '27': "26-27",
+        '41': "41-42",
+        '42': "41-42",
+    },
+    12: {
+        '3': "3-4",
+        '4': "3-4",
+        '6': "6-7",
+        '7': "6-7",
+        '13': "13-14",
+        '14': "13-14",
+        '18': "18-19",
+        '19': "18-19",
+    },
+    13: {
+        '1': "1-2",
+        '2': "1-2",
+        '6': "6-7",
+        '7': "6-7",
+        '8': "8-12",
+        '9': "8-12",
+        '10': "8-12",
+        '11': "8-12",
+        '12': "8-12",
+    },
+    14: {
+        '22': "22-25",
+        '23': "22-25",
+        '24': "22-25",
+        '25': "22-25",
+    },
+    15: {
+        '3': "3-4",
+        '4': "3-4",
+    },
+    16: {
+        '1': "1-3",
+        '2': "1-3",
+        '3': "1-3",
+        '11': "11-12",
+        '12': "11-12",
+        '13': "13-15",
+        '14': "13-15",
+        '15': "13-15",
+    },
+    17: {
+        '5': "5-6",
+        '6': "5-6",
+        '26': "26-27",
+        '27': "26-27",
+    },
+    18: {
+        '51': "51-53",
+        '52': "51-53",
+        '53': "51-53",
+    },
 }
+
 
 @babel.localeselector
 def get_locale():
@@ -153,8 +147,10 @@ def index():
             language = json.loads(request.cookies.get('settings'))["language"]
 
     if language == "en":
-        chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
-        return render_template('main/index.html', chapters=chapters, language=language)
+        chapters = ChapterModel.query.order_by(
+            ChapterModel.chapter_number).all()
+        return render_template(
+            'main/index.html', chapters=chapters, language=language)
     else:
         return redirect('/' + language + '/')
 
@@ -175,14 +171,15 @@ def index_radhakrishna(language):
     """ % (chapter_table)
     chapters = db.session.execute(sql)
 
-    return render_template('main/index.html', chapters=chapters, language=language)
-
+    return render_template(
+        'main/index.html', chapters=chapters, language=language)
 
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
     verses = VerseModel.query.whoosh_search(request.args.get('query')).all()
-    return render_template('main/search.html', verses=verses, query=request.args.get('query'))
+    return render_template(
+        'main/search.html', verses=verses, query=request.args.get('query'))
 
 
 @main.route('/chapter-numbers', methods=['GET'])
@@ -190,7 +187,8 @@ def get_all_chapter_numbers():
     chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
     chapter_numbers = {}
     for chapter in chapters:
-        chapter_numbers[chapter.chapter_number] = "Chapter " + str(chapter.chapter_number)
+        chapter_numbers[chapter.chapter_number] = "Chapter " + str(
+            chapter.chapter_number)
     return jsonify(chapter_numbers)
 
 
@@ -204,7 +202,8 @@ def get_all_languages():
 
 @main.route('/verse-numbers/<int:chapter_number>', methods=['GET'])
 def get_all_verse_numbers(chapter_number):
-    verses = VerseModel.query.order_by(VerseModel.verse_order).filter_by(chapter_number=chapter_number)
+    verses = VerseModel.query.order_by(
+        VerseModel.verse_order).filter_by(chapter_number=chapter_number)
     verse_numbers = {}
     for verse in verses:
         verse_numbers[verse.verse_order] = "Verse " + str(verse.verse_number)
@@ -230,12 +229,15 @@ def chapter(chapter_number):
             """ % (chapter_number)
 
         verses = db.session.execute(sql)
-        return render_template('main/chapter.html', chapter=chapter, verses=verses)
+        return render_template(
+            'main/chapter.html', chapter=chapter, verses=verses)
     else:
-        return redirect('/chapter/' + str(chapter_number) + '/' + language + '/')
+        return redirect(
+            '/chapter/' + str(chapter_number) + '/' + language + '/')
 
 
-@main.route('/chapter/<int:chapter_number>/<string:language>/', methods=['GET'])
+@main.route(
+    '/chapter/<int:chapter_number>/<string:language>/', methods=['GET'])
 def chapter_radhakrishna(chapter_number, language):
     if chapter_number not in range(1, 19):
         abort(404)
@@ -266,18 +268,22 @@ def chapter_radhakrishna(chapter_number, language):
     return render_template('main/chapter.html', chapter=chapter, verses=verses)
 
 
-@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/', methods=['GET'])
+@main.route(
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/',
+    methods=['GET'])
 def verse(chapter_number, verse_number):
     if chapter_number not in range(1, 19):
         abort(404)
     if verse_number in verse_dict[chapter_number]:
         current_app.logger.info("RadhaKrishna")
-        return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_dict[chapter_number][verse_number]) + '/')
+        return redirect('/chapter/' + str(chapter_number) + '/verse/' +
+                        str(verse_dict[chapter_number][verse_number]) + '/')
     else:
         language = "en"
         if "settings" in request.cookies:
             if json.loads(request.cookies.get('settings'))["language"]:
-                language = json.loads(request.cookies.get('settings'))["language"]
+                language = json.loads(
+                    request.cookies.get('settings'))["language"]
 
         if language == "en":
             chapter = ChapterModel.find_by_chapter_number(chapter_number)
@@ -295,25 +301,42 @@ def verse(chapter_number, verse_number):
             if verse is None:
                 abort(404)
 
-            max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
+            max_verse_number = VerseModel.query.order_by(
+                VerseModel.verse_order.desc()).filter_by(
+                    chapter_number=chapter_number).first().verse_number
 
-            if verse_number==max_verse_number:
+            if verse_number == max_verse_number:
                 next_verse = None
                 previous_verse_order = verse.verse_order - 1
-                previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+                previous_verse = VerseModel.query.filter_by(
+                    chapter_number=chapter_number,
+                    verse_order=previous_verse_order).first()
             else:
                 next_verse_order = verse.verse_order + 1
                 previous_verse_order = verse.verse_order - 1
-                previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
-                next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
+                previous_verse = VerseModel.query.filter_by(
+                    chapter_number=chapter_number,
+                    verse_order=previous_verse_order).first()
+                next_verse = VerseModel.query.filter_by(
+                    chapter_number=chapter_number,
+                    verse_order=next_verse_order).first()
 
-            return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
+            return render_template(
+                'main/verse.html',
+                chapter=chapter,
+                verse=verse,
+                next_verse=next_verse,
+                previous_verse=previous_verse,
+                language=language)
 
         else:
-            return redirect('/chapter/' + str(chapter_number) + '/verse/' + str(verse_number) + '/' + language + '/')
+            return redirect('/chapter/' + str(chapter_number) + '/verse/' +
+                            str(verse_number) + '/' + language + '/')
 
 
-@main.route('/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/', methods=['GET'])
+@main.route(
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/',
+    methods=['GET'])
 def verse_radhakrishna(chapter_number, verse_number, language):
     if chapter_number not in range(1, 19):
         abort(404)
@@ -337,19 +360,33 @@ def verse_radhakrishna(chapter_number, verse_number, language):
     if verse is None:
         abort(404)
 
-    max_verse_number = VerseModel.query.order_by(VerseModel.verse_order.desc()).filter_by(chapter_number=chapter_number).first().verse_number
+    max_verse_number = VerseModel.query.order_by(
+        VerseModel.verse_order.desc()).filter_by(
+            chapter_number=chapter_number).first().verse_number
 
-    if verse_number==max_verse_number:
+    if verse_number == max_verse_number:
         next_verse = None
         previous_verse_order = verse.verse_order - 1
-        previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
+        previous_verse = VerseModel.query.filter_by(
+            chapter_number=chapter_number,
+            verse_order=previous_verse_order).first()
     else:
         next_verse_order = verse.verse_order + 1
         previous_verse_order = verse.verse_order - 1
-        previous_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=previous_verse_order).first()
-        next_verse = VerseModel.query.filter_by(chapter_number=chapter_number, verse_order=next_verse_order).first()
+        previous_verse = VerseModel.query.filter_by(
+            chapter_number=chapter_number,
+            verse_order=previous_verse_order).first()
+        next_verse = VerseModel.query.filter_by(
+            chapter_number=chapter_number,
+            verse_order=next_verse_order).first()
 
-    return render_template('main/verse.html', chapter=chapter, verse=verse, next_verse=next_verse, previous_verse=previous_verse, language=language)
+    return render_template(
+        'main/verse.html',
+        chapter=chapter,
+        verse=verse,
+        next_verse=next_verse,
+        previous_verse=previous_verse,
+        language=language)
 
 
 @main.route('/about/', methods=['GET'])
@@ -382,7 +419,9 @@ def contact():
             name=args_dict['name'],
             email=args_dict['email'],
             message=args_dict['message'])
-        flash('Thank you for your message. We will try to reply as soon as possible.')
+        flash(
+            'Thank you for your message. We will try to reply as soon as possible.'
+        )
         return redirect(url_for('main.index'))
     return render_template('main/contact.html', form=form)
 

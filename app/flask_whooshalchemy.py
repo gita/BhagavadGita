@@ -11,35 +11,27 @@
 
 '''
 
-from __future__ import with_statement
-from __future__ import absolute_import
-
-
-import flask.ext.sqlalchemy as flask_sqlalchemy
-
-import sqlalchemy
-
-from whoosh.qparser import OrGroup
-from whoosh.qparser import AndGroup
-from whoosh.qparser import MultifieldParser
-from whoosh.analysis import StemmingAnalyzer
-import whoosh.index
-from whoosh.fields import Schema
-#from whoosh.fields import ID, TEXT, KEYWORD, STORED
+from __future__ import absolute_import, with_statement
 
 import heapq
 import os
 import sys
 
+import flask.ext.sqlalchemy as flask_sqlalchemy
+import sqlalchemy
+import whoosh.index
+from whoosh.analysis import StemmingAnalyzer
+from whoosh.fields import Schema
+from whoosh.qparser import AndGroup, MultifieldParser, OrGroup
+
+#from whoosh.fields import ID, TEXT, KEYWORD, STORED
 
 if sys.version < '3':
     text_type = unicode
 else:
     text_type = str
 
-
 __searchable__ = '__searchable__'
-
 
 DEFAULT_WHOOSH_INDEX_NAME = 'whoosh_index'
 
@@ -80,9 +72,9 @@ class _QueryProxy(flask_sqlalchemy.BaseQuery):
             # Whoosh
 
             if hasattr(row, self._primary_key_name):
-                heapq.heappush(ordered_by_whoosh_rank,
-                    (self._whoosh_rank[text_type(getattr(row,
-                        self._primary_key_name))], row))
+                heapq.heappush(
+                    ordered_by_whoosh_rank, (self._whoosh_rank[text_type(
+                        getattr(row, self._primary_key_name))], row))
             else:
                 # PK column not found in result row
                 return iter(super_rows)
@@ -135,8 +127,8 @@ class _QueryProxy(flask_sqlalchemy.BaseQuery):
             result_set.add(pk)
             result_ranks[pk] = rank
 
-        f = self.filter(getattr(self._modelclass,
-            self._primary_key_name).in_(result_set))
+        f = self.filter(
+            getattr(self._modelclass, self._primary_key_name).in_(result_set))
 
         f._whoosh_rank = result_ranks
 
@@ -151,8 +143,8 @@ class _Searcher(object):
         self.primary_key_name = primary
         self._index = indx
         self.searcher = indx.searcher()
-        self._all_fields = list(set(indx.schema._fields.keys()) -
-                set([self.primary_key_name]))
+        self._all_fields = list(
+            set(indx.schema._fields.keys()) - set([self.primary_key_name]))
 
     def __call__(self, query, limit=None, fields=None, or_=False):
         if fields is None:
@@ -160,8 +152,7 @@ class _Searcher(object):
 
         group = OrGroup if or_ else AndGroup
         parser = MultifieldParser(fields, self._index.schema, group=group)
-        return self._index.searcher().search(parser.parse(query),
-                limit=limit)
+        return self._index.searcher().search(parser.parse(query), limit=limit)
 
 
 def whoosh_index(app, model):
@@ -174,8 +165,7 @@ def whoosh_index(app, model):
     if not hasattr(app, 'whoosh_indexes'):
         app.whoosh_indexes = {}
 
-    return app.whoosh_indexes.get(model.__name__,
-                _create_index(app, model))
+    return app.whoosh_indexes.get(model.__name__, _create_index(app, model))
 
 
 def _create_index(app, model):
@@ -192,8 +182,7 @@ def _create_index(app, model):
         app.config['WHOOSH_BASE'] = DEFAULT_WHOOSH_INDEX_NAME
 
     # we index per model.
-    wi = os.path.join(app.config.get('WHOOSH_BASE'),
-            model.__name__)
+    wi = os.path.join(app.config.get('WHOOSH_BASE'), model.__name__)
 
     if not app.config.get('WHOOSH_ANALYZER'):
         app.config['WHOOSH_ANALYZER'] = StemmingAnalyzer()
@@ -227,9 +216,9 @@ def _get_whoosh_schema_and_primary_key(model, analyzer=StemmingAnalyzer()):
             schema[field.name] = whoosh.fields.ID(stored=True, unique=True)
             primary = field.name
 
-        if field.name in searchable and isinstance(field.type,
-                (sqlalchemy.types.Text, sqlalchemy.types.String,
-                    sqlalchemy.types.Unicode)):
+        if field.name in searchable and isinstance(
+                field.type, (sqlalchemy.types.Text, sqlalchemy.types.String,
+                             sqlalchemy.types.Unicode)):
 
             schema[field.name] = whoosh.fields.TEXT(analyzer=analyzer)
 
@@ -248,8 +237,8 @@ def _after_flush(app, changes):
         update = change[1] in ('update', 'insert')
 
         if hasattr(change[0].__class__, __searchable__):
-            bytype.setdefault(change[0].__class__.__name__, []).append((update,
-                change[0]))
+            bytype.setdefault(change[0].__class__.__name__, []).append(
+                (update, change[0]))
 
     if sys.version < '3':
         iter = bytype.iteritems
@@ -268,18 +257,18 @@ def _after_flush(app, changes):
                         try:
                             attrs[key] = text_type(getattr(v, key))
                         except AttributeError:
-                            raise AttributeError('{0} does not have {1} field {2}'
-                                    .format(model, __searchable__, key))
+                            raise AttributeError(
+                                '{0} does not have {1} field {2}'.format(
+                                    model, __searchable__, key))
 
                     attrs[primary_field] = text_type(getattr(v, primary_field))
                     writer.update_document(**attrs)
                 else:
-                    writer.delete_by_term(primary_field, text_type(getattr(v,
-                        primary_field)))
+                    writer.delete_by_term(primary_field,
+                                          text_type(getattr(v, primary_field)))
 
 
 flask_sqlalchemy.models_committed.connect(_after_flush)
-
 
 # def init_app(db):
 #     app = db.get_app()

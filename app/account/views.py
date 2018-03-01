@@ -1,18 +1,18 @@
-from flask import flash, redirect, render_template, request, url_for, current_app, session, jsonify
-from flask_login import (current_user, login_required, login_user,
-                         logout_user)
+import os
+
+from flask import (current_app, flash, jsonify, redirect, render_template,
+                   request, session, url_for)
+from flask_login import current_user, login_required, login_user, logout_user
 from flask_rq import get_queue
 from werkzeug.security import gen_salt
 
 from . import account
 from .. import db, oauthclient
 from ..email import send_email
-from ..models import User, App, Client
-from .forms import (ChangeEmailForm, ChangePasswordForm, CreatePasswordForm,
-                    LoginForm, RegistrationForm, RequestResetPasswordForm,
-                    ResetPasswordForm, CreateAppForm, UpdateAppForm)
-import os
-
+from ..models import App, Client, User
+from .forms import (ChangeEmailForm, ChangePasswordForm, CreateAppForm,
+                    CreatePasswordForm, LoginForm, RegistrationForm,
+                    RequestResetPasswordForm, ResetPasswordForm, UpdateAppForm)
 
 github = oauthclient.remote_app(
     'github',
@@ -23,16 +23,13 @@ github = oauthclient.remote_app(
     request_token_url=None,
     access_token_method='POST',
     access_token_url='https://github.com/login/oauth/access_token',
-    authorize_url='https://github.com/login/oauth/authorize'
-)
+    authorize_url='https://github.com/login/oauth/authorize')
 
 google = oauthclient.remote_app(
     'google',
     consumer_key=os.environ.get('GOOGLE_KEY'),
     consumer_secret=os.environ.get('GOOGLE_SECRET'),
-    request_token_params={
-        'scope': 'email'
-    },
+    request_token_params={'scope': 'email'},
     base_url='https://www.googleapis.com/oauth2/v1/',
     request_token_url=None,
     access_token_method='POST',
@@ -49,8 +46,7 @@ facebook = oauthclient.remote_app(
     request_token_url=None,
     access_token_url='/oauth/access_token',
     access_token_method='GET',
-    authorize_url='https://www.facebook.com/dialog/oauth'
-)
+    authorize_url='https://www.facebook.com/dialog/oauth')
 
 
 @account.route('/github-login')
@@ -65,13 +61,20 @@ def github_login():
             flash('You are now logged in. Welcome back!', 'success')
             return redirect(request.args.get('next') or url_for('main.index'))
         else:
-            user = User(email=email, social_id=me.data.get('id'), social_provider="github", username=me.data.get('login'), first_name=name, confirmed=True)
+            user = User(
+                email=email,
+                social_id=me.data.get('id'),
+                social_provider="github",
+                username=me.data.get('login'),
+                first_name=name,
+                confirmed=True)
             db.session.add(user)
             db.session.commit()
             login_user(user, True)
             flash('You are now logged in. Welcome back!', 'success')
             return redirect(request.args.get('next') or url_for('main.index'))
-    return github.authorize(callback=url_for('account.github_authorized', _external=True))
+    return github.authorize(
+        callback=url_for('account.github_authorized', _external=True))
 
 
 @account.route('/github/authorized')
@@ -79,10 +82,7 @@ def github_authorized():
     resp = github.authorized_response()
     if resp is None or resp.get('access_token') is None:
         return 'Access denied: reason=%s error=%s resp=%s' % (
-            request.args['error'],
-            request.args['error_description'],
-            resp
-        )
+            request.args['error'], request.args['error_description'], resp)
     session['github_token'] = (resp['access_token'], '')
     return redirect(url_for('account.github_login'))
 
@@ -104,13 +104,19 @@ def google_login():
             flash('You are now logged in. Welcome back!', 'success')
             return redirect(request.args.get('next') or url_for('main.index'))
         else:
-            user = User(email=email, social_id=me.data.get('id'), social_provider="google", first_name=name, confirmed=True)
+            user = User(
+                email=email,
+                social_id=me.data.get('id'),
+                social_provider="google",
+                first_name=name,
+                confirmed=True)
             db.session.add(user)
             db.session.commit()
             login_user(user, True)
             flash('You are now logged in. Welcome back!', 'success')
             return redirect(request.args.get('next') or url_for('main.index'))
-    return google.authorize(callback=url_for('account.google_authorized', _external=True))
+    return google.authorize(
+        callback=url_for('account.google_authorized', _external=True))
 
 
 @account.route('/google/authorized')
@@ -118,10 +124,7 @@ def google_authorized():
     resp = google.authorized_response()
     if resp is None or resp.get('access_token') is None:
         return 'Access denied: reason=%s error=%s resp=%s' % (
-            request.args['error'],
-            request.args['error_description'],
-            resp
-        )
+            request.args['error'], request.args['error_description'], resp)
     session['google_token'] = (resp['access_token'], '')
     return redirect(url_for('account.google_login'))
 
@@ -143,13 +146,22 @@ def facebook_login():
             flash('You are now logged in. Welcome back!', 'success')
             return redirect(request.args.get('next') or url_for('main.index'))
         else:
-            user = User(email=email, social_id=me.data.get('id'), social_provider="facebook", first_name=name, confirmed=True)
+            user = User(
+                email=email,
+                social_id=me.data.get('id'),
+                social_provider="facebook",
+                first_name=name,
+                confirmed=True)
             db.session.add(user)
             db.session.commit()
             login_user(user, True)
             flash('You are now logged in. Welcome back!', 'success')
             return redirect(request.args.get('next') or url_for('main.index'))
-    return facebook.authorize(callback=url_for('account.facebook_authorized', next=request.args.get('next') or request.referrer or None, _external=True))
+    return facebook.authorize(
+        callback=url_for(
+            'account.facebook_authorized',
+            next=request.args.get('next') or request.referrer or None,
+            _external=True))
 
 
 @account.route('/facebook/authorized')
@@ -157,10 +169,7 @@ def facebook_authorized():
     resp = facebook.authorized_response()
     if resp is None or resp.get('access_token') is None:
         return 'Access denied: reason=%s error=%s resp=%s' % (
-            request.args['error'],
-            request.args['error_description'],
-            resp
-        )
+            request.args['error'], request.args['error_description'], resp)
     session['facebook_token'] = (resp['access_token'], '')
     return redirect(url_for('account.facebook_login'))
 
@@ -255,8 +264,8 @@ def reset_password_request():
                 user=user,
                 reset_link=reset_link,
                 next=request.args.get('next'))
-        flash('A password reset link has been sent to {}.'
-              .format(form.email.data), 'warning')
+        flash('A password reset link has been sent to {}.'.format(
+            form.email.data), 'warning')
         return redirect(url_for('account.login'))
     return render_template('account/reset_password.html', form=form)
 
@@ -447,7 +456,7 @@ def create_app():
             application_description=form.application_description.data,
             application_website=form.application_website.data,
             callback=form.callback.data,
-            user_id = current_user.id)
+            user_id=current_user.id)
         db.session.add(app)
         db.session.flush()
 
@@ -459,17 +468,18 @@ def create_app():
                 'http://127.0.0.1:8000/authorized',
                 'http://127.0.1:8000/authorized',
                 'http://127.1:8000/authorized',
-                ]),
+            ]),
             _default_scopes='email',
             user_id=current_user.id,
-            app_id=app.application_id
-        )
+            app_id=app.application_id)
         db.session.add(item)
         db.session.commit()
 
         flash('You application has been created.', 'success')
-        return redirect(url_for('account.update_app', application_id=app.application_id))
-    return render_template('account/create_app.html', user=current_user, form=form)
+        return redirect(
+            url_for('account.update_app', application_id=app.application_id))
+    return render_template(
+        'account/create_app.html', user=current_user, form=form)
 
 
 @account.route('/manage/apps/<int:application_id>', methods=['GET', 'POST'])
@@ -488,15 +498,21 @@ def update_app(application_id):
     form_dict['callback'] = app.callback
     form = UpdateAppForm(**form_dict)
     if form.validate_on_submit():
-        app.application_name=form.application_name.data
-        app.application_description=form.application_description.data
-        app.application_website=form.application_website.data
-        app.callback=form.callback.data
+        app.application_name = form.application_name.data
+        app.application_description = form.application_description.data
+        app.application_website = form.application_website.data
+        app.callback = form.callback.data
         db.session.commit()
 
         flash('You application has been updated.', 'success')
         return redirect(url_for('main.index'))
-    return render_template('account/update_app.html', user=current_user, form=form, app_name=form_dict['application_name'], client_id=client_id, client_secret=client_secret)
+    return render_template(
+        'account/update_app.html',
+        user=current_user,
+        form=form,
+        app_name=form_dict['application_name'],
+        client_id=client_id,
+        client_secret=client_secret)
 
 
 @account.route('/manage/apps', methods=['GET', 'POST'])
@@ -505,10 +521,12 @@ def all_apps():
     current_app.logger.info("RadhaKrishnaHanuman")
     apps_list = App.query.filter_by(user_id=current_user.id).all()
     current_app.logger.info(apps_list)
-    return render_template('account/all_apps.html', user=current_user, apps_list=apps_list)
+    return render_template(
+        'account/all_apps.html', user=current_user, apps_list=apps_list)
 
 
-@account.route('/manage/apps/<int:application_id>/delete', methods=['GET', 'POST'])
+@account.route(
+    '/manage/apps/<int:application_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_app(application_id):
     current_app.logger.info("RadhaKrishnaHanuman")

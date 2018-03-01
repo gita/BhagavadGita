@@ -11,7 +11,8 @@ from ...models import User
 
 class UserForm(Form):
     username = StringField(
-        'Username', validators=[InputRequired(), Length(1, 64)])
+        'Username', validators=[InputRequired(),
+                                Length(1, 64)])
     submit = SubmitField('Log in')
 
 

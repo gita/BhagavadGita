@@ -1,5 +1,6 @@
 import os
 import sys
+
 from raygun4py.middleware import flask as flask_raygun
 
 PYTHON_VERSION = sys.version_info[0]
@@ -44,8 +45,7 @@ class Config:
 
     # Admin account
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
-    ADMIN_EMAIL = os.environ.get(
-        'ADMIN_EMAIL')
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
     EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)

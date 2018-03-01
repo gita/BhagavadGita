@@ -6,7 +6,6 @@ class VerseModel(db.Model):
     __tablename__ = 'verses'
     __searchable__ = ['text', 'meaning', 'transliteration', 'word_meanings']
 
-
     id = db.Column(db.Integer, primary_key=True)
     verse_number = db.Column(db.String)
     text = db.Column(db.String)
@@ -15,10 +14,12 @@ class VerseModel(db.Model):
     verse_order = db.Column(db.Integer)
     meaning = db.Column(db.Integer)
 
-    chapter_number = db.Column(db.Integer, db.ForeignKey('chapters.chapter_number'))
+    chapter_number = db.Column(db.Integer,
+                               db.ForeignKey('chapters.chapter_number'))
     chapters = db.relationship('ChapterModel')
 
-    def __init__(self, chapter_number, verse_number, text, transliteration, word_meanings, meaning, verse_order):
+    def __init__(self, chapter_number, verse_number, text, transliteration,
+                 word_meanings, meaning, verse_order):
         self.chapter_number = chapter_number
         self.verse_number = verse_number
         self.text = text
@@ -28,7 +29,13 @@ class VerseModel(db.Model):
         self.verse_order = verse_order
 
     def json(self):
-        return {'chapter_number': self.chapter_number, 'verse_number': self.verse_number, 'text': self.text, 'transliteration': self.transliteration, 'word_meanings': self.word_meanings}
+        return {
+            'chapter_number': self.chapter_number,
+            'verse_number': self.verse_number,
+            'text': self.text,
+            'transliteration': self.transliteration,
+            'word_meanings': self.word_meanings
+        }
 
     @classmethod
     def find_by_verse_number(cls, verse_number):
@@ -36,4 +43,5 @@ class VerseModel(db.Model):
 
     @classmethod
     def find_by_chapter_number_verse_number(cls, chapter_number, verse_number):
-        return cls.query.filter_by(chapter_number=chapter_number, verse_number=verse_number).first()
+        return cls.query.filter_by(
+            chapter_number=chapter_number, verse_number=verse_number).first()
