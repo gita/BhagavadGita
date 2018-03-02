@@ -3,6 +3,9 @@
 {% import 'macros/check_password.html' as check %}
 
 {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
     <div align="center">
 
       {% set flashes = {
@@ -15,16 +18,12 @@
       <section class="form-gradient" style="margin-top: 3rem;">
 
           <!--Form with header-->
-          <div class="card" style="width: 23rem; margin-bottom: 5rem;">
+          <div class="card" style="margin-bottom: 5rem;">
 
               <!--Header-->
               <div class="header pt-3 hanuman-gradient">
-
-                  <div class="row d-flex justify-content-center">
-                      <h3 class="white-text mb-3 pt-3 font-bold">Contact Us</h3>
-                      <p class="white-text">Reach out with any questions you have.</p>
-                  </div>
-
+                <h3 class="white-text mb-3 pt-3 font-bold">Contact Us</h3>
+                <p class="white-text">Reach out with any questions you have.</p>
               </div>
               <!--Header-->
 
@@ -62,6 +61,10 @@
           <!--/Form with header-->
           {{ check.password_check('password', 0) }}
       </section>
+    </div>
+  </div>
+</div>
+</div>
 
     <style>
       body {
