@@ -2,7 +2,10 @@
 {% import 'macros/form_macros.html' as f %}
 
 {% block content %}
-    <div class="container mt-10" align="center" style="margin-bottom: 2rem;">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div align="center">
 
       {% set flashes = {
           'error':   get_flashed_messages(category_filter=['form-error']),
@@ -11,16 +14,16 @@
           'success': get_flashed_messages(category_filter=['form-success'])
       } %}
 
-      <section class="form-gradient">
+      <section class="form-gradient"  style="margin-top: 3rem;">
 
           <!--Form with header-->
-          <div class="card" style="width: 23rem;">
+          <div class="card">
 
               <!--Header-->
-              <div class="header pt-3 peach-gradient">
+              <div class="header pt-3 hanuman-gradient">
 
                   <div class="row d-flex justify-content-center">
-                      <h3 class="white-text mb-3 pt-3 font-bold">Create an application</h3>
+                      <h3 class="white-text mb-3 pt-3 font-bold">Register an application</h3>
                   </div>
 
               </div>
@@ -28,7 +31,26 @@
 
               <div class="card-body mt-4" style="margin-left: 1rem; margin-right: 0.5rem;">
 
-                  {{ f.render_form(form) }}
+                {{ f.begin_form(form, flashes) }}
+                  <div class="md-form">
+                      {{ f.render_form_field(form.application_name) }}
+
+                      {{ f.render_form_field(form.application_description) }}
+
+                      {{ f.render_form_field(form.application_website) }}
+
+                      <input type="checkbox" id="developer_agreement" name="developer_agreement" required>
+                      <p for="developer_agreement">Yes, I have read and agree to the <a href="">Bhagavad Gita Developer Agreement</a>.</p>
+
+                  </div>
+                  <div align="center">
+                    {{ f.form_message(flashes['error'], header='Something went wrong.', class='danger') }}
+                    {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                    {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                    {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+                    {{ f.render_form_field(form.submit) }}
+                  </div>
+                 {{ f.end_form(form) }}
 
               </div>
 
@@ -36,10 +58,19 @@
           <!--/Form with header-->
 
       </section>
-
+    </div>
+    </div>
+    </div>
+    </div>
     <style>
       body {
         background: #EEEEEE;
+      }
+      a {
+        color: #FFC107;
+      }
+      a:hover {
+        color: #FF9800;
       }
     </style>
 {% endblock %}

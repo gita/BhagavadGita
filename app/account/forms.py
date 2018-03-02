@@ -3,7 +3,7 @@ from flask_wtf import Form
 from wtforms import ValidationError
 from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField, TextAreaField)
-from wtforms.fields.html5 import EmailField
+from wtforms.fields.html5 import EmailField, URLField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
 from ..models import User
@@ -121,12 +121,8 @@ class CreateAppForm(Form):
     application_description = TextAreaField(
         'Description', validators=[InputRequired(),
                                    Length(10, 200)])
-    application_website = StringField(
-        'Website', validators=[InputRequired(),
-                               Length(1, 128)])
-    callback = StringField(
-        'Callback URL', validators=[InputRequired(),
-                                    Length(1, 128)])
+    application_website = URLField(
+        'Website', validators=[InputRequired()])
     developer_agreement = BooleanField(
         'Yes, I have read and agree to the Bhagavad Gita Developer Agreement.',
         validators=[InputRequired()])
@@ -139,10 +135,6 @@ class UpdateAppForm(Form):
     application_description = TextAreaField(
         'Description', validators=[InputRequired(),
                                    Length(10, 200)])
-    application_website = StringField(
-        'Website', validators=[InputRequired(),
-                               Length(1, 128)])
-    callback = StringField(
-        'Callback URL', validators=[InputRequired(),
-                                    Length(1, 128)])
+    application_website = URLField(
+        'Website', validators=[InputRequired()])
     submit = SubmitField('Update your Application')

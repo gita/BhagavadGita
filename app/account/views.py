@@ -9,7 +9,7 @@ from werkzeug.security import gen_salt
 from . import account
 from .. import db, oauthclient
 from ..email import send_email
-from ..models import App, Client, User
+from ..models import App, Client, User, Token
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreateAppForm,
                     CreatePasswordForm, LoginForm, RegistrationForm,
                     RequestResetPasswordForm, ResetPasswordForm, UpdateAppForm)
@@ -305,7 +305,7 @@ def change_password():
             return redirect(url_for('main.index'))
         else:
             flash('Original password is invalid.', 'form-error')
-    return render_template('account/manage.html', form=form)
+    return render_template('account/manage.html', form=form, user=current_user)
 
 
 @account.route('/manage/change-email', methods=['GET', 'POST'])
@@ -333,7 +333,7 @@ def change_email_request():
             return redirect(url_for('main.index'))
         else:
             flash('Invalid email or password.', 'form-error')
-    return render_template('account/manage.html', form=form)
+    return render_template('account/manage.html', form=form, user=current_user)
 
 
 @account.route('/manage/change-email/<token>', methods=['GET', 'POST'])
@@ -455,7 +455,6 @@ def create_app():
             application_name=form.application_name.data,
             application_description=form.application_description.data,
             application_website=form.application_website.data,
-            callback=form.callback.data,
             user_id=current_user.id)
         db.session.add(app)
         db.session.flush()
@@ -463,13 +462,7 @@ def create_app():
         item = Client(
             client_id=gen_salt(40),
             client_secret=gen_salt(50),
-            _redirect_uris=' '.join([
-                'http://localhost:8000/authorized',
-                'http://127.0.0.1:8000/authorized',
-                'http://127.0.1:8000/authorized',
-                'http://127.1:8000/authorized',
-            ]),
-            _default_scopes='email',
+            _default_scopes='verse chapter',
             user_id=current_user.id,
             app_id=app.application_id)
         db.session.add(item)
@@ -485,8 +478,6 @@ def create_app():
 @account.route('/manage/apps/<int:application_id>', methods=['GET', 'POST'])
 @login_required
 def update_app(application_id):
-    current_app.logger.info("RadhaKrishnaHanuman")
-    current_app.logger.info(application_id)
     app = App.query.filter_by(application_id=application_id).first()
     client = Client.query.filter_by(app_id=application_id).first()
     client_id = client.client_id
@@ -495,17 +486,15 @@ def update_app(application_id):
     form_dict['application_name'] = app.application_name
     form_dict['application_description'] = app.application_description
     form_dict['application_website'] = app.application_website
-    form_dict['callback'] = app.callback
     form = UpdateAppForm(**form_dict)
     if form.validate_on_submit():
         app.application_name = form.application_name.data
         app.application_description = form.application_description.data
         app.application_website = form.application_website.data
-        app.callback = form.callback.data
         db.session.commit()
 
         flash('You application has been updated.', 'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('account.all_apps'))
     return render_template(
         'account/update_app.html',
         user=current_user,
@@ -518,19 +507,22 @@ def update_app(application_id):
 @account.route('/manage/apps', methods=['GET', 'POST'])
 @login_required
 def all_apps():
-    current_app.logger.info("RadhaKrishnaHanuman")
-    apps_list = App.query.filter_by(user_id=current_user.id).all()
-    current_app.logger.info(apps_list)
-    return render_template(
-        'account/all_apps.html', user=current_user, apps_list=apps_list)
+    if current_user.is_anonymous or current_user.confirmed:
+        apps_list = App.query.filter_by(user_id=current_user.id).all()
+        current_app.logger.info(apps_list)
+        return render_template(
+            'account/all_apps.html', user=current_user, apps_list=apps_list)
+    return redirect(url_for('account.unconfirmed'))
 
 
 @account.route(
     '/manage/apps/<int:application_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_app(application_id):
-    current_app.logger.info("RadhaKrishnaHanuman")
-    current_app.logger.info(application_id)
+    client = Client.query.filter_by(app_id=application_id).first()
+    Token.query.filter_by(client_id=client.client_id).delete()
+    Client.query.filter_by(app_id=application_id).delete()
     App.query.filter_by(application_id=application_id).delete()
-    flash('You application has been deleted.', 'danger')
+    db.session.commit()
+    flash('You application has been deleted.', 'success')
     return redirect(url_for('account.all_apps'))

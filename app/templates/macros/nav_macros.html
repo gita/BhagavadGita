@@ -16,6 +16,7 @@
 
 {% macro header_items(current_user) %}
     {% set endpoints = [
+      ('account.all_apps', 'API Dashboard', 'settings')
     ]%}
     {% set user = [] %}
     {% if current_user.is_authenticated %}

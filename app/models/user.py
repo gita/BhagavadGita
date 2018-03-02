@@ -201,7 +201,6 @@ class Client(db.Model):
     app_id = db.Column(db.ForeignKey('app.application_id'))
     app = db.relationship('App')
 
-    _redirect_uris = db.Column(db.Text)
     _default_scopes = db.Column(db.Text)
 
     @property
@@ -293,7 +292,6 @@ class App(db.Model):
     application_name = db.Column(db.String(32), nullable=False)
     application_description = db.Column(db.String(200))
     application_website = db.Column(db.String(128))
-    callback = db.Column(db.String(128))
 
     user_id = db.Column(db.ForeignKey('users.id'))
     user = db.relationship('User')

@@ -1,38 +1,49 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<nav class="breadcrumb" style="margin-top: -2.5rem;">
-<a class="breadcrumb-item" href="/">Home</a>
-<span class="breadcrumb-item active">All Apps</span>
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+  <span class="breadcrumb-item active">{{ _('All Apps') }}</span>
 </nav>
 
-<div class="container" align="center" style="margin-bottom: 2rem;">
-    <div class="card">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card orange lighten-3 text-center z-depth-2 h-100">
         <div class="card-body">
-          <a href="/account/manage/apps/new" class="btn peach-gradient" style="border-radius: 10em; padding: .85rem 2.13rem;">RadhaKrishna</a>
-          <table id="table_id" class="display table table-striped table-bordered table-list">
-          <thead>
-              <tr>
-                <th style="text-align: center;"><em class="fa fa-cog"></em></th>
-                <th style="text-align: center;">App Name</th>
-                <th style="text-align: center;">App Description</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for app in apps_list %}
+            <h4 class="font-up font-bold mt-2 mb-3"><strong>YOUR REGISTERED APPS</strong></h4>
+            <hr>
+            <a class="btn btn-warning waves-effect waves-light" href="/account/manage/apps/new">REGISTER NEW APP</a>
+            <br>
+            {% if apps_list == [] %}
+              <br>
+              <p>You haven't registered any apps.</p>
+            {% else %}
+              <table id="table_id" class="display table table-striped table-bordered table-list">
+              <thead>
                   <tr>
-                      <td align="center" style="width: 10rem;">
-                          <a class="btn btn-warning btn-rounded" title="Press Me to edit this app." href="/account/manage/apps/{{ app.application_id }}" alt="Edit" title="Edit" id="editLink" class="itemLink" style="background-color: #ffffff !important; color: #000000 !important;"><em class="fa fa-pencil"></em></a>
-                          <a class="btn btn-danger" title="Press Me to delete this app." href="/account/manage/apps/{{ app.application_id }}/delete" alt="Delete" title="Are You Sure?" name="btnDelete" value="delete" class="itemLink" style="background-color: #F44336 !important;"><em aria-hidden="true" title="Delete" class="fa fa-trash"></em></a>
-                      </td>
-                      <td style="text-align: center;">{{app.application_name}}</td>
-                      <td style="text-align: center;">{{app.application_description}}</td>
+                    <th style="text-align: center;"><em class="fa fa-cog"></em></th>
+                    <th style="text-align: center;">App Name</th>
+                    <th style="text-align: center;">App Description</th>
                   </tr>
-              {% endfor %}
-          </tbody>
-        </table>
-
+              </thead>
+              <tbody>
+                {% for app in apps_list %}
+                    <tr>
+                        <td align="center" style="width: 10rem;">
+                            <a class="btn btn-warning btn-rounded" title="Press Me to edit this app." href="/account/manage/apps/{{ app.application_id }}" alt="Edit" title="Edit" id="editLink" class="itemLink" style="background-color: #ffffff !important; color: #000000 !important;"><em class="fa fa-pencil"></em></a>
+                            <a class="btn btn-danger" title="Press Me to delete this app." href="/account/manage/apps/{{ app.application_id }}/delete" alt="Delete" title="Are You Sure?" name="btnDelete" value="delete" class="itemLink" style="background-color: #F44336 !important;"><em aria-hidden="true" title="Delete" class="fa fa-trash"></em></a>
+                        </td>
+                        <td style="text-align: center;">{{app.application_name}}</td>
+                        <td style="text-align: center;">{{app.application_description}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
@@ -47,6 +58,12 @@
   }
   .btn {
     padding: .6rem .85rem;
+  }
+  .table td, .table th {
+      border-top: 1px solid #fafafa;
+  }
+  th {
+    background-color: #ffb74d;
   }
 </style>
 {% endblock %}

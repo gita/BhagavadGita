@@ -9,74 +9,70 @@
     'success': get_flashed_messages(category_filter=['form-success'])
 } %}
 
-<nav class="breadcrumb" style="margin-top: -2.5rem;">
-<a class="breadcrumb-item" href="/">Home</a>
-<a class="breadcrumb-item" href="/account/manage/apps">All Apps</a>
-<span class="breadcrumb-item active">{{app_name}}</span>
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">Home</a>
+  <a class="breadcrumb-item" href="/account/manage/apps">All Apps</a>
+  <span class="breadcrumb-item active">{{app_name}}</span>
 </nav>
-    <div class="container mt-10" align="center" style="margin-bottom: 2rem;">
 
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div align="center">
       <section class="form-gradient">
-
-          <!--Form with header-->
-          <div class="card" style="width: 23rem;">
-
-              <!--Header-->
-              <div class="header pt-3 peach-gradient">
-
+          <div class="card">
+              <div class="header pt-3 hanuman-gradient">
                   <div class="row d-flex justify-content-center">
                       <h3 class="white-text mb-3 pt-3 font-bold">{{app_name}}</h3>
                   </div>
-
               </div>
-              <!--Header-->
-
               <div class="card-body mt-4" style="margin-left: 1rem; margin-right: 0.5rem;">
 
-                <p align="left">Client ID</p>
-                <p align="left" style="font-size: 12px;">{{client_id}}</p>
-                <p align="left">Client Secret</p>
-                <p align="left" style="font-size: 12px;">{{client_secret}}</p>
+                <div class="row clearfix">
+                  <div class="col-md-6">
+                    <h3>Client Credentials</h3>
+                    <hr>
+                    <br>
+                    <p align="center">Client ID</p>
+                    <p align="center" style="font-size: 12px;">{{client_id}}</p>
+                    <p align="center">Client Secret</p>
+                    <p align="center" style="font-size: 12px;">{{client_secret}}</p>
+                    <br>
+                    <p>Please refer to the <a href="/api">API Page</a> to understand how to use these client credentials with the <b>Bhagavad Gita API</b>.</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h3>Update Application</h3>
+                    <hr>
+                    {{ f.begin_form(form, flashes) }}
+                      <div class="md-form">
+                          <p align="left" style="margin-bottom: -1rem;">{{form.application_name.label.text}}</p>
+                          {{ f.render_form_field(form.application_name) }}
 
-                <hr>
+                          <p align="left" style="margin-bottom: -0.2rem;">{{form.application_description.label.text}}</p>
+                          {{ f.render_form_field(form.application_description) }}
 
-                {{ f.begin_form(form, flashes) }}
-                    <!--Body-->
-                    <div class="md-form">
-                        <p align="left" style="margin-bottom: -1rem;">{{form.application_name.label.text}}</p>
-                        {{ f.render_form_field(form.application_name) }}
+                          <p align="left" style="margin-bottom: -1rem;">{{form.application_website.label.text}}</p>
+                          {{ f.render_form_field(form.application_website) }}
 
-                        <p align="left" style="margin-bottom: -0.2rem;">{{form.application_description.label.text}}</p>
-                        {{ f.render_form_field(form.application_description) }}
-
-                        <p align="left" style="margin-bottom: -1rem;">{{form.application_website.label.text}}</p>
-                        {{ f.render_form_field(form.application_website) }}
-
-                        <p align="left" style="margin-bottom: -1rem;">{{form.callback.label.text}}</p>
-                        {{ f.render_form_field(form.callback) }}
-
-                    </div>
-
-
-                    <!--Grid row-->
-                    <div align="center">
-
-                      {{ f.form_message(flashes['error'], header='Something went wrong.', class='danger') }}
-                      {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
-                      {{ f.form_message(flashes['info'], header='Information', class='info') }}
-                      {{ f.form_message(flashes['success'], header='Success!', class='success') }}
-
-                      {{ f.render_form_field(form.submit) }}
-                    </div>
-                    <!--Grid row-->
-                   {{ f.end_form(form) }}
-
+                      </div>
+                      <div align="center">
+                        {{ f.form_message(flashes['error'], header='Something went wrong.', class='danger') }}
+                        {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                        {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                        {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+                        {{ f.render_form_field(form.submit) }}
+                      </div>
+                     {{ f.end_form(form) }}
+                  </div>
+                </div>
               </div>
-
           </div>
-          <!--/Form with header-->
 
       </section>
+    </div>
+    </div>
+    </div>
+    </div>
 
     <style>
       body {
