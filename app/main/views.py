@@ -10,6 +10,7 @@ from flask_babel import gettext
 from flask_rq import get_queue
 
 from app import babel, db
+import app.flask_whooshalchemy as wa
 from app.models.chapter import ChapterModel
 from app.models.verse import VerseModel
 
@@ -173,6 +174,21 @@ def index_radhakrishna(language):
 
     return render_template(
         'main/index.html', chapters=chapters, language=language)
+
+
+def rebuild_index(model):
+    primary_field = model.pure_whoosh.primary_key_name
+    searchables = model.__searchable__
+    index_writer = wa.whoosh_index(current_app, model)
+
+    query = model.query.all()
+    with index_writer.writer() as writer:
+        for post in query:
+            index_attrs = {}
+            for field in searchables:
+                index_attrs[field] = str(getattr(post, field))
+            index_attrs[primary_field] = str(getattr(post, primary_field))
+            writer.update_document(**index_attrs)
 
 
 @main.route('/search', methods=['GET', 'POST'])

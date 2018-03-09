@@ -5,7 +5,7 @@ class ChapterModel(db.Model):
 
     __tablename__ = 'chapters'
     __searchable__ = [
-        'name', 'name_transliterated', 'name_translation', 'name_meaning'
+        'name', 'name_transliterated', 'name_translation', 'name_meaning', 'chapter_summary'
     ]
 
     id = db.Column(db.Integer, primary_key=True)

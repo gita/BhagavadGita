@@ -107,7 +107,7 @@
               <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT VERSE') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
               {% else %}
                 {% set next_chapter = chapter.chapter_number + 1 %}
-                {% if next_chapter == 18 %}
+                {% if next_chapter == 19 %}
                   <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
                 {% else %}
                   <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT CHAPTER') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
