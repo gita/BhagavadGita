@@ -12,6 +12,7 @@ from flask_wtf import CsrfProtect
 from flask_restful import Api
 from flask_babel import Babel
 from flask_oauthlib.client import OAuth
+from elasticsearch import Elasticsearch
 
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
@@ -26,6 +27,12 @@ csrf = CsrfProtect()
 oauth = OAuth2Provider()
 oauthclient = OAuth()
 babel = Babel()
+
+es = Elasticsearch(
+    [os.environ.get('ES_URL')],
+    http_auth=(os.environ.get('ES_USERNAME'), os.environ.get('ES_PASSWORD')),
+    scheme="https"
+)
 
 # Set up Flask-Login
 login_manager = LoginManager()
@@ -53,12 +60,6 @@ def create_app(config_name):
     RQ(app)
     api = Api(app)
     babel.init_app(app)
-
-    import app.flask_whooshalchemy as wa
-    from app.models.chapter import ChapterModel
-    from app.models.verse import VerseModel
-    wa.whoosh_index(app, VerseModel)
-    wa.whoosh_index(app, ChapterModel)
 
     # Register Jinja template functions
     from .utils import register_template_utils

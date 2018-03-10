@@ -90,6 +90,13 @@
               <div class="meaning" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1rem;" class="verse-meaning"><b>{{verse.meaning  | replace('"', "")}}</b></p>
               </div>
+              {% if language == "en" and verse.meaning_large != "" %}
+                <h4><b><u>{{ _('Purport') }}</u></b></h4>
+                <br>
+                <div class="meaning_large" align="center">
+                  <p style="font-size: 1rem;" class="verse-meaning-large"><b>{{verse.meaning_large | replace('"', "")}}</b></p>
+                </div>
+              {% endif %}
               <br>
               <p></p>
               {% if previous_verse != None %}
@@ -351,6 +358,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       var settings = JSON.parse(getCookie('settings'));
       if (settings['font']) {
         $('.verse-meaning').css("font-size", settings['font'] + "rem");
+        $('.verse-meaning-large').css("font-size", settings['font'] + "rem");
         $('.verse-word').css("font-size", settings['font']*1.2 + "rem");
         $('#myRange').val(settings['font']);
       }
@@ -402,6 +410,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     slider.oninput = function() {
       var size = this.value;
       $('.verse-meaning').css("font-size", size + "rem");
+      $('.verse-meaning-large').css("font-size", size + "rem");
       $('.verse-word').css("font-size", size*1.2 + "rem");
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));

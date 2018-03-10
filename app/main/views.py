@@ -9,14 +9,14 @@ from flask import (abort, current_app, flash, jsonify, make_response, redirect,
 from flask_babel import gettext
 from flask_rq import get_queue
 
-from app import babel, db
-import app.flask_whooshalchemy as wa
+from app import babel, db, es
 from app.models.chapter import ChapterModel
 from app.models.verse import VerseModel
 
 from . import main
 from ..email import send_email
 from .forms import ContactForm
+
 
 if sys.version_info[0] < 3:
     reload(sys)
@@ -193,7 +193,20 @@ def rebuild_index(model):
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
-    verses = VerseModel.query.whoosh_search(request.args.get('query')).all()
+    query = request.args.get('query')
+    res = es.search(index="verses", body={
+      "from": 0, "size": 1000,
+      "query": {
+        "multi_match": {
+          "query": query,
+          "fields": ["meaning", "meaning_large", "text", "transliteration", "word_meanings"]
+        }
+      }
+    })
+
+    verses = res['hits']['hits']
+
+    current_app.logger.info(verses)
     return render_template(
         'main/search.html', verses=verses, query=request.args.get('query'))
 
@@ -405,8 +418,51 @@ def verse_radhakrishna(chapter_number, verse_number, language):
         language=language)
 
 
+import decimal, datetime
+
+
+def alchemyencoder(obj):
+    """JSON encoder function for SQLAlchemy special classes."""
+    if isinstance(obj, datetime.date):
+        return obj.isoformat()
+    elif isinstance(obj, decimal.Decimal):
+        return float(obj)
+
+
 @main.route('/about/', methods=['GET'])
 def about():
+    # verses = []
+    #
+    # sql = """
+    #     SELECT *
+    #     FROM verses
+    # """
+    #
+    # res = db.session.execute(sql)
+    #
+    # hanuman = open('bhagavad_gita.txt', 'w')
+    # verses = json.dumps([dict(r) for r in res], default=alchemyencoder)
+    # verses = json.loads(verses)
+    # simplejson.dump(verses, hanuman)
+    # hanuman.close()
+
+    # hanuman = open('/Users/radhakrishna/Documents/radhakrishnahanuman/radhakrishnahanuman/bhagavad_gita.txt', 'rb')
+    # bhagavad = hanuman.read()
+    # bhagavad = simplejson.loads(bhagavad)
+    # hanuman.close()
+    #
+    # verses = VerseModel.query.all()
+    #
+    # for verse in bhagavad:
+    #     for v in verses:
+    #         if str(verse['chapter']) == str(v.chapter_number):
+    #             if str(verse['verse']) == str(v.verse_number):
+    #                 verse['radhakrishna'] = verse['radhakrishna'].lstrip("Purport\n                    \n                        \n                        ")
+    #                 verse['radhakrishna'] = verse['radhakrishna'].replace("\n                    \n                        \n                        ", "\n")
+    #                 v.meaning_large = verse['radhakrishna']
+    #
+    # db.session.commit()
+
     return render_template('main/about.html')
 
 

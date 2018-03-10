@@ -1,0 +1,37 @@
+1. PUT verses
+
+2.
+PUT verses/_mapping/verse
+{
+  "properties": {
+    "verse_number": {
+      "type": "keyword"
+    },
+    "text": {
+      "type": "text"
+    },
+    "transliteration": {
+      "type": "text"
+    },
+    "word_meanings": {
+      "type": "text"
+    },
+    "meaning": {
+      "type": "text"
+    },
+    "meaning_large": {
+      "type": "text"
+    },
+    "chapter_number": {
+      "type": "integer"
+    },
+    "verse_order": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "integer"
+    }
+  }
+}
+
+3. elasticsearch_loader --index verses --type verse json bhagavad_gita.json
