@@ -15,9 +15,13 @@
 #}
 
 {% macro header_items(current_user) %}
-    {% set endpoints = [
-      ('account.all_apps', 'API Dashboard', 'settings')
-    ]%}
+    {% set endpoints = [] %}
+    {% if current_user.is_authenticated %}
+      {% set endpoints = [
+        ('account.all_apps', 'API Dashboard', 'settings')
+      ]%}
+    {% endif %}
+
     {% set user = [] %}
     {% if current_user.is_authenticated %}
       {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}

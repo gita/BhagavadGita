@@ -1,6 +1,48 @@
 {% import 'macros/page_macros.html' as page %}
 {% extends 'layouts/base.html' %}
 
+{% block title %}Bhagavad Gita API - BhagavadGita.io{% endblock %}
+
+{% block meta_tags %}
+        <meta name="description" content="The Bhagavad Gita Application Programming Interface (API) allows a web or mobile developer to use the Bhagavad Gita text in their web or mobile application(s)." />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Bhagavad Gita API - BhagavadGita.io" />
+        <meta property="og:description" content="The Bhagavad Gita Application Programming Interface (API) allows a web or mobile developer to use the Bhagavad Gita text in their web or mobile application(s)." />
+        <meta property="og:url" content="https://bhagavadgita.io{{request.path}}" />
+        <meta property="og:site_name" content="Bhagavad Gita" />
+        <meta property="og:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Bhagavad Gita API - BhagavadGita.io" />
+        <meta name="twitter:description" content="The Bhagavad Gita Application Programming Interface (API) allows a web or mobile developer to use the Bhagavad Gita text in their web or mobile application(s)." />
+        <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+
+        <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Organization","@id":"#organization","name":"Bhagavad Gita","url":"https:\/\/bhagavadgita.io","logo":"https:\/\/bhagavadgita.io\/static\/images\/radhakrishna.png"}</script>
+        <script type="application/ld+json">{
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": {
+                        "@id": "https://bhagavadgita.io",
+                        "name": "Home"
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "item": {
+                        "@id": "https://bhagavadgita.io/api/",
+                        "name": "Bhagavad Gita API - BhagavadGita.io"
+                    }
+                }
+            ]
+        }
+        </script>
+{% endblock %}
+
 {% block content %}
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>

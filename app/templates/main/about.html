@@ -1,6 +1,49 @@
 {% import 'macros/page_macros.html' as page %}
 {% extends 'layouts/base.html' %}
 
+{% block title %}What is The Bhagavad Gita -  BhagavadGita.io{% endblock %}
+
+{% block meta_tags %}
+        <meta name="description" content="Bhagavad Gita, also known as the Gita - "The Song of The Lord" is a practical guide to one's life that guides one to re-organise their life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)." />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="What is The Bhagavad Gita -  BhagavadGita.io" />
+        <meta property="og:description" content="Bhagavad Gita, also known as the Gita - "The Song of The Lord" is a practical guide to one's life that guides one to re-organise their life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)." />
+        <meta property="og:url" content="https://bhagavadgita.io{{request.path}}" />
+        <meta property="og:site_name" content="Bhagavad Gita" />
+        <meta property="og:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="What is The Bhagavad Gita -  BhagavadGita.io" />
+        <meta name="twitter:description" content="Bhagavad Gita, also known as the Gita - "The Song of The Lord" is a practical guide to one's life that guides one to re-organise their life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)." />
+        <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+
+        <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Organization","@id":"#organization","name":"Bhagavad Gita","url":"https:\/\/bhagavadgita.io","logo":"https:\/\/bhagavadgita.io\/static\/images\/radhakrishna.png"}</script>
+        <script type="application/ld+json">{
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": {
+                        "@id": "https://bhagavadgita.io",
+                        "name": "Home"
+                    }
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "item": {
+                        "@id": "https://bhagavadgita.io/about/",
+                        "name": "What is The Bhagavad Gita -  BhagavadGita.io"
+                    }
+                }
+            ]
+        }
+        </script>
+{% endblock %}
+
+
 {% block content %}
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
