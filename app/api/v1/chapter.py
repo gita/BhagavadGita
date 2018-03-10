@@ -1,15 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flasgger import Schema, Swagger, SwaggerView, fields
-from flask import jsonify
-
-from ... import csrf, oauth
+from flasgger import SwaggerView
+from flask import jsonify, request
+from ... import csrf, oauth, db
 from ...models.chapter import ChapterModel
 from ...schemas.chapter import ChapterSchema
 
 chapter_schema = ChapterSchema()
 chapters_schema = ChapterSchema(many=True)
+
+LANGUAGES = {'en': 'English', 'hi': 'हिंदी'}
 
 
 class Chapter(SwaggerView):
@@ -40,6 +41,11 @@ class Chapter(SwaggerView):
           required: 'true'
           default: 1
           description: Which Chapter Number to filter?
+        - name: language
+          in: query
+          type: 'string'
+          description: "Language to query. Leave blank for english."
+          enum: ['hi']
         consumes:
         - application/json
         produces:
@@ -69,7 +75,30 @@ class Chapter(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        chapter = ChapterModel.find_by_chapter_number(chapter_number)
+        language = request.args.get('language')
+
+        if chapter_number not in range(1, 19):
+            return (jsonify({'message': 'Invalid Chapter.'}), 404)
+
+        if language is None:
+            chapter = ChapterModel.find_by_chapter_number(chapter_number)
+        else:
+            if language not in LANGUAGES.keys():
+                return (jsonify({'message': 'Invalid Language.'}), 404)
+                
+            chapter_table = "chapters_" + language
+            sql = """
+                SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.chapter_number, c.verses_count, c.name
+                FROM %s ct
+                JOIN
+                chapters c
+                ON
+                c.chapter_number = ct.chapter_number
+                WHERE c.chapter_number = %s
+                ORDER BY c.chapter_number
+            """ % (chapter_table, chapter_number)
+            chapter = db.session.execute(sql).first()
+
         if chapter:
             result = chapter_schema.dump(chapter)
             return jsonify(result.data)
@@ -94,6 +123,11 @@ class ChapterList(SwaggerView):
           required: 'True'
           type: 'string'
           description: "Your app's access token."
+        - name: language
+          in: query
+          type: 'string'
+          description: "Language to query. Leave blank for english."
+          enum: ['hi']
         consumes:
         - application/json
         produces:
@@ -126,7 +160,26 @@ class ChapterList(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        chapters = ChapterModel.query.order_by(
-            ChapterModel.chapter_number).all()
+        language = request.args.get('language')
+
+        if language is None:
+            chapters = ChapterModel.query.order_by(
+                ChapterModel.chapter_number).all()
+        else:
+            if language not in LANGUAGES.keys():
+                return (jsonify({'message': 'Invalid Language.'}), 404)
+
+            chapter_table = "chapters_" + language
+            sql = """
+                SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.chapter_number, c.verses_count, c.name
+                FROM %s ct
+                JOIN
+                chapters c
+                ON
+                c.chapter_number = ct.chapter_number
+                ORDER BY c.chapter_number
+            """ % (chapter_table)
+            chapters = db.session.execute(sql)
+
         result = chapters_schema.dump(chapters)
         return jsonify(result.data)

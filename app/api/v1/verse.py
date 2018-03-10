@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flasgger import SwaggerView
-from flask import jsonify
+from flask import jsonify, request
 
 from app.models.chapter import ChapterModel
 
@@ -12,6 +12,8 @@ from ...schemas.verse import VerseSchema
 
 verse_schema = VerseSchema()
 verses_schema = VerseSchema(many=True)
+
+LANGUAGES = {'en': 'English', 'hi': 'हिंदी'}
 
 
 class VerseList(SwaggerView):
@@ -32,6 +34,11 @@ class VerseList(SwaggerView):
           required: 'True'
           type: 'string'
           description: "Your app's access token."
+        - name: language
+          in: query
+          type: 'string'
+          description: "Language to query. Leave blank for english."
+          enum: ['hi']
         consumes:
         - application/json
         produces:
@@ -65,13 +72,32 @@ class VerseList(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        sql = """
-                SELECT *
-                FROM verses v
-                ORDER BY v.chapter_number, v.verse_order
-            """
+        language = request.args.get('language')
 
-        verses = db.session.execute(sql)
+        if language is None:
+            sql = """
+                    SELECT *
+                    FROM verses v
+                    ORDER BY v.chapter_number, v.verse_order
+                """
+            verses = db.session.execute(sql)
+        else:
+            if language not in LANGUAGES.keys():
+                return (jsonify({'message': 'Invalid Language.'}), 404)
+
+            verses_table = "verses_" + language
+            sql = """
+                    SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+                    FROM %s vt
+                    JOIN verses v
+                    ON
+                    vt.chapter_number = v.chapter_number
+                    AND vt.verse_number = v.verse_number
+                    ORDER BY v.verse_order
+                """ % (verses_table)
+
+            verses = db.session.execute(sql)
+
         result = verses_schema.dump(verses)
         return jsonify(result.data)
 
@@ -104,6 +130,11 @@ class VerseListByChapter(SwaggerView):
           required: 'true'
           default: 1
           description: Which Chapter Number to filter?
+        - name: language
+          in: query
+          type: 'string'
+          description: "Language to query. Leave blank for english."
+          enum: ['hi']
         consumes:
         - application/json
         produces:
@@ -138,8 +169,12 @@ class VerseListByChapter(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        chapter = ChapterModel.find_by_chapter_number(chapter_number)
-        if chapter:
+        language = request.args.get('language')
+
+        if chapter_number not in range(1, 19):
+            return (jsonify({'message': 'Invalid Chapter.'}), 404)
+
+        if language is None:
             sql = """
                     SELECT *
                     FROM verses v
@@ -148,9 +183,26 @@ class VerseListByChapter(SwaggerView):
                 """ % (chapter_number)
 
             verses = db.session.execute(sql)
-            result = verses_schema.dump(verses)
-            return jsonify(result.data)
-        return (jsonify({'message': 'Chapter not found.'}), 404)
+        else:
+            if language not in LANGUAGES.keys():
+                return (jsonify({'message': 'Invalid Language.'}), 404)
+
+            verses_table = "verses_" + language
+            sql = """
+                    SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+                    FROM %s vt
+                    JOIN verses v
+                    ON
+                    vt.chapter_number = v.chapter_number
+                    AND vt.verse_number = v.verse_number
+                    WHERE v.chapter_number = %s
+                    ORDER BY v.verse_order
+                """ % (verses_table, chapter_number)
+
+            verses = db.session.execute(sql)
+
+        result = verses_schema.dump(verses)
+        return jsonify(result.data)
 
 
 class VerseByChapter(SwaggerView):
@@ -191,6 +243,11 @@ class VerseByChapter(SwaggerView):
           required: 'true'
           default: 1
           description: Which Verse Number to filter?
+        - name: language
+          in: query
+          type: 'string'
+          description: "Language to query. Leave blank for english."
+          enum: ['hi']
         consumes:
         - application/json
         produces:
@@ -219,12 +276,35 @@ class VerseByChapter(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        chapter = ChapterModel.find_by_chapter_number(chapter_number)
-        if chapter:
+        language = request.args.get('language')
+
+        if chapter_number not in range(1, 19):
+            return (jsonify({'message': 'Invalid Chapter.'}), 404)
+
+        if language is None:
             verse = VerseModel.find_by_chapter_number_verse_number(
                 chapter_number, verse_number)
-            if verse:
-                result = verse_schema.dump(verse)
-                return jsonify(result.data)
-            return (jsonify({'message': 'Verse not found.'}), 404)
-        return (jsonify({'message': 'Chapter not found.'}), 404)
+
+        else:
+            if language not in LANGUAGES.keys():
+                return (jsonify({'message': 'Invalid Language.'}), 404)
+
+            verses_table = "verses_" + language
+            sql = """
+                    SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+                    FROM %s vt
+                    JOIN verses v
+                    ON
+                    vt.chapter_number = v.chapter_number
+                    AND vt.verse_number = v.verse_number
+                    WHERE v.chapter_number = %s
+                    AND v.verse_number = '%s'
+                    ORDER BY v.verse_order
+                """ % (verses_table, chapter_number, verse_number)
+
+            verse = db.session.execute(sql).first()
+
+        if verse:
+            result = verse_schema.dump(verse)
+            return jsonify(result.data)
+        return (jsonify({'message': 'Verse not found.'}), 404)
