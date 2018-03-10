@@ -126,6 +126,7 @@ class ChapterList(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        chapters = ChapterModel.query.all()
+        chapters = ChapterModel.query.order_by(
+            ChapterModel.chapter_number).all()
         result = chapters_schema.dump(chapters)
         return jsonify(result.data)

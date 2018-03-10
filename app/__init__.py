@@ -7,11 +7,11 @@ from flask_assets import Environment
 from flask_wtf import CsrfProtect
 from flask_compress import Compress
 from flask_rq import RQ
-from flask_oauthlib.provider import OAuth2Provider
+from app.lib.flask_oauthlib.provider import OAuth2Provider
 from flask_wtf import CsrfProtect
 from flask_restful import Api
 from flask_babel import Babel
-from flask_oauthlib.client import OAuth
+from app.lib.flask_oauthlib.client import OAuth
 from elasticsearch import Elasticsearch
 
 from config import config

@@ -211,15 +211,15 @@ class Client(db.Model):
     def client_type(self):
         return 'public'
 
-    @property
-    def redirect_uris(self):
-        if self._redirect_uris:
-            return self._redirect_uris.split()
-        return []
-
-    @property
-    def default_redirect_uri(self):
-        return self.redirect_uris[0]
+    # @property
+    # def redirect_uris(self):
+    #     if self._redirect_uris:
+    #         return self._redirect_uris.split()
+    #     return []
+    #
+    # @property
+    # def default_redirect_uri(self):
+    #     return self.redirect_uris[0]
 
     @property
     def default_scopes(self):

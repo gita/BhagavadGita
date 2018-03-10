@@ -1,14 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flasgger import Schema, Swagger, SwaggerView, fields
+from flasgger import SwaggerView
 from flask import jsonify
 
 from app.models.chapter import ChapterModel
 
-from ... import csrf, oauth
+from ... import csrf, oauth, db
 from ...models.verse import VerseModel
-from ...schemas.chapter import ChapterSchema
 from ...schemas.verse import VerseSchema
 
 verse_schema = VerseSchema()
@@ -44,13 +43,13 @@ class VerseList(SwaggerView):
               $ref: '#/definitions/VerseSchema'
             examples:
               - chapter_number: 1
-                meaning_english: "Dhritarashtra said: O Sanjay, after gathering on the holy field of Kurukshetra, and desiring to fight, what did my sons and the sons of Pandu do?"
+                meaning: "Dhritarashtra said: O Sanjay, after gathering on the holy field of Kurukshetra, and desiring to fight, what did my sons and the sons of Pandu do?"
                 text: "धृतराष्ट्र उवाच | धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः | मामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय |||1||"
                 transliteration: "dhṛitarāśhtra uvācha dharma-kṣhetre kuru-kṣhetre samavetā yuyutsavaḥ māmakāḥ pāṇḍavāśhchaiva kimakurvata sañjaya"
                 verse_number: 1
                 word_meanings: "dhṛitarāśhtraḥ uvācha—Dhritarashtra said; dharma-kṣhetre—the land of dharma; kuru-kṣhetre—at Kurukshetra; samavetāḥ—having gathered; yuyutsavaḥ—desiring to fight; māmakāḥ—my sons; pāṇḍavāḥ—the sons of Pandu; cha—and; eva—certainly; kim—what; akurvata—did they do; sañjaya—Sanjay"
               - chapter_number: 1
-                meaning_english: 'Sanjay said: On observing the Pandava army standing in military formation, King Duryodhan approached his teacher Dronacharya, and said the following words.'
+                meaning: 'Sanjay said: On observing the Pandava army standing in military formation, King Duryodhan approached his teacher Dronacharya, and said the following words.'
                 text: "सञ्जय उवाच | दृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा | आचार्यमुपसङ्गम्य राजा वचनमब्रवीत् | ||2||"
                 transliteration: "sañjaya uvācha dṛiṣhṭvā tu pāṇḍavānīkaṁ vyūḍhaṁ duryodhanastadā āchāryamupasaṅgamya rājā vachanamabravīt"
                 verse_number: 2
@@ -66,7 +65,13 @@ class VerseList(SwaggerView):
             description: 'Server Error: Something went wrong on our end.'
         """
 
-        verses = VerseModel.query.all()
+        sql = """
+                SELECT *
+                FROM verses v
+                ORDER BY v.chapter_number, v.verse_order
+            """
+
+        verses = db.session.execute(sql)
         result = verses_schema.dump(verses)
         return jsonify(result.data)
 
@@ -110,13 +115,13 @@ class VerseListByChapter(SwaggerView):
               $ref: '#/definitions/VerseSchema'
             examples:
             - chapter_number: 1
-              meaning_english: "Dhritarashtra said: O Sanjay, after gathering on the holy field of Kurukshetra, and desiring to fight, what did my sons and the sons of Pandu do?"
+              meaning: "Dhritarashtra said: O Sanjay, after gathering on the holy field of Kurukshetra, and desiring to fight, what did my sons and the sons of Pandu do?"
               text: "धृतराष्ट्र उवाच | धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः | मामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय |||1||"
               transliteration: "dhṛitarāśhtra uvācha dharma-kṣhetre kuru-kṣhetre samavetā yuyutsavaḥ māmakāḥ pāṇḍavāśhchaiva kimakurvata sañjaya"
               verse_number: 1
               word_meanings: "dhṛitarāśhtraḥ uvācha—Dhritarashtra said; dharma-kṣhetre—the land of dharma; kuru-kṣhetre—at Kurukshetra; samavetāḥ—having gathered; yuyutsavaḥ—desiring to fight; māmakāḥ—my sons; pāṇḍavāḥ—the sons of Pandu; cha—and; eva—certainly; kim—what; akurvata—did they do; sañjaya—Sanjay"
             - chapter_number: 1
-              meaning_english: 'Sanjay said: On observing the Pandava army standing in military formation, King Duryodhan approached his teacher Dronacharya, and said the following words.'
+              meaning: 'Sanjay said: On observing the Pandava army standing in military formation, King Duryodhan approached his teacher Dronacharya, and said the following words.'
               text: "सञ्जय उवाच | दृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा | आचार्यमुपसङ्गम्य राजा वचनमब्रवीत् | ||2||"
               transliteration: "sañjaya uvācha dṛiṣhṭvā tu pāṇḍavānīkaṁ vyūḍhaṁ duryodhanastadā āchāryamupasaṅgamya rājā vachanamabravīt"
               verse_number: 2
@@ -135,7 +140,14 @@ class VerseListByChapter(SwaggerView):
 
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
         if chapter:
-            verses = VerseModel.query.filter_by(chapter_number=chapter_number)
+            sql = """
+                    SELECT *
+                    FROM verses v
+                    WHERE v.chapter_number = %s
+                    ORDER BY v.verse_order
+                """ % (chapter_number)
+
+            verses = db.session.execute(sql)
             result = verses_schema.dump(verses)
             return jsonify(result.data)
         return (jsonify({'message': 'Chapter not found.'}), 404)
@@ -190,7 +202,7 @@ class VerseByChapter(SwaggerView):
               $ref: '#/definitions/VerseSchema'
             examples:
             - chapter_number: 1
-              meaning_english: "Dhritarashtra said: O Sanjay, after gathering on the holy field of Kurukshetra, and desiring to fight, what did my sons and the sons of Pandu do?"
+              meaning: "Dhritarashtra said: O Sanjay, after gathering on the holy field of Kurukshetra, and desiring to fight, what did my sons and the sons of Pandu do?"
               text: "धृतराष्ट्र उवाच | धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः | मामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय |||1||"
               transliteration: "dhṛitarāśhtra uvācha dharma-kṣhetre kuru-kṣhetre samavetā yuyutsavaḥ māmakāḥ pāṇḍavāśhchaiva kimakurvata sañjaya"
               verse_number: 1
