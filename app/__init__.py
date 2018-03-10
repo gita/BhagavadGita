@@ -29,8 +29,8 @@ oauthclient = OAuth()
 babel = Babel()
 
 es = Elasticsearch(
-    [os.environ.get('ES_URL')],
-    http_auth=(os.environ.get('ES_USERNAME'), os.environ.get('ES_PASSWORD')),
+    [os.environ.get('ES_URL') or 'ES_URL'],
+    http_auth=(os.environ.get('ES_USERNAME') or 'ES_USERNAME', os.environ.get('ES_PASSWORD') or 'ES_PASSWORD'),
     scheme="https"
 )
 
