@@ -8,7 +8,6 @@ from flask_wtf import CsrfProtect
 from flask_compress import Compress
 from flask_rq import RQ
 from app.lib.flask_oauthlib.provider import OAuth2Provider
-from flask_wtf import CsrfProtect
 from flask_restful import Api
 from flask_babel import Babel
 from app.lib.flask_oauthlib.client import OAuth
@@ -125,24 +124,24 @@ def create_app(config_name):
     from app.api.v1.chapter import Chapter, ChapterList
 
     verse_list_view = VerseList.as_view('VerseList')
-    app.add_url_rule('/v1/verses', view_func=verse_list_view)
+    app.add_url_rule('/api/v1/verses', view_func=verse_list_view)
 
     verse_list_chapter_view = VerseListByChapter.as_view('VerseListChapter')
     app.add_url_rule(
-        '/v1/chapters/<int:chapter_number>/verses',
+        '/api/v1/chapters/<int:chapter_number>/verses',
         view_func=verse_list_chapter_view)
 
     verse_chapter_view = VerseByChapter.as_view('VerseChapter')
     app.add_url_rule(
-        '/v1/chapters/<int:chapter_number>/verses/<string:verse_number>',
+        '/api/v1/chapters/<int:chapter_number>/verses/<string:verse_number>',
         view_func=verse_chapter_view)
 
     chapter_view = Chapter.as_view('Chapter')
     app.add_url_rule(
-        '/v1/chapters/<int:chapter_number>', view_func=chapter_view)
+        '/api/v1/chapters/<int:chapter_number>', view_func=chapter_view)
 
     chapter_list_view = ChapterList.as_view('ChapterList')
-    app.add_url_rule('/v1/chapters', view_func=chapter_list_view)
+    app.add_url_rule('/api/v1/chapters', view_func=chapter_list_view)
 
     with app.test_request_context():
         spec.add_path(view=verse_list_view)
