@@ -5,7 +5,7 @@ import json
 import sys
 
 from flask import (abort, current_app, flash, jsonify, make_response, redirect,
-                   render_template, request, url_for)
+                   render_template, request, url_for, send_from_directory)
 from flask_rq import get_queue
 
 from app import babel, db, es
@@ -456,3 +456,9 @@ def set_cookie():
 def get_cookie():
     radha = request.cookies.get('settings')
     return radha
+
+
+@main.route('/robots.txt')
+@main.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(current_app.static_folder, request.path[1:])

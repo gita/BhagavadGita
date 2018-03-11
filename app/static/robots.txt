@@ -10,4 +10,4 @@ Disallow: /reset-password
 Disallow: /join-from-invite
 Disallow: /unconfirmed
 
-Sitemap: https://bhagavadgita.io/static/sitemap.xml
+Sitemap: https://bhagavadgita.io/sitemap.xml
