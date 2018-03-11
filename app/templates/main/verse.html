@@ -20,6 +20,12 @@
         <meta name="twitter:title" content="{{ _('Bhagavad Gita') }} {{ _('Chapter') }} {{chapter.chapter_number}} {{ _('Verse') }} {{verse.verse_number}} - BhagavadGita.io" />
         <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
 
+        <link rel="alternate" hreflang="en" href="https://bhagavadgita.io{{request.path | replace("/hi/", "")}}" />
+        <link rel="alternate" hreflang="en-us" href="https://bhagavadgita.io{{request.path | replace("/hi/", "")}}" />
+        <link rel="alternate" hreflang="en-gb" href="https://bhagavadgita.io{{request.path | replace("/hi/", "")}}" />
+        <link rel="alternate" hreflang="en-in" href="https://bhagavadgita.io{{request.path | replace("/hi/", "")}}" />
+        <link rel="alternate" hreflang="hi" href="https://bhagavadgita.io{{request.path | replace("/hi/", "/")}}hi/" />
+
         <script type="application/ld+json">{
         "@context": "http://schema.org",
         "@type": "BreadcrumbList",
