@@ -6,7 +6,6 @@ import sys
 
 from flask import (abort, current_app, flash, jsonify, make_response, redirect,
                    render_template, request, url_for)
-from flask_babel import gettext
 from flask_rq import get_queue
 
 from app import babel, db, es

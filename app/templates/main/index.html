@@ -344,6 +344,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
       var languages = $('#languages');
 
+      var hreflang = "{{request.path | replace("/", "")}}"
+      if (hreflang == ""){
+        hreflang = "en"
+      }
+
       axios.get('/languages')
       .then(function (response) {
         for (const [key, value] of Object.entries(response.data)) {
@@ -353,8 +358,9 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
                val(key);
           option.appendTo(languages);
         }
+        languages.val(hreflang);
         if (settings) {
-          if (settings['font']) {
+          if (settings['language']) {
             languages.val(settings['language']);
           }
         }

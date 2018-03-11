@@ -1,0 +1,13 @@
+User-Agent: *
+Disallow:
+Disallow: /github-login
+Disallow: /google-login
+Disallow: /facebook-login
+Disallow: /google/authorized
+Disallow: /facebook/authorized
+Disallow: /github/authorized
+Disallow: /reset-password
+Disallow: /join-from-invite
+Disallow: /unconfirmed
+
+Sitemap: https://bhagavadgita.io/static/sitemap.xml
