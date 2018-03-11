@@ -40,7 +40,7 @@ login_manager.login_view = 'account.login'
 
 
 def create_app(config_name):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='static')
     app.config.from_object(config[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # not using sqlalchemy event system, hence disabling it
