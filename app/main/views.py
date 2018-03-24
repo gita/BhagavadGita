@@ -472,5 +472,15 @@ def get_cookie():
 
 @main.route('/robots.txt')
 @main.route('/sitemap.xml')
+@main.route('/android-chrome-192x192.png')
+@main.route('/android-chrome-512x512.png')
+@main.route('/apple-touch-icon.png')
+@main.route('/browserconfig.xml')
+@main.route('/favicon-16x16.png')
+@main.route('/favicon-32x32.png')
+@main.route('/favicon.ico')
+@main.route('/mstile-150x150.png')
+@main.route('/safari-pinned-tab.svg')
+@main.route('/manifest.json')
 def static_from_root():
     return send_from_directory(current_app.static_folder, request.path[1:])
