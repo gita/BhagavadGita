@@ -1,0 +1,105 @@
+{% import 'macros/page_macros.html' as page %}
+{% extends 'layouts/base.html' %}
+
+{% block title %}Terms of Service{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+  <span class="breadcrumb-item active">{{ _('Terms of Service') }}</span>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <br>
+      <h1>Bhagavad Gita Terms of Service</h1>
+      <p>Thank you for using Bhagavad Gita! We're happy you're here. Please read this Terms of Service agreement carefully before accessing or using Bhagavad Gita. Because it is such an important contract between us and our users, we have tried to make it as clear as possible.</p>
+
+      <h3 id="accountterms">Account Terms</h3>
+
+      <h4 id="1requiredinformation">1. Required Information</h4>
+
+      <p>You must provide a valid email address in order to complete the signup process. Any other information requested, such as your real name, is optional, unless you are accepting these terms on behalf of a legal entity.</p>
+
+      <h4 id="2accountrequirements">2. Account Requirements</h4>
+
+      <p>We have a few simple rules for accounts on BhagavadGita.io's Service.</p>
+
+      <ul>
+      <li>You must be a human to create an account. Accounts registered by "bots" or other automated methods are not permitted. </li>
+
+      <li>One person or legal entity may maintain no more than one account.</li>
+
+      <li>Your login may only be used by one person — i.e., a single login may not be shared by multiple people.</li>
+      </ul>
+
+      <h4 id="3useraccountsecurity">3. User Account Security</h4>
+
+      <p>You are responsible for keeping your account secure while you use our Service.</p>
+
+      <h3 id="copyrightstatement">Copyright Statement</h3>
+
+      <p>From this site, you may download the information and use it on your computer for personal study or other non-commercial purposes. You must include appropriate attribution/credit on the material you extract. In this case, free means free.  It cannot be bundled with anything sold, nor can you charge for shipping, handling, or anything. It is provided for personal study or for use in undergraduate or seminary religion classes or other non-commercial study.</p>
+
+      <p>All the translations on this site have been taken with permission from their respective authors.</p>
+
+      <h3 id="acceptableuse">Acceptable Use</h3>
+
+      <h4 id="1compliancewithlawsandregulations">1. Compliance with Laws and Regulations</h4>
+
+      <p>Your use of the Website and Service must not violate any applicable laws, including copyright or trademark laws, export control laws, or other laws in your jurisdiction. You are responsible for making sure that your use of the Service is in compliance with laws and any applicable regulations.</p>
+
+      <h4 id="2conductrestrictions">2. Conduct Restrictions</h4>
+
+      <p>While using BhagavadGita.io, you agree that you will not under any circumstances:</p>
+
+      <ul>
+      <li>use our servers for any form of excessive automated bulk activity (for example, spamming), or relay any other form of unsolicited advertising or solicitation through our servers, such as get-rich-quick schemes;</li>
+
+      <li>attempt to disrupt or tamper with BhagavadGita.io's servers in ways that could harm our Website or Service, to place undue burden on BhagavadGita.io's servers through automated means, or to access BhagavadGita.io's Service in ways that exceed your authorization.</li>
+      </ul>
+
+      <h4 id="3scraping">3. Scraping</h4>
+
+      <p>Scraping refers to extracting data from our Website via an automated process, such as a bot or webcrawler. It does not refer to the collection of information through Bhagavad Gita API. You may scrape the website for the following reasons:</p>
+
+      <ul>
+      <li>Researchers may scrape public, non-personal information from BhagavadGita.io for research purposes, only if any publications resulting from that research are open access.</li>
+
+      <li>Archivists may scrape BhagavadGita.io for public data for archival purposes.</li>
+      </ul>
+
+      <p>You may not scrape BhagavadGita.io for spamming purposes.</p>
+
+      <h4 id="4excessivebandwidthuse">4. Excessive Bandwidth Use</h4>
+
+      <p>If we determine your bandwidth usage to be significantly excessive in relation to other Bhagavad Gita customers, we reserve the right to suspend your account until you can reduce your bandwidth consumption.</p>
+
+      <h3 id="apiterms">API Terms</h3>
+
+      <h4 id="noabuseoroveruseoftheapi">No Abuse or Overuse of the API</h4>
+
+      <p>Abuse or excessively frequent requests to BhagavadGita.io via the API may result in the temporary or permanent suspension of your account's access to the API. BhagavadGita.io, in our sole discretion, will determine abuse or excessive usage of the API. We will make a reasonable attempt to warn you via email prior to suspension.</p>
+
+      <p>You may not share API tokens to exceed BhagavadGita.io's rate limitations.</p>
+
+      <p>You may not use the API to download data or Content from BhagavadGita.io for spamming purposes.</p>
+
+      <p>BhagavadGita.io may offer subscription-based access to our API for those Users who require high-throughput access or access that would result in resale of BhagavadGita.io Service.</p>
+
+      <p>Using the Bhagavad Gita API, you may download the information and use it in your app or website as long as you do not charge for it. You must include appropriate attribution/credit on the material you extract. In this case, free means free.  It cannot be bundled with anything sold, nor can you charge for shipping, handling, or anything. It is provided for non-commercial use only.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.jumbotron {
+  background-image: url("/static/images/gita.jpg");
+  background-size: cover;
+}
+.breadcrumb {
+  margin-bottom: 0rem;
+}
+</style>
+{% endblock %}

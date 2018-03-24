@@ -414,6 +414,18 @@ def api():
     return render_template('main/api.html')
 
 
+@main.route('/privacy-policy/', methods=['GET'])
+def privacy_policy():
+
+    return render_template('main/privacy-policy.html')
+
+
+@main.route('/terms-of-service/', methods=['GET'])
+def terms_of_service():
+
+    return render_template('main/terms-of-service.html')
+
+
 @main.route('/contact/', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
