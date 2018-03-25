@@ -2,9 +2,9 @@
 const cacheName = 'bhagavadgita';
 const startPage = 'https://bhagavadgita.io/';
 const offlinePage = 'https://bhagavadgita.io/';
-const fallbackImage = 'https://hanumanchalisa.net/wp-content/plugins/super-progressive-web-apps/public/images/logo.png';
+const fallbackImage = 'https://bhagavadgita.io/static/images/sribhagavadgita.jpg';
 const filesToCache = [startPage, offlinePage, fallbackImage];
-const neverCacheUrls = [/\/wp-admin/, /\/wp-login/, /preview=true/];
+const neverCacheUrls = ['/register'];
 self.addEventListener('install', function(e) {
     console.log('BhagavadGita service worker installation');
     e.waitUntil(caches.open(cacheName).then(function(cache) {
