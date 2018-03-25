@@ -509,52 +509,16 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       document.cookie = name+'=; Max-Age=-99999999;';
   }
 </script>
-
-<script src="/upup.min.js"></script>
 <script>
-  UpUp.start({
-    'content': 'Cannot reach site. Please check your internet connection.',
-    'content-url': '/',
-    'cache-version': 'v3',
-    'service-worker-url': '/bhagavadgita.min.js',
-    'assets': [
-      '/static/styles/app.css',
-      '/static/webassets-external/e2004f5e6d9cac08c7960d53c9848148_bootstrap.min.css',
-      '/static/webassets-external/f02fdd49f14a7ca24df9629e39fc75bd_mdb.min.css',
-      '/static/webassets-external/0cebf0022b3ceead7531e7da3d9cac78_select2.min.css',
-      '/static/webassets-external/a967f73b8ac0a718e732152b9e904771_font-awesome.min.css',
-      '/static/webassets-external/b54b4ca42f274426735df5e793a90a1b_bootstrap-social.min.css',
-      '/static/webassets-external/7b04a33a91a4277cb27bac45f57d8b79_zxcvbn.js',
-      '/static/webassets-external/417e728cfb5e32f47a2321f72899255f_bootstrap.min.js',
-      '/static/webassets-external/c8b1b2b15864748a310a1607f2ef1972_popper.min.js',
-      '/static/webassets-external/1a51ffbcd22149edb670fba660fb6a3b_clipboard.min.js',
-      '/static/webassets-external/b1ba1f3114aeaff5d0aeb595c01adff1_select2.min.js',
-      '/static/webassets-external/644836ea0df0f78e4a5430e55a3f863d_axios.min.js',
-      '/static/webassets-external/6e88c3fa95357d2c8e34c2002d471dcf_app.js',
-      '/static/webassets-external/32a7dc539f3c299e3aa5d67cef53df59_mdb.min.js',
-      '/static/images/arjuna-vishada-yoga.jpg',
-      '/static/images/akshara-brahma-yoga.jpg',
-      '/static/images/bhakti-yoga.jpg',
-      '/static/images/daivasura-sampad-vibhaga-yoga.jpg',
-      '/static/images/dhyana-yoga.jpg',
-      '/static/images/gunatraya-vibhaga-yoga.jpg',
-      '/static/images/gyan-vigyana-yoga.jpg',
-      '/static/images/jnana-karma-sanyasa-yoga.jpg',
-      '/static/images/karma-sanyasa-yoga.jpg',
-      '/static/images/karma-yoga.jpg',
-      '/static/images/kshetra-kshetrajna-vibhaga-yoga.jpg',
-      '/static/images/moksha-sanyasa-yoga.jpg',
-      '/static/images/purushotamma-yoga.jpg',
-      '/static/images/raja-vidya-yoga.jpg',
-      '/static/images/sankhya-yoga.jpg',
-      '/static/images/shraddha-traya-vibhaga-yoga.jpg',
-      '/static/images/vibhooti-yoga.jpg',
-      '/static/images/vishwaroopa-darshana-yoga.jpg',
-      '/static/images/sribhagavadgita.jpg',
-      './chapter-numbers',
-      './languages',
-      './verse-numbers/1'
-    ]
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/bhagavadgita.js').then(function(registration) {
+          console.log('Radhe Radhe');
+          registration.update();
+      }).catch(function(error) {
+          console.log('Jai Shri Radha Krishna ' + error);
+      });
   });
+}
 </script>
 {% endblock %}
