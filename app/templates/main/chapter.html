@@ -96,14 +96,14 @@
         {% if previous_chapter == 0 %}
           <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('ALL CHAPTERS') }}</a>
         {% else %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('CHAPTER') }} {{previous_chapter}}</a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('CHAPTER') }} {{previous_chapter}}</a>
         {% endif %}
 
         {% set next_chapter = chapter.chapter_number + 1 %}
         {% if next_chapter == 19 %}
           <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
         {% else %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('CHAPTER') }} {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('CHAPTER') }} {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
         {% endif %}
       </div>
     </div>
@@ -116,13 +116,13 @@
               <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-clipboard-text="{{verse.meaning}}" style="float: left;">
                 <i class="fa fa-copy" style="color: #fff;"></i>
               </a>
-              <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-clipboard-text="https://bhagavadgita.io/chapter/{{chapter.chapter_number}}/verse/{{verse.verse_number}}" style="float: right;">
+              <a class="btn-sm bg-amber-darken-1 my-0 waves-effect waves-light" data-clipboard-text="https://bhagavadgita.io/chapter/{{chapter.chapter_number}}/verse/{{verse.verse_number}}/" style="float: right;">
                 <i class="fa fa-link" style="color: #fff;"></i>
               </a>
               <h4 class="font-up font-bold white-text mt-2 mb-3"><strong>{{ _('Verse') }} {{verse.verse_number}}</strong></h4>
               <hr>
               <p class="white-text mb-0 verse-meaning">{{verse.meaning | replace('"', "")}}</p>
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}">{{ _('OPEN VERSE') }}</a>
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}/">{{ _('OPEN VERSE') }}</a>
           </div>
         </div>
       </div>

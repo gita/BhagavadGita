@@ -106,24 +106,24 @@
               <br>
               <p></p>
               {% if previous_verse != None %}
-                <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS VERSE') }}</a>
+                <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS VERSE') }}</a>
               {% else %}
                 {% set previous_chapter = chapter.chapter_number - 1 %}
                 {% if previous_chapter == 0 %}
                   <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('ALL CHAPTERS') }}</a>
                 {% else %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS CHAPTER') }}</a>
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS CHAPTER') }}</a>
                 {% endif %}
               {% endif %}
 
               {% if next_verse != None %}
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT VERSE') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT VERSE') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
               {% else %}
                 {% set next_chapter = chapter.chapter_number + 1 %}
                 {% if next_chapter == 19 %}
                   <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
                 {% else %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT CHAPTER') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT CHAPTER') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
                 {% endif %}
               {% endif %}
           </div>
