@@ -19,5 +19,6 @@ vendor_js = Bundle(
     'vendor/clipboard.min.js',
     'vendor/select2.min.js',
     'vendor/axios.min.js',
+    'vendor/mdb.min.js',
     filters='jsmin',
     output='scripts/vendor.js')

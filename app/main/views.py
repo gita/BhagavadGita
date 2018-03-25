@@ -482,7 +482,7 @@ def get_cookie():
 @main.route('/mstile-150x150.png')
 @main.route('/safari-pinned-tab.svg')
 @main.route('/manifest.json')
-@main.route('/sw.js')
-@main.route('/fallback.json')
+@main.route('/upup.min.js')
+@main.route('/upup.sw.min.js')
 def static_from_root():
     return send_from_directory(current_app.static_folder, request.path[1:])
