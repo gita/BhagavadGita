@@ -16,7 +16,8 @@
     ],
     "theme_color": "#FD9F28",
     "background_color": "#FD9F28",
-    "start_url": "/",
+    "start_url": "https://bhagavadgita.io/",
     "display": "standalone",
-    "gcm_sender_id": "482941778795"
+    "gcm_sender_id": "482941778795",
+    "description": "Read, study and recite the Bhagavad Gita Online in a simple, beautiful and easy to use interface. Bhagavad Gita - The Song of The Lord is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)."
 }
