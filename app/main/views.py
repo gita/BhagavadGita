@@ -486,7 +486,5 @@ def get_cookie():
 @main.route('/bhagavadgita.min.js')
 @main.route('/bhagavadgitachapter.min.js')
 @main.route('/bhagavadgitaverse.min.js')
-@main.route('/OneSignalSDKWorker.js')
-@main.route('/OneSignalSDKUpdaterWorker.js')
 def static_from_root():
     return send_from_directory(current_app.static_folder, request.path[1:])
