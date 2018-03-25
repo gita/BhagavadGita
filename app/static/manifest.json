@@ -16,6 +16,6 @@
     ],
     "theme_color": "#FD9F28",
     "background_color": "#FD9F28",
-    "start_url": "https://bhagavadgita.io",
+    "start_url": "/",
     "display": "standalone"
 }

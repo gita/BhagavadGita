@@ -508,5 +508,14 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   function eraseCookie(name) {
       document.cookie = name+'=; Max-Age=-99999999;';
   }
+
+  if('serviceWorker' in navigator) {
+    try {
+      navigator.serviceWorker.register('sw.js');
+      console.log("RadhaKrishna");
+    } catch(error) {
+      console.log("BankeBihari");
+    }
+  }
 </script>
 {% endblock %}
