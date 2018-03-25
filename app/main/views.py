@@ -483,5 +483,6 @@ def get_cookie():
 @main.route('/safari-pinned-tab.svg')
 @main.route('/manifest.json')
 @main.route('/sw.js')
+@main.route('/fallback.json')
 def static_from_root():
     return send_from_directory(current_app.static_folder, request.path[1:])
