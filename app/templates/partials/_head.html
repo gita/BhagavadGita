@@ -7,6 +7,16 @@
         <meta name="msapplication-TileColor" content="#fd9f28">
         <meta name="theme-color" content="#ffffff">
 
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+        <script>
+          var OneSignal = window.OneSignal || [];
+          OneSignal.push(function() {
+            OneSignal.init({
+              appId: "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
+            });
+          });
+        </script>
+
         {% assets 'app_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
         {% assets 'vendor_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
 
