@@ -105,7 +105,7 @@
       <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
         <div class="card h-100" id="bg-{{chapter.chapter_number}}">
           <div class="view overlay hm-white-slight">
-              <img src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_meaning | replace('"', "")}}">
+              <img data-src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_meaning | replace('"', "")}}">
               <a>
                   <div class="mask waves-effect waves-light"></div>
               </a>
@@ -349,6 +349,8 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
           $('#myRange').val(settings['font']);
         }
       }
+
+      var myLazyLoad = new LazyLoad();
 
       $('.js-example-basic-single').select2();
 

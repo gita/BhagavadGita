@@ -20,5 +20,6 @@ vendor_js = Bundle(
     'vendor/select2.min.js',
     'vendor/axios.min.js',
     'vendor/mdb.min.js',
+    'vendor/lazyload.js',
     filters='jsmin',
     output='scripts/vendor.js')
