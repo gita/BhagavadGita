@@ -5,6 +5,7 @@ const offlinePage = 'https://bhagavadgita.io/';
 const fallbackImage = 'https://bhagavadgita.io/static/images/sribhagavadgita.jpg';
 const filesToCache = [startPage, offlinePage, fallbackImage];
 const neverCacheUrls = ['/register'];
+
 self.addEventListener('install', function(e) {
     console.log('BhagavadGita service worker installation');
     e.waitUntil(caches.open(cacheName).then(function(cache) {
