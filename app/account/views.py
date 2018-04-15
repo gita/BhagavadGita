@@ -468,6 +468,14 @@ def create_app():
         db.session.add(item)
         db.session.commit()
 
+        get_queue().enqueue(
+            send_email,
+            recipient=current_user.email,
+            subject='Radha Krishna',
+            template='account/email/confirm_app',
+            user=current_user._get_current_object(),
+            app_name=form.application_name.data)
+            
         flash('You application has been created.', 'success')
         return redirect(
             url_for('account.update_app', application_id=app.application_id))
