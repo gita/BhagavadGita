@@ -468,7 +468,9 @@ def create_app():
         db.session.add(item)
         db.session.commit()
 
-        send_email(recipient=current_user.email,
+        get_queue().enqueue(
+            send_email,
+            recipient=current_user.email,
             subject='Application Successfully Registered : Bhagavad Gita API',
             template='account/email/confirm_app',
             user=current_user._get_current_object(),
