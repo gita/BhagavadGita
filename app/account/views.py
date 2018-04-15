@@ -13,6 +13,8 @@ from ..models import App, Client, User, Token
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreateAppForm,
                     CreatePasswordForm, LoginForm, RegistrationForm,
                     RequestResetPasswordForm, ResetPasswordForm, UpdateAppForm)
+from flask_mail import Mail, Message
+from .. import mail
 
 github = oauthclient.remote_app(
     'github',
@@ -471,13 +473,10 @@ def create_app():
 
         current_app.logger.info("RadhaKrishna")
 
-        get_queue().enqueue(
-            send_email,
-            recipient=current_user.email,
-            subject='Application Successfully Registered : Bhagavad Gita API',
-            template='account/email/confirm_app',
-            user=current_user._get_current_object(),
-            app_name=form.application_name.data)
+        msg = Message('Hello', sender='contact@bhagavadgita.io',
+                      recipients=['radhakrishnamaakhan@gmail.com'])
+        msg.body = "RadhaKrishna"
+        mail.send(msg)
             
         flash('You application has been created.', 'success')
         return redirect(
