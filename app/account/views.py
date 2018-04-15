@@ -481,7 +481,7 @@ def create_app():
         return redirect(
             url_for('account.update_app', application_id=app.application_id))
     return render_template(
-        'account/create_app.html', user=current_user._get_current_object(), form=form)
+        'account/create_app.html', user=current_user, form=form)
 
 
 @account.route('/manage/apps/<string:application_id>', methods=['GET', 'POST'])
