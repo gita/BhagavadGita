@@ -469,19 +469,21 @@ def create_app():
         db.session.add(item)
         db.session.commit()
 
-        print("RadhaKrishna")
-        # print(current_user.full_name)
+        current_app.logger.info("RadhaKrishna")
 
-        send_email(recipient=current_user.email,
-            subject='Application Successfully Registered',
+        get_queue().enqueue(
+            send_email,
+            recipient=current_user.email,
+            subject='Application Successfully Registered : Bhagavad Gita API',
             template='account/email/confirm_app',
+            user=current_user._get_current_object(),
             app_name=form.application_name.data)
             
         flash('You application has been created.', 'success')
         return redirect(
             url_for('account.update_app', application_id=app.application_id))
     return render_template(
-        'account/create_app.html', user=current_user, form=form)
+        'account/create_app.html', user=current_user._get_current_object(), form=form)
 
 
 @account.route('/manage/apps/<string:application_id>', methods=['GET', 'POST'])
