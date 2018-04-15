@@ -471,7 +471,7 @@ def create_app():
 
         current_app.logger.info("RadhaKrishna")
 
-        send_email(recipient=current_user.email,subject='Application Successfully Registered : Bhagavad Gita API',template='account/email/confirm_app',user=current_user._get_current_object(),app_name=form.application_name.data)
+        send_email(recipient=current_user.email,subject='Application Successfully Registered : Bhagavad Gita API',template='account/email/confirm_app',user=current_user,app_name=form.application_name.data)
             
         flash('You application has been created.', 'success')
         return redirect(
