@@ -468,6 +468,8 @@ def create_app():
         db.session.add(item)
         db.session.commit()
 
+        current_app.logger.info("RadhaKrishna")
+
         get_queue().enqueue(
             send_email,
             recipient=current_user.email,
@@ -480,7 +482,7 @@ def create_app():
         return redirect(
             url_for('account.update_app', application_id=app.application_id))
     return render_template(
-        'account/create_app.html', user=current_user, form=form)
+        'account/create_app.html', user=current_user._get_current_object(), form=form)
 
 
 @account.route('/manage/apps/<int:application_id>', methods=['GET', 'POST'])
