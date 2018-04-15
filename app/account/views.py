@@ -471,12 +471,12 @@ def create_app():
         db.session.add(item)
         db.session.commit()
 
-        current_app.logger.info("RadhaKrishna")
-
-        msg = Message('Hello', sender='contact@bhagavadgita.io',
-                      recipients=['radhakrishnamaakhan@gmail.com'])
-        msg.body = "RadhaKrishna"
-        mail.send(msg)
+        send_email(
+            recipient=current_user.email,
+            subject='Application Successfully Registered',
+            template='account/email/confirm_app',
+            user=current_user._get_current_object(),
+            app_name=form.application_name.data)
             
         flash('You application has been created.', 'success')
         return redirect(
