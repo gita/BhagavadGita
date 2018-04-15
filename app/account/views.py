@@ -452,6 +452,7 @@ def create_app():
     form = CreateAppForm()
     if form.validate_on_submit():
         app = App(
+            application_id=gen_salt(10),
             application_name=form.application_name.data,
             application_description=form.application_description.data,
             application_website=form.application_website.data,
@@ -485,7 +486,7 @@ def create_app():
         'account/create_app.html', user=current_user._get_current_object(), form=form)
 
 
-@account.route('/manage/apps/<int:application_id>', methods=['GET', 'POST'])
+@account.route('/manage/apps/<string:application_id>', methods=['GET', 'POST'])
 @login_required
 def update_app(application_id):
     app = App.query.filter_by(application_id=application_id).first()
@@ -526,7 +527,7 @@ def all_apps():
 
 
 @account.route(
-    '/manage/apps/<int:application_id>/delete', methods=['GET', 'POST'])
+    '/manage/apps/<string:application_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_app(application_id):
     client = Client.query.filter_by(app_id=application_id).first()

@@ -288,7 +288,7 @@ class Token(db.Model):
 
 
 class App(db.Model):
-    application_id = db.Column(db.Integer, primary_key=True)
+    application_id = db.Column(db.String(20), primary_key=True)
     application_name = db.Column(db.String(32), nullable=False)
     application_description = db.Column(db.String(200))
     application_website = db.Column(db.String(128))
