@@ -70,6 +70,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}" href="/bhagavad-gita-quotes/">Quotes</a>
           {{ header_items(current_user) }}
           {{ create_dropdown(dropdown) }}
         </div>
