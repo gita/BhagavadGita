@@ -81,23 +81,23 @@ def access_token():
     parameters:
     - name: client_id
       in: formData
-      required: 'True'
+      required: True
       type: 'string'
       description: "Your app's client_id. Get from API dashboard."
     - name: client_secret
       in: formData
-      required: 'True'
+      required: True
       type: 'string'
       description: "Your app's client_secret. Get from API dashboard."
     - name: grant_type
       in: formData
-      required: 'True'
+      required: True
       type: 'string'
       default: 'client_credentials'
       description: "Grant Type."
     - name: scope
       in: formData
-      required: 'True'
+      required: True
       type: 'string'
       default: verse chapter
       description: "The resources that you would like to access."

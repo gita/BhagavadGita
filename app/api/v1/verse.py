@@ -31,7 +31,7 @@ class VerseList(SwaggerView):
         parameters:
         - name: access_token
           in: query
-          required: 'True'
+          required: True
           type: 'string'
           description: "Your app's access token."
         - name: language
@@ -125,17 +125,17 @@ class VerseListByChapter(SwaggerView):
         parameters:
         - name: access_token
           in: query
-          required: 'True'
+          required: True
           type: 'string'
           description: "Your app's access token."
         - name: chapter_number
           in: path
-          type: int
+          type: integer
           enum:
           - 1
           - 2
           - 3
-          required: 'true'
+          required: True
           default: 1
           description: Which Chapter Number to filter?
         - name: language
@@ -237,17 +237,17 @@ class VerseByChapter(SwaggerView):
         parameters:
         - name: access_token
           in: query
-          required: 'True'
+          required: True
           type: 'string'
           description: "Your app's access token."
         - name: chapter_number
           in: path
-          type: int
+          type: integer
           enum:
           - 1
           - 2
           - 3
-          required: 'true'
+          required: True
           default: 1
           description: Which Chapter Number to filter?
         - name: verse_number
@@ -257,7 +257,7 @@ class VerseByChapter(SwaggerView):
           - 1
           - 2
           - 3
-          required: 'true'
+          required: True
           default: 1
           description: Which Verse Number to filter?
         - name: language
