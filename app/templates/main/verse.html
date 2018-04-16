@@ -96,7 +96,7 @@
               <div class="meaning" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1rem;" class="verse-meaning"><b>{{verse.meaning  | replace('"', "")}}</b></p>
               </div>
-              {% if language == "en" and verse.meaning_large != "" %}
+              {% if verse.meaning_large != "" %}
                 <h4><b><u>{{ _('Purport') }}</u></b></h4>
                 <br>
                 {% set meaning = verse.meaning_large | replace('"', "") %}

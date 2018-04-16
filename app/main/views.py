@@ -357,7 +357,7 @@ def verse_radhakrishna(chapter_number, verse_number, language):
 
     verses_table = "verses_" + language
     sql = """
-            SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+            SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order, vt.meaning_large
             FROM %s vt
             JOIN verses v
             ON
