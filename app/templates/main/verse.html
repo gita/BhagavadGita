@@ -99,8 +99,12 @@
               {% if language == "en" and verse.meaning_large != "" %}
                 <h4><b><u>{{ _('Purport') }}</u></b></h4>
                 <br>
+                {% set meaning = verse.meaning_large | replace('"', "") %}
+                {% set meaning = meaning.split('\n') %}
                 <div class="meaning_large" align="center">
-                  <p style="font-size: 1rem;" class="verse-meaning-large"><b>{{verse.meaning_large | replace('"', "")}}</b></p>
+                  {% for i in range(meaning | length) %}
+                  <p style="font-size: 1rem;" class="verse-meaning-large"><b>{{meaning[i]}}</b></p>
+                  {% endfor %}
                 </div>
               {% endif %}
               <br>
