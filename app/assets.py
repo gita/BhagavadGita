@@ -13,13 +13,11 @@ vendor_css = Bundle(
     output='styles/vendor.css')
 
 vendor_js = Bundle(
-    'vendor/zxcvbn.js',
-    'vendor/bootstrap.min.js',
     'vendor/popper.min.js',
+    'vendor/bootstrap.min.js',
+    'vendor/zxcvbn.js',
     'vendor/clipboard.min.js',
     'vendor/select2.min.js',
     'vendor/axios.min.js',
-    'vendor/mdb.min.js',
     'vendor/lazyload.js',
-    filters='jsmin',
     output='scripts/vendor.js')
