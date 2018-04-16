@@ -109,9 +109,12 @@ def access_token():
       200:
         description: 'Success: Everything worked as expected.'
         examples:
-          - access_token: "cN31b7gClnImuQg8OeMGsUWYGsA0we"
-            token_type: "Bearer"
-            scope: "email"
+          application/json: |-
+            {
+              access_token: "cN31b7gClnImuQg8OeMGsUWYGsA0we"
+              token_type: "Bearer"
+              scope: "email"
+            }
       400:
         description: 'Bad Request: The request was unacceptable due to wrong parameter(s).'
       401:
