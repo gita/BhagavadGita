@@ -113,7 +113,7 @@ def create_app(config_name):
     swagger = Swagger(
         app,
         template={
-            'swagger': '3.0',
+            'swagger': '2.0',
             'info': {
                 'title': 'Bhagavad Gita API',
                 'version': '1.0'

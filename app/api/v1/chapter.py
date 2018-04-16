@@ -56,13 +56,15 @@ class Chapter(SwaggerView):
             schema:
               $ref: '#/definitions/ChapterSchema'
             examples:
-              - chapter_number: 1
-                name: u'अर्जुनविषादयोग'
-                name_english: u'Arjuna Dilemma'
-                name_transliterated: u'Arjun Viṣhād Yog'
-                name_transliterated_simple: u'Arjuna Visada Yoga'
-                verses_count: 47
-
+              application/json: |-
+                {
+                  "chapter_number": 1, 
+                  "name": "u'\u0905\u0930\u094d\u091c\u0941\u0928\u0935\u093f\u0937\u093e\u0926\u092f\u094b\u0917'", 
+                  "name_english": "u'Arjuna Dilemma'", 
+                  "name_transliterated": "u'Arjun Vi\u1e63h\u0101d Yog'", 
+                  "name_transliterated_simple": "u'Arjuna Visada Yoga'", 
+                  "verses_count": 47
+                }
           400:
             description: 'Bad Request: The request was unacceptable due to wrong parameter(s).'
           401:
@@ -138,18 +140,27 @@ class ChapterList(SwaggerView):
             schema:
               $ref: '#/definitions/ChapterSchema'
             examples:
-              - chapter_number: 1
-                name: u'अर्जुनविषादयोग'
-                name_english: u'Arjuna Dilemma'
-                name_transliterated: u'Arjun Viṣhād Yog'
-                name_transliterated_simple: u'Arjuna Visada Yoga'
-                verses_count: 47
-              - chapter_number: 2
-                name: u'सांख्ययोग'
-                name_english: u'Transcendental Knowledge'
-                name_transliterated: u'Sānkhya Yog'
-                name_transliterated_simple: u'Sankhya Yoga'
-                verses_count: 72
+              application/json: |-
+                {
+                  "chapters": [
+                    {
+                      "chapter_number": 1, 
+                      "name": "u'\u0905\u0930\u094d\u091c\u0941\u0928\u0935\u093f\u0937\u093e\u0926\u092f\u094b\u0917'", 
+                      "name_english": "u'Arjuna Dilemma'", 
+                      "name_transliterated": "u'Arjun Vi\u1e63h\u0101d Yog'", 
+                      "name_transliterated_simple": "u'Arjuna Visada Yoga'", 
+                      "verses_count": 47
+                    }, 
+                    {
+                      "chapter_number": 2, 
+                      "name": "u'\u0938\u093e\u0902\u0916\u094d\u092f\u092f\u094b\u0917'", 
+                      "name_english": "u'Transcendental Knowledge'", 
+                      "name_transliterated": "u'S\u0101nkhya Yog'", 
+                      "name_transliterated_simple": "u'Sankhya Yoga'", 
+                      "verses_count": 72
+                    }
+                  ]
+                }
           400:
             description: 'Bad Request: The request was unacceptable due to wrong parameter(s).'
           401:
