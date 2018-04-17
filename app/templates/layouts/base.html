@@ -40,10 +40,8 @@
         %}
       #}
 
-        {% block nav %}
-          {# add dropdown variable here to the render_nav method to render dropdowns #}
-          {{ nav.render_nav(current_user) }}
-        {% endblock %}
+         {% block nav %} {# add dropdown variable here to the render_nav method to render dropdowns #} {{ nav.render_nav(current_user)
+        }} {% endblock %}
 
         {% include 'partials/_flashes.html' %}
         {# When extended, the content block contains all the html of the webpage #}
@@ -112,10 +110,27 @@
             <a href="#" class="go-top"><i class="fa fa-arrow-up"></i></a>
         </footer>
 
+        <style>
+          body {
+            padding-left: 300px;
+          }
+
+          footer {
+            padding-left: 0;
+          }
+
+          @media only screen and (max-width : 992px) {
+            body {
+              padding-left: 0;
+            }
+          }
+        </style>
+
         <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5a8d87d4d57467001383cda2&product=inline-share-buttons" defer></script>
 
         <script>
           $(document).ready(function() {
+            $('.sidenav').sidenav();
             $(window).scroll(function() {
               if ($(this).scrollTop() > 200) {
                 $('.go-top').fadeIn(200);

@@ -221,3 +221,19 @@ input[type=email]:focus:not([readonly]), input[type=password]:focus:not([readonl
 .alert {
   margin-bottom: 0;
 }
+
+#query {
+  padding-left: 2rem;
+}
+
+#mobile-demo>li.search {
+  margin-top: -0.5rem;
+}
+
+body>div>div.alert {
+  margin-bottom: 0;
+}
+
+#mobile-demo>li:nth-child(1)>div {
+  padding-bottom: 1rem;
+}

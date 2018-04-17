@@ -63,23 +63,58 @@
 {% endmacro %}
 
 {% macro render_nav(current_user, dropdown=[]) %}
-    <nav class="navbar navbar-expand-md navbar-dark amber darken-2">
-      <a class="navbar-brand" href="/"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-dark amber darken-2">
+      <a class="navbar-brand center" href="/"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
+      <button href="#" data-target="mobile-demo" class="navbar-toggler sidenav-trigger hide-on-large-only" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}" href="/bhagavad-gita-quotes/">Quotes</a>
-          {{ header_items(current_user) }}
-          {{ create_dropdown(dropdown) }}
-        </div>
-        <form class="form-inline my-2 my-md-0" method="get" action="/search">
-          <input class="form-control w-100" type="text" name="query" id="query" placeholder="{{ _('Search') }}" aria-label="Search">
-        </form>
-        <div class="navbar-nav">
-            {{ account_items(current_user) }}
-        </div>
-      </div>
     </nav>
+
+    <ul class="sidenav sidenav-fixed" id="mobile-demo">
+      <li>
+        <div class="user-view">
+          <div class="background">
+            <img src="/static/images/sankhya-yoga.jpg">
+          </div>
+          <a href="#user">
+            <img class="circle" src="/static/images/radhakrishna.png">
+          </a>
+          {% if current_user.is_authenticated %}
+            <a href="#name">
+               {% if current_user.last_name %}
+              <tr>
+                <span class="white-text name">{{ '%s %s' % (current_user.first_name, current_user.last_name) }}</span>
+              </tr>
+              {% else %}
+              <tr>
+                <span class="white-text name">{{ '%s' % (current_user.first_name) }}</span>
+              </tr>
+              {% endif %}
+            </a>
+            <a href="#email">
+              <span class="white-text email">{{ current_user.email }}</span>
+            </a>
+          {% endif %}
+        </div>
+      </li>
+      <li class="search">
+        <div class="search-wrapper">
+          <form class="form-inline" method="get" action="/search">
+            <input class="form-control w-100" type="text" name="query" id="query" placeholder="{{ _('Search') }}" aria-label="Search">
+          </form>
+        </div>
+      </li>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}"
+          href="/bhagavad-gita-quotes/">Quotes</a>
+      </li>
+      <li>
+         {{ header_items(current_user) }} 
+         {{ create_dropdown(dropdown) }}
+      </li>
+      <hr>
+      <li>
+         {{ account_items(current_user) }}
+      </li>
+    </ul>
 {% endmacro %}

@@ -10,6 +10,7 @@ vendor_css = Bundle(
     'vendor/select2.min.css',
     'vendor/font-awesome.min.css',
     'vendor/bootstrap-social.min.css',
+    'vendor/materialize.min.css',
     output='styles/vendor.css')
 
 vendor_js = Bundle(
@@ -20,4 +21,5 @@ vendor_js = Bundle(
     'vendor/select2.min.js',
     'vendor/axios.min.js',
     'vendor/lazyload.js',
+    'vendor/materialize.min.js',
     output='scripts/vendor.js')
