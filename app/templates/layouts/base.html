@@ -140,6 +140,14 @@
           #mobile-demo>li:nth-child(1)>div {
             padding-bottom: 1rem;
           }
+
+          #mobile-demo > li.no-padding > ul > li > a {
+            padding: 0 32px;
+          }
+
+          #mobile-demo > li.no-padding > ul > li > div > ul > li > a {
+            color: #757575;
+          }
         </style>
 
         <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5a8d87d4d57467001383cda2&product=inline-share-buttons" defer></script>
@@ -147,6 +155,7 @@
         <script>
           $(document).ready(function() {
             $('.sidenav').sidenav();
+            $('.collapsible').collapsible();
             $(window).scroll(function() {
               if ($(this).scrollTop() > 200) {
                 $('.go-top').fadeIn(200);

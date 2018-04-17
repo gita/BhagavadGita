@@ -76,7 +76,7 @@
           <div class="background">
             <img src="/static/images/shriradhakrishna.jpg">
           </div>
-          <a href="#user">
+          <a href="/">
             <img class="circle" src="/static/images/radhakrishna.png">
           </a>
           {% if current_user.is_authenticated %}
@@ -116,9 +116,26 @@
          {{ header_items(current_user) }} 
          {{ create_dropdown(dropdown) }}
       </li>
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          <li>
+            <a class="collapsible-header">Chapters
+            </a>
+            <div class="collapsible-body">
+              <ul>
+                {% for i in range(1, 19) %}
+                <li>
+                  <a class="nav-item nav-link waves-effect waves-light" href="/chapter/{{i}}/">Chapter {{i}}</a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
       <hr>
       <li>
-         {{ account_items(current_user) }}
+        {{ account_items(current_user) }}
       </li>
     </ul>
 {% endmacro %}
