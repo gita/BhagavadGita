@@ -43,9 +43,13 @@ endblock %} {% block meta_tags %}
     <div class="row">
         <div class="col-md-12">
             <br>
-            <h1>Bhagavad Gita Quotes By Lord Krishna</h1>
+            <h1 align="center">Bhagavad Gita Quotes By Lord Krishna</h1>
+            <div class="col-md-12" align="center">
+                <img src="/static/images/gita.jpg" class="img-fluid" alt="Responsive image">
+            </div>
+            <br>
             {% for quote in quotes %}
-            <p>{{loop.index}}. {{quote}}</p>
+            <p style="font-size: 1.2rem;">{{loop.index}}. {{quote}}</p>
             {% endfor %}
         </div>
     </div>

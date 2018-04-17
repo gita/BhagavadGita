@@ -74,7 +74,7 @@
       <li>
         <div class="user-view">
           <div class="background">
-            <img src="/static/images/jnana-karma-sanyasa-yoga.jpg">
+            <img src="/static/images/shriradhakrishna.jpg">
           </div>
           <a href="#user">
             <img class="circle" src="/static/images/radhakrishna.png">
@@ -103,6 +103,10 @@
             <input class="form-control w-100" type="text" name="query" id="query" placeholder="{{ _('Search') }}" aria-label="Search">
           </form>
         </div>
+      </li>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.index' %}active{% endif %}"
+          href="/">Home</a>
       </li>
       <li>
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}"
