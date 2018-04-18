@@ -208,19 +208,14 @@
               var shareButton = document.getElementById('share');
 
               shareButton.addEventListener('click', function (ev) {
-                if (navigator.share !== undefined) {
-
-                  var shareUrl = document.querySelector('link[rel=canonical]') ? document.querySelector('link[rel=canonical]').href : window.location.href;
-
+                if (navigator.share) {
                   navigator.share({
-                    title: document.title,
-                    url: shareUrl
-                  }).then(() => console.log('Successful share'))
-                    .catch((error) => console.log('Error sharing:', error));
-
-                  ev.preventDefault();
-                } else {
-                  console.log("Unfortunately, this feature is not supported on your browser");
+                    title: 'Radhe Radhe',
+                    text: 'Radhe Radhe',
+                    url: 'https://bhagavadgita.io',
+                  })
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing', error));
                 }
               });
             } else {
