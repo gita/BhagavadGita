@@ -11,6 +11,7 @@ vendor_css = Bundle(
     'vendor/font-awesome.min.css',
     'vendor/bootstrap-social.min.css',
     'vendor/materialize.min.css',
+    'vendor/material-icons.css',
     output='styles/vendor.css')
 
 vendor_js = Bundle(

@@ -63,11 +63,27 @@
 {% endmacro %}
 
 {% macro render_nav(current_user, dropdown=[]) %}
-    <nav class="navbar navbar-dark amber darken-2">
-      <a class="navbar-brand center" href="/"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
-      <button href="#" data-target="mobile-demo" class="navbar-toggler sidenav-trigger hide-on-large-only" data-toggle="collapse" type="button">
+    <nav class="navbar navbar-dark amber darken-2 fixed-top">
+      <button href="#" data-target="mobile-demo" class="navbar-toggler sidenav-trigger hide-on-large-only" data-toggle="collapse"
+        type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <a class="navbar-brand center mx-auto" href="/"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
+      <a class="btn-rounded navbar-toggler waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">
+        <span class="fa fa-cog"></span>
+      </a>
+      <div class="btn-group">
+        <a class="btn-rounded navbar-toggler waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true">
+          <i class="material-icons">more_vert</i>
+        </a>
+        <div class="dropdown-menu" id="gita">
+          <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">Language</a>
+          <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">Settings</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+      </div>
     </nav>
 
     <ul class="sidenav sidenav-fixed" id="mobile-demo">
@@ -134,6 +150,10 @@
         </ul>
       </li>
       <hr>
+      <!-- <li>
+        <a class="nav-item nav-link waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">Settings</a>
+      </li>
+      <hr> -->
       <li>
         {{ account_items(current_user) }}
       </li>
