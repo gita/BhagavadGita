@@ -240,6 +240,8 @@
             var isAndroid = ua.indexOf("android") > -1;
             if (isAndroid) {
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#vishnu">Share</a>`)
+              $('#gita').append(`<div class="dropdown-divider"></div>`)
+              $('#gita').append(`<a class="dropdown-item waves-effect waves-light" href="https://bhagavadgita.io">About Bhagavad Gita</a>`)
             }
 
             $(window).scroll(function() {
