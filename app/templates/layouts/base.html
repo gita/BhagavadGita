@@ -203,7 +203,7 @@
             var isAndroid = ua.indexOf("android") > -1;
             if (isAndroid) {
               console.log("RadhaKrishna")
-              $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href='intent://send?text=Hello#Intent;scheme=whatsapp;package=com.whatsapp;end'>Share</a>")
+              $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href='whatsapp://send?text=Hello'>Share</a>")
 
               var shareButton = document.getElementById('share');
 
