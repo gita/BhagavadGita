@@ -141,6 +141,22 @@
           </div>
         </div>
 
+        <div class="modal fade" id="shiva" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body text-center">
+                <div>
+                  <p>Bhagavad Gita v1.0</p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a class="btn btn-warning" href="https://play.google.com/store/apps/developer?id=Hanuman" target="_blank">Try More Apps!</a>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">{{ _('Close') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <style>
           body {
             padding-left: 300px;
@@ -241,7 +257,8 @@
             if (isAndroid) {
               $('#gita').append(`<div class="dropdown-divider"></div>`)
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#vishnu">Share</a>`)
-              $('#gita').append(`<a class="dropdown-item waves-effect waves-light" href="https://bhagavadgita.io" target="_blank">About Bhagavad Gita</a>`)
+              $('#gita').append(`<a class="dropdown-item waves-effect waves-light" href="https://bhagavadgita.io/about/" target="_blank">About Bhagavad Gita</a>`)
+              $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#shiva">About</a>`)
             }
 
             $(window).scroll(function() {
