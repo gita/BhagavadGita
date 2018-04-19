@@ -377,7 +377,9 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       var isAndroid = ua.indexOf("android") > -1;
       if (isAndroid) {
         console.log("RadhaKrishna")
-        $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href='whatsapp://send?text={{verse.transliteration  | replace('"', "")}} \n play.google.com/store/apps/details?id=com.hanuman.radha.krishna'>Share</a>")
+        var text = `whatsapp://send?text={{verse.transliteration}}`
+        console.log(text);
+        $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href=text>Share</a>")
 
         var shareButton = document.getElementById('share');
 
