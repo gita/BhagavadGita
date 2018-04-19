@@ -427,7 +427,10 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         text = window.encodeURIComponent(text)
         var whatsapp = 'whatsapp://send?text=' + text
         $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href=''>Share</a>")
-        document.getElementById("whatsapp").href = whatsapp;
+        document.getElementById("whatsappbtn").href = whatsapp;
+      } else {
+        console.log("RadhaKrishnaHanuman")
+      }
     }
 
     $('.js-example-basic-single').select2();
