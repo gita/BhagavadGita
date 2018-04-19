@@ -110,6 +110,37 @@
             <a href="#" class="go-top"><i class="fa fa-arrow-up"></i></a>
         </footer>
 
+        <div class="modal fade" id="vishnu" tabindex="-1" role="dialog" aria-labelledby="vishnuTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="vishnuTitle">{{ _('Share') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body text-center">
+                <div>
+                  <a class="btn btn-facebook waves-effect waves-light" href="https://www.facebook.com/IIRadhaKrishnaII/">
+                    <i class="fa fa-facebook"></i> Share on Facebook
+                  </a>
+
+                  <a class="btn btn-twitter waves-effect waves-light" href="https://www.facebook.com/IIRadhaKrishnaII/">
+                    <i class="fa fa-twitter"></i> Tweet on Twitter
+                  </a>
+
+                  <a class="btn btn-whatsapp waves-effect waves-light" href="" id="whatsapp">
+                    <i class="fa fa-whatsapp"></i> Share on Whatsapp
+                  </a>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">{{ _('Close') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <style>
           body {
             padding-left: 300px;
@@ -176,6 +207,20 @@
 
           body > div.jumbotron {
             margin-top: 3rem;
+          }
+
+          #vishnu > div > div > div.modal-body.text-center > div > a {
+            text-transform: inherit;
+          }
+
+          #vishnu > div > div > div.modal-body.text-center > div > a > i {
+            padding-right: 1rem;
+          }
+
+          .btn-whatsapp {
+            color: #fff;
+            background-color: #33D26A;
+            border-color: rgba(0,0,0,.2);
           }
         </style>
 
