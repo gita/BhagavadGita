@@ -427,6 +427,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         text = window.encodeURIComponent(text)
         var whatsapp = 'whatsapp://send?text=' + text
         document.getElementById("whatsappbtn").href = whatsapp;
+        document.getElementById("twitterbtn").href = text;
       } else {
         console.log("RadhaKrishnaHanuman")
       }
