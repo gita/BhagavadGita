@@ -427,9 +427,18 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         text = window.encodeURIComponent(text)
         var whatsapp = 'whatsapp://send?text=' + text
         document.getElementById("whatsappbtn").href = whatsapp;
-        document.getElementById("twitterbtn").href = text;
+
+        var twitter = `https://twitter.com/home?status=BG - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} - \n{{verse.meaning  | replace('"', "")}} \n https://bhagavadgita.io/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}/`
+        document.getElementById("twitterbtn").href = twitter;
       } else {
         console.log("RadhaKrishnaHanuman")
+        var text = `Bhagavad Gita - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} \n{{verse.text  | replace('"', "")}} \n{{verse.meaning  | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
+        text = window.encodeURIComponent(text)
+        var whatsapp = 'whatsapp://send?text=' + text
+        document.getElementById("whatsappbtn").href = whatsapp;
+        
+        var twitter = `https://twitter.com/home?status=BG - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} \n{{verse.meaning  | replace('"', "")}} \n https://bhagavadgita.io/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}/`
+        document.getElementById("twitterbtn").href = twitter;
       }
     }
 
