@@ -377,11 +377,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       var isAndroid = ua.indexOf("android") > -1;
       if (isAndroid) {
         console.log("RadhaKrishna")
-        var text = `whatsapp://send?text={{verse.transliteration}}`
+        var text = `whatsapp://send?text={{verse.text  | replace('"', "")}} \n {{verse.meaning  | replace('"', "")}}`
         console.log(text);
         $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href=''>Share</a>")
         document.getElementById("share").href = text;
-        
+
         var shareButton = document.getElementById('share');
 
         shareButton.addEventListener('click', function (ev) {
