@@ -198,29 +198,6 @@
 
               $('html, body').animate({scrollTop: 0}, 300);
             })
-
-            var ua = navigator.userAgent.toLowerCase();
-            var isAndroid = ua.indexOf("android") > -1;
-            if (isAndroid) {
-              console.log("RadhaKrishna")
-              $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href='whatsapp://send?text={{verse.transliteration  | replace('"', "")}} \n https://play.google.com/store/apps/details?id=com.hanuman.radha.krishna'>Share</a>")
-
-              var shareButton = document.getElementById('share');
-
-              shareButton.addEventListener('click', function (ev) {
-                // if (navigator.share) {
-                //   navigator.share({
-                //     title: 'Radhe Radhe',
-                //     text: 'Radhe Radhe',
-                //     url: 'https://bhagavadgita.io',
-                //   })
-                //     .then(() => console.log('Successful share'))
-                //     .catch((error) => console.log('Error sharing', error));
-                // }
-              });
-            } else {
-              console.log("RadhaKrishnaHanuman")
-            }
           });
         </script>
     </body>
