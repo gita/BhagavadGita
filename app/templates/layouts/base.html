@@ -203,7 +203,7 @@
             var isAndroid = ua.indexOf("android") > -1;
             if (isAndroid) {
               alert("RadhaKrishna")
-              $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href='intent:#Intent;action=android.intent.action.SEND;type=text/plain;S.android.intent.extra.TEXT=https%3A%2F%2Fpaul.kinlan.me%2F;S.android.intent.extra.SUBJECT=Amazing;S.browser_fallback_url=https:%3A%2F%2Ftwitter.com%2Fintent%2Ftweet;end'>Share</a>")
+              $('#gita').append("intent://send?text=Hello#Intent;scheme=whatsapp;package=com.whatsapp;end")
 
               var shareButton = document.getElementById('share');
 
