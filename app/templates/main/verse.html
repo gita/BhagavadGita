@@ -377,7 +377,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       var isAndroid = ua.indexOf("android") > -1;
       if (isAndroid) {
         console.log("RadhaKrishna")
-        var text = `Bhagavad Gita - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} %0A {{verse.text  | replace('"', "")}} %0A {{verse.meaning  | replace('"', "")}} \n Shared via the Bhagavad Gita app. Download Now - %0A https://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
+        var text = `Bhagavad Gita - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} \n {{verse.text  | replace('"', "")}} \n {{verse.meaning  | replace('"', "")}} \n Shared via the Bhagavad Gita app. Download Now - \n https://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
         text = window.encodeURIComponent(text)
         var whatsapp = 'whatsapp://send?text=' + text
         $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href=''>Share</a>")
