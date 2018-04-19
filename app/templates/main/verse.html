@@ -433,7 +433,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         var twitter = `https://twitter.com/intent/tweet?text=` + text
         document.getElementById("twitterbtn").href = twitter;
 
-        var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io&redirect_uri=https://bhagavadgita.io`
+        var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}&redirect_uri=https://bhagavadgita.io`
         document.getElementById("facebookbtn").href = facebook;
       } else {
         console.log("RadhaKrishnaHanuman")
