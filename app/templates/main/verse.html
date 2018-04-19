@@ -379,8 +379,9 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         console.log("RadhaKrishna")
         var text = `whatsapp://send?text={{verse.transliteration}}`
         console.log(text);
-        $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href=text>Share</a>")
-
+        $('#gita').append("<a class='dropdown-item waves-effect waves-light' id='share' href=''>Share</a>")
+        document.getElementById("share").href = text;
+        
         var shareButton = document.getElementById('share');
 
         shareButton.addEventListener('click', function (ev) {
