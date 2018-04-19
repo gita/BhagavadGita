@@ -235,6 +235,13 @@
             $('.sidenav').sidenav();
             $('.collapsible').collapsible();
             $('.dropdown-trigger').dropdown();
+
+            var ua = navigator.userAgent.toLowerCase();
+            var isAndroid = ua.indexOf("android") > -1;
+            if (isAndroid) {
+              $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#vishnu">Share</a>`)
+            }
+
             $(window).scroll(function() {
               if ($(this).scrollTop() > 200) {
                 $('.go-top').fadeIn(200);

@@ -437,16 +437,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         document.getElementById("facebookbtn").href = facebook;
       } else {
         console.log("RadhaKrishnaHanuman")
-        var text = `Bhagavad Gita - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} \n{{verse.text  | replace('"', "")}} \n{{verse.meaning  | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
-        text = window.encodeURIComponent(text)
-        var whatsapp = 'whatsapp://send?text=' + text
-        document.getElementById("whatsappbtn").href = whatsapp;
-        
-        var twitter = `https://twitter.com/intent/tweet?text=Bhagavad%20Gita%20Chapter%20{{verse.chapter_number}}%20Verse%20{{verse.verse_number}}%20-%20BhagavadGita.io&url=https%3A%2F%2Fbhagavadgita.io%2Fchapter%2F{{verse.chapter_number}}%2Fverse%2F{{verse.verse_number}}%2F`
-        document.getElementById("twitterbtn").href = twitter;
-
-        var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io&redirect_uri=https://bhagavadgita.io`
-        document.getElementById("facebookbtn").href = facebook;
       }
     }
 
