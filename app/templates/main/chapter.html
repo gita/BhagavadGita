@@ -66,7 +66,7 @@
       <h3>{{chapter.name_meaning | replace('"', "")}}</h3>
     </div>
     <br>
-    <div class="text-center">
+    <div class="text-center" id="sharebtn">
       <div class="sharethis-inline-share-buttons"></div>
     </div>
     <br>
@@ -385,6 +385,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       document.getElementById("facebookbtn").href = facebook;
     } else {
       console.log("RadhaKrishnaHanuman")
+      $('#sharebtn').remove();
     }
 
     $('.js-example-basic-single').select2();

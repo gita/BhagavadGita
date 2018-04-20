@@ -73,7 +73,7 @@
           <div class="card-body">
               <h4 class="font-up font-bold mt-2 mb-3"><strong>BG - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
               <hr>
-              <div class="text-center">
+              <div class="text-center" id="sharebtn">
                 <div class="sharethis-inline-share-buttons"></div>
               </div>
               <br>
@@ -436,6 +436,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         document.getElementById("facebookbtn").href = facebook;
       } else {
         console.log("RadhaKrishnaHanuman")
+        $('#sharebtn').remove();
       }
     }
 
