@@ -15,6 +15,7 @@ vendor_css = Bundle(
     output='styles/vendor.css')
 
 vendor_js = Bundle(
+    'vendor/materialize.min.js',
     'vendor/popper.min.js',
     'vendor/bootstrap.min.js',
     'vendor/zxcvbn.js',
@@ -22,5 +23,4 @@ vendor_js = Bundle(
     'vendor/select2.min.js',
     'vendor/axios.min.js',
     'vendor/lazyload.js',
-    'vendor/materialize.min.js',
     output='scripts/vendor.js')
