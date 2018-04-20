@@ -379,6 +379,24 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         hreflang = "en"
       }
 
+      var ua = navigator.userAgent.toLowerCase();
+      var isAndroid = ua.indexOf("android") > -1;
+      if (isAndroid) {
+        console.log("RadhaKrishna")
+        var text = `Bhagavad Gita - {{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
+        text = window.encodeURIComponent(text)
+        var whatsapp = 'whatsapp://send?text=' + text
+        document.getElementById("whatsappbtn").href = whatsapp;
+
+        var twitter = `https://twitter.com/intent/tweet?text=` + text
+        document.getElementById("twitterbtn").href = twitter;
+
+        var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io/chapter/{{chapter.chapter_number}}/&redirect_uri=https://bhagavadgita.io`
+        document.getElementById("facebookbtn").href = facebook;
+      } else {
+        console.log("RadhaKrishnaHanuman")
+      }
+
       axios.get('/languages')
       .then(function (response) {
         for (const [key, value] of Object.entries(response.data)) {
