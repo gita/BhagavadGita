@@ -65,4 +65,23 @@ endblock %} {% block meta_tags %}
         margin-bottom: 0rem;
     }
 </style>
+<script>
+    var ua = navigator.userAgent.toLowerCase();
+    var isAndroid = ua.indexOf("android") > -1;
+    if (isAndroid) {
+        console.log("RadhaKrishna")
+        var text = `Shrimad Bhagavad Gita in English and Hindi with complete translations and purports. Download the Bhagavad Gita app Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
+        text = window.encodeURIComponent(text)
+        var whatsapp = 'whatsapp://send?text=' + text
+        document.getElementById("whatsappbtn").href = whatsapp;
+
+        var twitter = `https://twitter.com/intent/tweet?text=` + text
+        document.getElementById("twitterbtn").href = twitter;
+
+        var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io&redirect_uri=https://bhagavadgita.io`
+        document.getElementById("facebookbtn").href = facebook;
+    } else {
+        console.log("RadhaKrishnaHanuman")
+    }
+</script>
 {% endblock %}

@@ -422,6 +422,9 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       var isAndroid = ua.indexOf("android") > -1;
       if (isAndroid) {
         console.log("RadhaKrishna")
+        
+        $('#sharebtn').remove();
+
         var text = `Bhagavad Gita - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} \n{{verse.text  | replace('"', "")}} \n{{verse.meaning  | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
         text = window.encodeURIComponent(text)
         var whatsapp = 'whatsapp://send?text=' + text
@@ -435,7 +438,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io/chapter/{{verse.chapter_number}}/verse/{{verse.verse_number}}&redirect_uri=https://bhagavadgita.io`
         document.getElementById("facebookbtn").href = facebook;
 
-        $('#sharebtn').remove();
       } else {
         console.log("RadhaKrishnaHanuman")
       }
