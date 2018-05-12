@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-25 18:26+0000\n"
-"PO-Revision-Date: 2018-02-25 18:29+0000\n"
+"POT-Creation-Date: 2018-05-12 16:56+0100\n"
+"PO-Revision-Date: 2018-05-12 16:59+0100\n"
 "Language: hi\n"
 "Language-Team: hi <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,117 +17,172 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 "Last-Translator: \n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.7\n"
 
-#: app/main/views.py:370 app/templates/macros/nav_macros.html:63
-#: app/templates/main/index.html:59
-msgid "BHAGAVAD GITA"
-msgstr "श्रीमद्भगवद्गीता"
-
-#: app/templates/macros/nav_macros.html:73
-msgid "Search"
-msgstr "खोजें"
-
-#: app/templates/main/chapter.html:53 app/templates/main/verse.html:59
+#: app/templates/account/all_apps.html:4
+#: app/templates/macros/nav_macros.html:103 app/templates/main/about.html:49
+#: app/templates/main/api.html:48
+#: app/templates/main/bhagavad-gita-quotes.html:38
+#: app/templates/main/chapter.html:59 app/templates/main/privacy-policy.html:8
+#: app/templates/main/terms-of-service.html:8 app/templates/main/verse.html:65
 msgid "Home"
 msgstr "होम"
 
-#: app/templates/main/chapter.html:54 app/templates/main/chapter.html:58
-#: app/templates/main/index.html:105 app/templates/main/verse.html:2
-#: app/templates/main/verse.html:7 app/templates/main/verse.html:20
-#: app/templates/main/verse.html:60 app/templates/main/verse.html:68
-msgid "Chapter"
-msgstr "अध्याय"
+#: app/templates/account/all_apps.html:5
+msgid "All Apps"
+msgstr "सभी ऐप्स"
 
-#: app/templates/main/chapter.html:70 app/templates/main/index.html:74
-msgid "Go to Verse"
-msgstr "श्लोक पे जाएं"
+#: app/templates/layouts/base.html:117
+msgid "Share"
+msgstr "शेयर"
 
-#: app/templates/main/chapter.html:75 app/templates/main/chapter.html:411
-#: app/templates/main/index.html:84
-msgid "Select Verse"
-msgstr "श्लोक चुनें"
-
-#: app/templates/main/chapter.html:88 app/templates/main/chapter.html:95
-#: app/templates/main/verse.html:100 app/templates/main/verse.html:111
-msgid "ALL CHAPTERS"
-msgstr "अध्यायों की सूची"
-
-#: app/templates/main/chapter.html:90 app/templates/main/chapter.html:97
-msgid "CHAPTER"
-msgstr "अध्याय"
-
-#: app/templates/main/chapter.html:113 app/templates/main/verse.html:2
-#: app/templates/main/verse.html:7 app/templates/main/verse.html:20
-#: app/templates/main/verse.html:61 app/templates/main/verse.html:68
-msgid "Verse"
-msgstr "श्लोक"
-
-#: app/templates/main/chapter.html:116
-msgid "OPEN VERSE"
-msgstr "श्लोक पढ़ें"
-
-#: app/templates/main/chapter.html:128 app/templates/main/index.html:119
-#: app/templates/main/verse.html:126
-msgid "Settings"
-msgstr "सेटिंग्स"
-
-#: app/templates/main/chapter.html:134 app/templates/main/index.html:125
-#: app/templates/main/verse.html:132
-msgid "Font Size"
-msgstr "फ़ॉन्ट आकार"
-
-#: app/templates/main/chapter.html:139 app/templates/main/index.html:130
-#: app/templates/main/verse.html:137
-msgid "Language"
-msgstr "भाषा"
-
-#: app/templates/main/chapter.html:146 app/templates/main/index.html:137
-#: app/templates/main/verse.html:144
+#: app/templates/layouts/base.html:138 app/templates/layouts/base.html:154
+#: app/templates/main/chapter.html:141 app/templates/main/chapter.html:165
+#: app/templates/main/index.html:134 app/templates/main/index.html:158
+#: app/templates/main/verse.html:154 app/templates/main/verse.html:178
 msgid "Close"
 msgstr "बंद करे"
 
-#: app/templates/main/index.html:60
-msgid "Explore"
-msgstr "सूची"
+#: app/templates/macros/nav_macros.html:71 app/templates/main/index.html:65
+msgid "BHAGAVAD GITA"
+msgstr "श्रीमद्भगवद्गीता"
 
-#: app/templates/main/index.html:68
+#: app/templates/macros/nav_macros.html:77
+#: app/templates/macros/nav_macros.html:136
+msgid "Choose Language"
+msgstr "भाषा चुनें"
+
+#: app/templates/macros/nav_macros.html:78
+#: app/templates/macros/nav_macros.html:139 app/templates/main/chapter.html:151
+#: app/templates/main/index.html:144 app/templates/main/verse.html:164
+msgid "Settings"
+msgstr "सेटिंग्स"
+
+#: app/templates/macros/nav_macros.html:97
+msgid "Search"
+msgstr "खोजें"
+
+#: app/templates/macros/nav_macros.html:107
+msgid "Quotes"
+msgstr "श्रीमद्भगवद्गीता के वचन"
+
+#: app/templates/macros/nav_macros.html:116 app/templates/main/index.html:74
 msgid "Chapters"
 msgstr "अध्यायों की सूची"
 
-#: app/templates/main/index.html:79
+#: app/templates/macros/nav_macros.html:122 app/templates/main/chapter.html:60
+#: app/templates/main/chapter.html:64 app/templates/main/chapter.html:379
+#: app/templates/main/index.html:108 app/templates/main/verse.html:2
+#: app/templates/main/verse.html:7 app/templates/main/verse.html:20
+#: app/templates/main/verse.html:66 app/templates/main/verse.html:74
+#: app/templates/main/verse.html:401 app/templates/main/verse.html:406
+msgid "Chapter"
+msgstr "अध्याय"
+
+#: app/templates/main/about.html:50
+msgid "About"
+msgstr "के बारे में"
+
+#: app/templates/main/about.html:57
+msgid "ABOUT BHAGAVAD GITA"
+msgstr "श्रीमद्भगवद्गीता के बारे में"
+
+#: app/templates/main/api.html:49
+msgid "API"
+msgstr "API"
+
+#: app/templates/main/bhagavad-gita-quotes.html:39
+msgid "Bhagavad Gita Quotes"
+msgstr "श्रीमद्भगवद्गीता के वचन"
+
+#: app/templates/main/chapter.html:75 app/templates/main/index.html:80
+msgid "Go to Verse"
+msgstr "श्लोक पे जाएं"
+
+#: app/templates/main/chapter.html:80 app/templates/main/chapter.html:453
+#: app/templates/main/index.html:90
+msgid "Select Verse"
+msgstr "श्लोक चुनें"
+
+#: app/templates/main/chapter.html:89 app/templates/main/chapter.html:96
+#: app/templates/main/verse.html:116 app/templates/main/verse.html:127
+msgid "ALL CHAPTERS"
+msgstr "अध्यायों की सूची"
+
+#: app/templates/main/chapter.html:91 app/templates/main/chapter.html:98
+msgid "CHAPTER"
+msgstr "अध्याय"
+
+#: app/templates/main/chapter.html:114 app/templates/main/verse.html:2
+#: app/templates/main/verse.html:7 app/templates/main/verse.html:20
+#: app/templates/main/verse.html:67 app/templates/main/verse.html:74
+#: app/templates/main/verse.html:401 app/templates/main/verse.html:406
+msgid "Verse"
+msgstr "श्लोक"
+
+#: app/templates/main/chapter.html:117
+msgid "OPEN VERSE"
+msgstr "श्लोक पढ़ें"
+
+#: app/templates/main/chapter.html:129 app/templates/main/index.html:122
+#: app/templates/main/verse.html:142
+msgid "Language"
+msgstr "भाषा"
+
+#: app/templates/main/chapter.html:158 app/templates/main/index.html:151
+#: app/templates/main/verse.html:171
+msgid "Font Size"
+msgstr "फ़ॉन्ट आकार"
+
+#: app/templates/main/index.html:66
+msgid "Explore"
+msgstr "सूची"
+
+#: app/templates/main/index.html:85
 msgid "Select Chapter"
 msgstr "अध्याय चुनें"
 
+#: app/templates/main/privacy-policy.html:9
+msgid "Privacy Policy"
+msgstr "गोपनीयता नीति"
+
+#: app/templates/main/terms-of-service.html:9
+msgid "Terms of Service"
+msgstr "सेवा की शर्तें"
+
 #: app/templates/main/verse.html:2 app/templates/main/verse.html:7
-#: app/templates/main/verse.html:20
+#: app/templates/main/verse.html:20 app/templates/main/verse.html:74
 msgid "Bhagavad Gita"
 msgstr "श्रीमद्भगवद्गीता"
 
-#: app/templates/main/verse.html:79
+#: app/templates/main/verse.html:84
 msgid "Transliteration"
 msgstr ""
 
-#: app/templates/main/verse.html:84
+#: app/templates/main/verse.html:89
 msgid "Word Meanings"
 msgstr "शब्दार्थ"
 
-#: app/templates/main/verse.html:88
+#: app/templates/main/verse.html:93
 msgid "Translation"
 msgstr "अनुवाद"
 
-#: app/templates/main/verse.html:96
+#: app/templates/main/verse.html:99
+msgid "Purport"
+msgstr "अभिप्राय"
+
+#: app/templates/main/verse.html:112
 msgid "PREVIOUS VERSE"
 msgstr "पिछला श्लोक"
 
-#: app/templates/main/verse.html:102
+#: app/templates/main/verse.html:118
 msgid "PREVIOUS CHAPTER"
 msgstr "पिछला अध्याय"
 
-#: app/templates/main/verse.html:107
+#: app/templates/main/verse.html:123
 msgid "NEXT VERSE"
 msgstr "अगला श्लोक"
 
-#: app/templates/main/verse.html:113
+#: app/templates/main/verse.html:129
 msgid "NEXT CHAPTER"
 msgstr "अगला अध्याय"

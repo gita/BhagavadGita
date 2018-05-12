@@ -74,8 +74,8 @@
           <i class="material-icons">more_vert</i>
         </a>
         <div class="dropdown-menu" id="gita">
-          <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">Language</a>
-          <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">Settings</a>
+          <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">{{ _('Choose Language') }}</a>
+          <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">{{ _('Settings') }}</a>
         </div>
       </div>
     </nav>
@@ -100,11 +100,11 @@
       </li>
       <li>
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.index' %}active{% endif %}"
-          href="/">Home</a>
+          href="/">{{ _('Home') }}</a>
       </li>
       <li>
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}"
-          href="/bhagavad-gita-quotes/">Quotes</a>
+          href="/bhagavad-gita-quotes/">{{ _('Quotes') }}</a>
       </li>
       <li>
          {{ header_items(current_user) }} 
@@ -113,13 +113,13 @@
       <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
           <li>
-            <a class="collapsible-header">Chapters
+            <a class="collapsible-header">{{ _('Chapters') }}
             </a>
             <div class="collapsible-body">
               <ul>
                 {% for i in range(1, 19) %}
                 <li>
-                  <a class="nav-item nav-link waves-effect waves-light" href="/chapter/{{i}}/">Chapter {{i}}</a>
+                  <a class="nav-item nav-link waves-effect waves-light" href="/chapter/{{i}}/">{{ _('Chapter') }} {{i}}</a>
                 </li>
                 {% endfor %}
               </ul>
@@ -133,10 +133,10 @@
       </li>
       <hr>
       <li>
-        <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">Language</a>
+        <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">{{ _('Choose Language') }}</a>
       </li>
       <li>
-        <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">Settings</a>
+        <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">{{ _('Settings') }}</a>
       </li>
     </ul>
 {% endmacro %}
