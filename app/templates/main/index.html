@@ -382,6 +382,8 @@ body > div:nth-child(4) {
         console.log("RadhaKrishna")
         var text = `Shrimad Bhagavad Gita in English and Hindi with complete translations and purports. Download the Bhagavad Gita app Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
         text = window.encodeURIComponent(text)
+        var whatsapp = 'whatsapp://send?text=' + text
+        document.getElementById("whatsappbtn").href = whatsapp;
 
         var twitter = `https://twitter.com/intent/tweet?text=` + text
         document.getElementById("twitterbtn").href = twitter;

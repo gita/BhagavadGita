@@ -129,7 +129,7 @@
                     <i class="fa fa-twitter"></i> Tweet on Twitter
                   </a>
 
-                  <a class="btn btn-whatsapp btn-share waves-effect waves-light" href="" id="whatsappbtn" onclick="open_whatsapp()">
+                  <a class="btn btn-whatsapp btn-share waves-effect waves-light" href="" id="whatsappbtn">
                     <i class="fa fa-whatsapp"></i> Share on Whatsapp
                   </a>
                 </div>
@@ -277,18 +277,6 @@
               $('html, body').animate({scrollTop: 0}, 300);
             })
           });
-          function open_whatsapp() {
-            $.ajax({
-              type: 'HEAD',
-              url: 'whatsapp://send?text=Radha%Krishna',
-              success: function () {
-                window.location = 'whatsapp://send?text=Radha%Krishna';
-              },
-              error: function () {
-                alert("Whatspp not installed");
-              }
-            });
-          }
         </script>
     </body>
 </html>
