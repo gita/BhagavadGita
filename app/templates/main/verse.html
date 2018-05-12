@@ -12,13 +12,14 @@
         <meta property="article:tag" content="Bhagavad Gita" />
         <meta property="article:tag" content="Bhagwad Gita" />
         <meta property="article:section" content="Bhagavad Gita" />
-        <meta property="og:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
-        <meta property="og:image:secure_url" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        {% set img = range(1, 5) | random %}
+        <meta property="og:image" content="https://bhagavadgita.io/static/images/gita/bhagavadgita-{{img}}.jpg" />
+        <meta property="og:image:secure_url" content="https://bhagavadgita.io/static/images/gita/bhagavadgita-{{img}}.jpg" />
         <meta property="og:image:width" content="1920" />
         <meta property="og:image:height" content="1080" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="{{ _('Bhagavad Gita') }} {{ _('Chapter') }} {{chapter.chapter_number}} {{ _('Verse') }} {{verse.verse_number}} - BhagavadGita.io" />
-        <meta name="twitter:image" content="https://bhagavadgita.io/static/images/sribhagavadgita.jpg" />
+        <meta name="twitter:image" content="https://bhagavadgita.io/static/images/gita/bhagavadgita-{{img}}.jpg" />
 
         <link rel="alternate" hreflang="en" href="https://bhagavadgita.io{{request.path | replace("/hi/", "")}}" />
         <link rel="alternate" hreflang="en-us" href="https://bhagavadgita.io{{request.path | replace("/hi/", "")}}" />
