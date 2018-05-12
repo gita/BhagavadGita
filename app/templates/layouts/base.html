@@ -280,9 +280,9 @@
           function open_whatsapp() {
             $.ajax({
               type: 'HEAD',
-              url: 'whatsapp://send?text=text=Radha%Krishna',
+              url: 'whatsapp://send?text=Radha%Krishna',
               success: function () {
-                window.location = 'whatsapp://send?text=text=Radha%Krishna';
+                window.location = 'whatsapp://send?text=Radha%Krishna';
               },
               error: function () {
                 alert("Whatspp not installed");
