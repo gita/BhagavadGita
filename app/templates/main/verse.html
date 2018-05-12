@@ -420,7 +420,8 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
       var ua = navigator.userAgent.toLowerCase();
       var isAndroid = ua.indexOf("android") > -1;
-      if (!isAndroid) {
+      alert(isAndroid);
+      if (isAndroid) {
         console.log("RadhaKrishna")
         
         $('#sharebtn').remove();
