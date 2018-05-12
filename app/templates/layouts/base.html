@@ -257,7 +257,7 @@
 
             var ua = navigator.userAgent.toLowerCase();
             var isAndroid = ua.indexOf("android") > -1;
-            if (!isAndroid) {
+            if (isAndroid) {
               $('#gita').append(`<div class="dropdown-divider"></div>`)
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#vishnu">Share</a>`)
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" href="https://bhagavadgita.io/about/" target="_blank">About Bhagavad Gita</a>`)
