@@ -370,11 +370,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
     var ua = navigator.userAgent.toLowerCase();
     alert(ua);
-    var isAndroid = String(ua) != String("bhagavadgita");
-    if (isAndroid) {
+    var isAndroid = String(ua) === String("android");
+    if (!isAndroid) {
       $('#sharebtn').append(`<div class="sharethis-inline-share-buttons"></div>`)
     }
-    if (!isAndroid) {
+    if (isAndroid) {
       console.log("RadhaKrishna")
       
       var text = `Bhagavad Gita - {{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
