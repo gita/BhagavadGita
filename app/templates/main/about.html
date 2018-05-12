@@ -82,4 +82,31 @@
   margin-bottom: 0rem;
 }
 </style>
+
+<script>
+  $(document).ready(function () {
+    var ua = navigator.userAgent.toLowerCase();
+    var isAndroid = ua.indexOf("android") > -1;
+    if (isAndroid) {
+      console.log("RadhaKrishna")
+
+      $('#sharebtn').remove();
+
+      var text = `About Bhagavad Gita \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
+      text = window.encodeURIComponent(text)
+      var whatsapp = 'whatsapp://send?text=' + text
+      document.getElementById("whatsappbtn").href = whatsapp;
+
+      var twitter = `https://twitter.com/intent/tweet?text=` + text
+      document.getElementById("twitterbtn").href = twitter;
+
+      var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io/about/&redirect_uri=https://bhagavadgita.io`
+      document.getElementById("facebookbtn").href = facebook;
+
+    } else {
+      console.log("RadhaKrishnaHanuman")
+    }
+  })
+</script>
+
 {% endblock %}
