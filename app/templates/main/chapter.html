@@ -369,7 +369,8 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     }
 
     var ua = navigator.userAgent.toLowerCase();
-    var isAndroid = ua.indexOf("android") > -1;
+    // var isAndroid = ua.indexOf("android") > -1;
+    isAndroid = ua === "bhagavadgita";
     if (!isAndroid) {
       $('#sharebtn').append(`<div class="sharethis-inline-share-buttons"></div>`)
     }
