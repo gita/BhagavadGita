@@ -56,7 +56,7 @@
         {% endif %}
         <script type="text/javascript" src="/static/webassets-external/32a7dc539f3c299e3aa5d67cef53df59_mdb.min.js" defer></script>
 
-        <footer class="page-footer center-on-small-only amber darken-2">
+        <footer class="page-footer center-on-small-only amber darken-2" id="bhagavadgitafooter>
             <div class="container">
                 <div class="row my-4">
                     <div class="col-md-4 col-lg-4">
@@ -262,6 +262,7 @@
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#vishnu" id="sharevishnu">Share</a>`)
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" href="https://bhagavadgita.io/about/" target="_blank">About Bhagavad Gita</a>`)
               // $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#shiva">About</a>`)
+              $('#bhagavadgitafooter').remove();
             }
 
             var pathname = window.location.pathname;
