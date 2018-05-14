@@ -70,40 +70,70 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="card orange lighten-3 text-center z-depth-2 h-100">
+        <div class="card orange lighten-3 text-center z-depth-2 h-100" id="verse-card">
           <div class="card-body">
-              <h4 class="font-up font-bold mt-2 mb-3"><strong>{{ _('Bhagavad Gita') }} - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
+              {% if previous_verse != None %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}/"
+ style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+              {% else %} {% set previous_chapter = chapter.chapter_number - 1 %} {% if previous_chapter == 0 %}
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+              {% else %}
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+              {% endif %} 
+              {% endif %}
+
+              {% if next_verse != None %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}/"
+                style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
+              </a>
+              {% else %} {% set next_chapter = chapter.chapter_number + 1 %} {% if next_chapter == 19 %}
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
+              </a>
+              {% else %}
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
+              </a>
+              {% endif %} 
+              {% endif %}
+
+              <h4 class="font-up font-bold mt-2 mb-3" style="font-size: 1.2rem;"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
+              
               <hr>
               <div class="text-center" id="sharebtn">
                 <div class="sharethis-inline-share-buttons"></div>
               </div>
               <br>
               <div class="sanskrit-text" align="center" style="margin-top: -2rem;">
-                <p style="font-size: 1.5rem;"><b>{{verse.text  | replace('"', "")}}</b></p>
+                <p style="font-size: 1.2rem;" class="verse-sanskrit"><b>{{verse.text  | replace('"', "")}}</b></p>
               </div>
               {% if language == "en" %}
-                <h4><b><u>{{ _('Transliteration') }}</u></b></h4>
+                <h5 class="heading"><b><u>{{ _('Transliteration') }}</u></b></h5>
                 <div class="transliteration" align="center" style="font-family: Noto Serif;">
-                  <p style="font-size: 1.2rem;"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
+                  <p style="font-size: 1.2rem;" class="verse-transliteration"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
                 </div>
               {% endif %}
-              <h4><b><u>{{ _('Word Meanings') }}</u></b></h4>
+              <h5 class="heading"><b><u>{{ _('Word Meanings') }}</u></b></h5>
               <div class="word-meanings" align="center" style="font-family: Noto Serif;">
                 <p style="font-size: 1.2rem;" class="verse-word"><i>{{verse.word_meanings  | replace('"', "")}}</i></p>
               </div>
-              <h4><b><u>{{ _('Translation') }}</u></b></h4>
+              <h5 class="heading"><b><u>{{ _('Translation') }}</u></b></h5>
               <br>
               <div class="meaning" align="center" style="margin-top: -2rem;">
-                <p style="font-size: 1rem;" class="verse-meaning"><b>{{verse.meaning  | replace('"', "")}}</b></p>
+                <p style="font-size: 1.2rem;" class="verse-meaning">{{verse.meaning  | replace('"', "")}}</p>
               </div>
               {% if verse.meaning_large != "" %}
-                <h4><b><u>{{ _('Purport') }}</u></b></h4>
+                <h5 class="heading" style="margin-bottom: -16px;"><b><u>{{ _('Purport') }}</u></b></h5>
                 <br>
                 {% set meaning = verse.meaning_large | replace('"', "") %}
                 {% set meaning = meaning.split('\n') %}
                 <div class="meaning_large" align="center">
                   {% for i in range(meaning | length) %}
-                  <p style="font-size: 1rem;" class="verse-meaning-large"><b>{{meaning[i]}}</b></p>
+                  <p style="font-size: 1rem;" class="verse-meaning-large">{{meaning[i]}}</p>
                   {% endfor %}
                 </div>
               {% endif %}
@@ -172,7 +202,7 @@
             <b>{{ _('Font Size') }}</b>
           </h5>
           <div class="slidecontainer">
-            <input type="range" min="0.5" max="2" value="1" step="0.1" class="slider" id="myRange">
+            <input type="range" min="0.5" max="2" value="1.2" step="0.1" class="slider" id="myRange">
           </div>
         </div>
         <div class="modal-footer">
@@ -378,6 +408,15 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     cursor: pointer;
     box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
 }
+
+#verse-card {
+  margin-bottom: 1rem;
+}
+
+.card .card-body h5 { 
+  margin-bottom: -2rem;
+  font-size: 1.4rem;
+}
   </style>
 
 <script>
@@ -385,9 +424,12 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     if (document.cookie.indexOf("settings=") >= 0) {
       var settings = JSON.parse(getCookie('settings'));
       if (settings['font']) {
+        $('.verse-sanskrit').css("font-size", settings['font'] + "rem");
+        $('.verse-transliteration').css("font-size", settings['font'] + "rem");
         $('.verse-meaning').css("font-size", settings['font'] + "rem");
         $('.verse-meaning-large').css("font-size", settings['font'] + "rem");
-        $('.verse-word').css("font-size", settings['font']*1.2 + "rem");
+        $('.verse-word').css("font-size", settings['font'] + "rem");
+        $('.heading').css("font-size", settings['font']*1.17 + "rem");
         $('#myRange').val(settings['font']);
       }
     }
@@ -461,9 +503,12 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
     slider.oninput = function() {
       var size = this.value;
+      $('.verse-sanskrit').css("font-size", size + "rem");
+      $('.verse-transliteration').css("font-size", size + "rem");
       $('.verse-meaning').css("font-size", size + "rem");
       $('.verse-meaning-large').css("font-size", size + "rem");
-      $('.verse-word').css("font-size", size*1.2 + "rem");
+      $('.verse-word').css("font-size", size + "rem");
+      $('.heading').css("font-size", size*1.17 + "rem");
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));
         var language = settings['language'];
