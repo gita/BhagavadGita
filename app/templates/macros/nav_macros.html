@@ -107,6 +107,10 @@
           href="/bhagavad-gita-quotes/">{{ _('Quotes') }}</a>
       </li>
       <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.about' %}active{% endif %}"
+          href="/about/">{{ _('About') }}</a>
+      </li>
+      <li>
          {{ header_items(current_user) }} 
          {{ create_dropdown(dropdown) }}
       </li>
@@ -131,12 +135,20 @@
       <li>
         {{ account_items(current_user) }}
       </li>
-      <hr>
       <li>
         <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">{{ _('Choose Language') }}</a>
       </li>
       <li>
         <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">{{ _('Settings') }}</a>
+      </li>
+      <hr>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.contact' %}active{% endif %}"
+          href="/contact/">{{ _('Contact Us') }}</a>
+      </li>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.privacy_policy' %}active{% endif %}"
+          href="/privacy-policy/">{{ _('Privacy Policy') }}</a>
       </li>
     </ul>
 {% endmacro %}
