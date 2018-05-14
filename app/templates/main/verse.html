@@ -109,17 +109,17 @@
               </div>
               <br>
               <div class="sanskrit-text" align="center" style="margin-top: -2rem;">
-                <p style="font-size: 1.3rem;" class="verse-sanskrit"><b>{{verse.text  | replace('"', "")}}</b></p>
+                <p style="font-size: 1.4rem;" class="verse-sanskrit"><b>{{verse.text  | replace('"', "")}}</b></p>
               </div>
               {% if language == "en" %}
                 <h5 class="heading"><b><u>{{ _('Transliteration') }}</u></b></h5>
                 <div class="transliteration" align="center" style="font-family: Noto Serif;">
-                  <p style="font-size: 1.3rem;" class="verse-transliteration"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
+                  <p style="font-size: 1.4rem;" class="verse-transliteration"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
                 </div>
               {% endif %}
               <h5 class="heading"><b><u>{{ _('Word Meanings') }}</u></b></h5>
               <div class="word-meanings" align="center" style="font-family: Noto Serif;">
-                <p style="font-size: 1.3rem;" class="verse-word"><i>{{verse.word_meanings  | replace('"', "")}}</i></p>
+                <p style="font-size: 1.2rem;" class="verse-word"><i>{{verse.word_meanings  | replace('"', "")}}</i></p>
               </div>
               <h5 class="heading"><b><u>{{ _('Translation') }}</u></b></h5>
               <br>
@@ -133,7 +133,7 @@
                 {% set meaning = meaning.split('\n') %}
                 <div class="meaning_large" align="center">
                   {% for i in range(meaning | length) %}
-                  <p style="font-size: 1rem;" class="verse-meaning-large">{{meaning[i]}}</p>
+                  <p style="font-size: 1.2rem;" class="verse-meaning-large">{{meaning[i]}}</p>
                   {% endfor %}
                 </div>
               {% endif %}
@@ -202,7 +202,7 @@
             <b>{{ _('Font Size') }}</b>
           </h5>
           <div class="slidecontainer">
-            <input type="range" min="0.5" max="2" value="1.3" step="0.1" class="slider" id="myRange">
+            <input type="range" min="0.5" max="2" value="1.0" step="0.1" class="slider" id="myRange">
           </div>
         </div>
         <div class="modal-footer">
@@ -417,6 +417,14 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   margin-bottom: -1rem;
   font-size: 1.4rem;
 }
+
+#verse-card > div > div.meaning_large > p {
+  font-family: Noto serif;
+}
+
+#verse-card > div > div.meaning > p {
+  font-family: Noto serif;
+}
   </style>
 
 <script>
@@ -424,11 +432,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     if (document.cookie.indexOf("settings=") >= 0) {
       var settings = JSON.parse(getCookie('settings'));
       if (settings['font']) {
-        $('.verse-sanskrit').css("font-size", settings['font'] + "rem");
-        $('.verse-transliteration').css("font-size", settings['font'] + "rem");
-        $('.verse-meaning').css("font-size", settings['font'] + "rem");
-        $('.verse-meaning-large').css("font-size", settings['font'] + "rem");
-        $('.verse-word').css("font-size", settings['font'] + "rem");
+        $('.verse-sanskrit').css("font-size", settings['font']*1.4 + "rem");
+        $('.verse-transliteration').css("font-size", settings['font']*1.4 + "rem");
+        $('.verse-meaning').css("font-size", settings['font']*1.2 + "rem");
+        $('.verse-meaning-large').css("font-size", settings['font']*1.2 + "rem");
+        $('.verse-word').css("font-size", settings['font']*1.2 + "rem");
         $('.heading').css("font-size", settings['font']*1.17 + "rem");
         $('#myRange').val(settings['font']);
       }
@@ -503,11 +511,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
     slider.oninput = function() {
       var size = this.value;
-      $('.verse-sanskrit').css("font-size", size + "rem");
-      $('.verse-transliteration').css("font-size", size + "rem");
-      $('.verse-meaning').css("font-size", size + "rem");
-      $('.verse-meaning-large').css("font-size", size + "rem");
-      $('.verse-word').css("font-size", size + "rem");
+      $('.verse-sanskrit').css("font-size", size*1.4 + "rem");
+      $('.verse-transliteration').css("font-size", size*1.4 + "rem");
+      $('.verse-meaning').css("font-size", size*1.2 + "rem");
+      $('.verse-meaning-large').css("font-size", size*1.2 + "rem");
+      $('.verse-word').css("font-size", size*1.2 + "rem");
       $('.heading').css("font-size", size*1.17 + "rem");
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));
