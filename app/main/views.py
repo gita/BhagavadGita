@@ -493,6 +493,7 @@ def progress():
     current_app.logger.info("RadhaKrishna")
     progress = {}
     gita = None
+    total_shlokas = 0
     progress = {key:None for key in range(1, 19)}
     if current_user.is_authenticated:
         sql = """
