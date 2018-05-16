@@ -297,6 +297,16 @@ class App(db.Model):
     user = db.relationship('User')
 
 
+class UserProgress(db.Model):
+    user_progress_id = db.Column(db.Integer(), primary_key=True)
+    chapter = db.Column(db.Integer(), nullable=False)
+    verse = db.Column(db.String(3), nullable=False)
+    timestamp = db.Column(db.TIMESTAMP())
+
+    user_id = db.Column(db.ForeignKey('users.id'))
+    user = db.relationship('User')
+
+
 login_manager.anonymous_user = AnonymousUser
 
 

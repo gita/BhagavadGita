@@ -111,6 +111,13 @@
               <div class="sanskrit-text" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1.4rem;" class="verse-sanskrit"><b>{{verse.text  | replace('"', "")}}</b></p>
               </div>
+
+              <div id="favouriteverse">
+                <a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" data-value="0" title="Mark as favourite" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;">
+                  <i class="material-icons" style="font-size: 1.2rem;">favorite_border</i>
+                </a>
+              </div>
+
               {% if language == "en" %}
                 <h5 class="heading"><b><u>{{ _('Transliteration') }}</u></b></h5>
                 <div class="transliteration" align="center" style="font-family: Noto Serif;">
@@ -187,6 +194,29 @@
       </div>
     </div>
   </div>
+
+<div class="modal fade" id="radhakrishnahanuman" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="radhakrishnaTitle">{{ _('Please Login.') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <div>
+          <p>You need to be a registered Bhagavad Gita user to be able to favourite posts. Please "Log In" or "Register" using the links below.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/account/login">{{ _('Log In') }}</a>
+        <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/account/register">{{ _('Register') }}</a>
+        <a class="btn btn-warning btn-rounded waves-effect waves-light" data-dismiss="modal">{{ _('Close') }}</a>
+      </div>
+    </div>
+  </div>
+</div>
   
   <div class="modal fade" id="hanuman" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -425,6 +455,12 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 #verse-card > div > div.meaning > p {
   font-family: Noto serif;
 }
+
+.btn-warning { background-color: #ffa726!important; color: #fff!important; }
+
+.btn {
+  text-transform: none;
+}
   </style>
 
 <script>
@@ -439,6 +475,9 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         $('.verse-word').css("font-size", settings['font']*1.2 + "rem");
         $('.heading').css("font-size", settings['font']*1.17 + "rem");
         $('#myRange').val(settings['font']);
+      }
+      if ({{current_user.is_authenticated|tojson}} === true) { 
+        get_favourite({{verse.chapter_number}},{{verse.verse_number}})
       }
     }
 
@@ -548,6 +587,64 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     }
     function eraseCookie(name) {
         document.cookie = name+'=; Max-Age=-99999999;';
+    }
+
+    function favorite() {
+      if ({{current_user.is_authenticated|tojson}} === true) { 
+        if ($('#favourite').data("value") === 0) { 
+          favourite({{verse.chapter_number}},{{verse.verse_number}}, 1) 
+          $('#favouriteverse').empty() 
+          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`) 
+        } else { 
+          favourite({{verse.chapter_number}}, {{verse.verse_number}}, 0) 
+          $('#favouriteverse').empty() 
+          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`) 
+          } 
+      } else { 
+        $('#radhakrishnahanuman').modal('show'); }
+    }
+
+    function favourite(chapter_number, verse_number, value) {
+      return JSON.parse(
+        $.ajax({
+          type: 'GET',
+          url: "/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/",
+          dataType: 'json',
+          async: false,
+          data: ({}),
+          success: function(msg) {
+            if (msg === "RadhaKrishna") {
+              console.log(msg)
+            }
+          },
+          error: function(msg) {
+            alert("Please reload and try again.")
+          },
+        }).responseText);
+    }
+
+    function get_favourite(chapter_number, verse_number) {
+      return JSON.parse(
+        $.ajax({
+          type: 'GET',
+          url: "/get-favourite/" + chapter_number + "/" + verse_number + "/",
+          dataType: 'json',
+          async: false,
+          data: ({}),
+          success: function(msg) {
+            console.log("RadhaKrishna")
+            if (msg === "True") {
+              $('#favouriteverse').empty() 
+              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`) 
+            } else {
+              $('#favouriteverse').empty() 
+              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`) 
+            }
+          },
+          error: function(msg) {
+            alert("Please reload and try again.")
+          },
+        }).responseText);
     }
   </script>
   <script>

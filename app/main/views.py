@@ -16,6 +16,8 @@ from . import main
 from ..email import send_email
 from .forms import ContactForm
 
+from flask_login import current_user
+from datetime import datetime
 
 if sys.version_info[0] < 3:
     reload(sys)
@@ -293,6 +295,28 @@ def verse(chapter_number, verse_number):
                         str(verse_dict[chapter_number][verse_number]) + '/')
     else:
         language = "en"
+
+        if current_user.is_authenticated:
+            sql = """
+                    SELECT COUNT(user_progress_id)
+                    FROM user_progress
+                    WHERE user_id = %s
+                    AND chapter = %s
+                    AND verse = '%s'
+                """ % (current_user.get_id(), chapter_number, verse_number)
+            result = db.session.execute(sql)
+            count = [dict(r) for r in result][0]['count']
+            
+            if count < 1:
+                timestamp = datetime.now()
+                sql = """
+                        INSERT INTO user_progress (user_id, chapter, verse, timestamp)
+                        VALUES (%s, %s, '%s', '%s')
+                    """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+
+                db.session.execute(sql)
+                db.session.commit()
+
         if "settings" in request.cookies:
             if json.loads(request.cookies.get('settings'))["language"]:
                 language = json.loads(
@@ -400,6 +424,62 @@ def verse_radhakrishna(chapter_number, verse_number, language):
         next_verse=next_verse,
         previous_verse=previous_verse,
         language=language)
+
+
+@main.route(
+    '/favourite/<int:chapter_number>/<string:verse_number>/<int:value>/',
+    methods=['GET'])
+def favourite(chapter_number, verse_number, value):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+                SELECT COUNT(user_favourite_id)
+                FROM user_favourite
+                WHERE user_id = %s
+                AND chapter = %s
+                AND verse = '%s'
+            """ % (current_user.get_id(), chapter_number, verse_number)
+        result = db.session.execute(sql)
+        count = [dict(r) for r in result][0]['count']
+        
+        if value == 1:
+            if count < 1:
+                timestamp = datetime.now()
+                sql = """
+                        INSERT INTO user_favourite (user_id, chapter, verse, timestamp)
+                        VALUES (%s, %s, '%s', '%s')
+                    """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+        elif value == 0:
+            sql = """
+                    DELETE FROM user_favourite
+                    WHERE user_id = %s
+                    AND chapter = %s
+                    AND verse = '%s'
+                """ % (current_user.get_id(), chapter_number, verse_number)
+        db.session.execute(sql)
+        db.session.commit()
+    return jsonify("RadhaKrishna")
+
+
+@main.route(
+    '/get-favourite/<int:chapter_number>/<string:verse_number>/',
+    methods=['GET'])
+def get_favourite(chapter_number, verse_number):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+                SELECT COUNT(user_favourite_id)
+                FROM user_favourite
+                WHERE user_id = %s
+                AND chapter = %s
+                AND verse = '%s'
+            """ % (current_user.get_id(), chapter_number, verse_number)
+        result = db.session.execute(sql)
+        count = [dict(r) for r in result][0]['count']
+
+        if count == 1:
+            return jsonify("True")
+        return jsonify("False")
 
 
 @main.route('/about/', methods=['GET'])
