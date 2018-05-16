@@ -69,6 +69,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand center mx-auto" href="/"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
+      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/'] %}
       <div class="btn-group">
         <a class="btn-rounded navbar-toggler waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" id="android">
           <i class="material-icons">more_vert</i>
@@ -78,6 +79,7 @@
           <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#hanuman">{{ _('Settings') }}</a>
         </div>
       </div>
+      {% endif %}
     </nav>
 
     <ul class="sidenav sidenav-fixed" id="mobile-demo">
@@ -102,18 +104,12 @@
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.index' %}active{% endif %}"
           href="/">{{ _('Home') }}</a>
       </li>
-      <li>
-        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}"
-          href="/bhagavad-gita-quotes/">{{ _('Quotes') }}</a>
-      </li>
+
       <li>
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.about' %}active{% endif %}"
           href="/about/">{{ _('About') }}</a>
       </li>
-      <li>
-         {{ header_items(current_user) }} 
-         {{ create_dropdown(dropdown) }}
-      </li>
+
       <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
           <li>
@@ -123,7 +119,7 @@
               <ul>
                 {% for i in range(1, 19) %}
                 <li>
-                  <a class="nav-item nav-link waves-effect waves-light" href="/chapter/{{i}}/">{{ _('Chapter') }} {{i}}</a>
+                  <a class="nav-item nav-link waves-effect waves-light" href="/chapter/{{i}}/?page=1">{{ _('Chapter') }} {{i}}</a>
                 </li>
                 {% endfor %}
               </ul>
@@ -131,12 +127,29 @@
           </li>
         </ul>
       </li>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.favourite_shlokas' %}active{% endif %}"
+          href="/favourite-shlokas/">{{ _('Favourite Shlokas') }}</a>
+      </li>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.progress' %}active{% endif %}"
+          href="/progress/">{{ _('Progress') }}</a>
+      </li>
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}"
+          href="/bhagavad-gita-quotes/">{{ _('Quotes') }}</a>
+      </li>
       <hr>
       <li>
         {{ account_items(current_user) }}
       </li>
-      
-      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/'] %}
+
+      <li>
+         {{ header_items(current_user) }}
+         {{ create_dropdown(dropdown) }}
+      </li>
+
+      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/'] %}
       <li>
         <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">{{ _('Choose Language') }}</a>
       </li>

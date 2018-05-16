@@ -41,3 +41,20 @@ class ChapterModel(db.Model):
     @classmethod
     def find_by_chapter_number(cls, chapter_number):
         return cls.query.filter_by(chapter_number=chapter_number).first()
+
+
+class ChapterModelHindi(db.Model):
+
+    __tablename__ = 'chapters_hi'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name_translation = db.Column(db.String)
+    chapter_number = db.Column(db.Integer)
+    name_meaning = db.Column(db.String)
+    chapter_summary = db.Column(db.String)
+
+    def __init__(self, name_translation, chapter_number, name_meaning, chapter_summary):
+        self.name_translation = name_translation
+        self.chapter_number = chapter_number
+        self.name_meaning = name_meaning
+        self.chapter_summary = chapter_summary

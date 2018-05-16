@@ -88,20 +88,20 @@
         {% if previous_chapter == 0 %}
           <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('ALL CHAPTERS') }}</a>
         {% else %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('CHAPTER') }} {{previous_chapter}}</a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('CHAPTER') }} {{previous_chapter}}</a>
         {% endif %}
 
         {% set next_chapter = chapter.chapter_number + 1 %}
         {% if next_chapter == 19 %}
           <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
         {% else %}
-          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('CHAPTER') }} {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+          <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('CHAPTER') }} {{next_chapter}} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
         {% endif %}
       </div>
     </div>
     <hr>
     <div class="row">
-      {% for verse in verses %}
+      {% for verse in verses.items %}
       <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
         <div class="card amber darken-1 text-center z-depth-2 h-100">
           <div class="card-body">
@@ -120,6 +120,16 @@
       </div>
     {% endfor %}
     </div>
+
+      <div class="text-center">
+          <div class="pagination" style="text-align: center">
+            {% for page in verses.iter_pages() %}
+                {% if page %}
+                    <a class="{% if request.args.get('page') == page|string %}active{% endif %}" href="{{request.path}}?page={{page}}">{{page}}</a>
+                {% endif %}
+            {% endfor %}
+          </div>
+      </div>
   </div>
 
   <div class="modal fade" id="radhakrishna" tabindex="-1" role="dialog" aria-labelledby="radhakrishnaTitle" aria-hidden="true">
@@ -143,7 +153,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal fade" id="hanuman" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -199,6 +209,24 @@ a:not([href]):not([tabindex]) {
     color: inherit;
     text-decoration: none;
 }
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #FD8725;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
 
 .card .btn-action {
     margin: -23px 20px;
@@ -375,7 +403,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     }
     if (isAndroid) {
       console.log("RadhaKrishna")
-      
+
       var text = `Bhagavad Gita - {{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
       text = window.encodeURIComponent(text)
       var whatsapp = 'whatsapp://send?text=' + text

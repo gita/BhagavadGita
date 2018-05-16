@@ -99,11 +99,11 @@
         <div class="card h-100" id="bg-{{chapter.chapter_number}}">
           <div class="view overlay hm-white-slight">
               <img data-src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_meaning | replace('"', "")}}">
-              <a href="/chapter/{{chapter.chapter_number}}/">
+              <a href="/chapter/{{chapter.chapter_number}}/?page=1">
                   <div class="mask waves-effect waves-light"></div>
               </a>
           </div>
-          <a class="btn-floating btn-action waves-effect waves-light" href="/chapter/{{chapter.chapter_number}}/"><i class="fa fa-chevron-right"></i></a>
+          <a class="btn-floating btn-action waves-effect waves-light" href="/chapter/{{chapter.chapter_number}}/?page=1"><i class="fa fa-chevron-right"></i></a>
           <div class="card-body">
               <h4 class="card-title"><b>{{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}</b></h4>
               <hr>

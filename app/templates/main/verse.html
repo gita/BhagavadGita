@@ -43,7 +43,7 @@
                 "@type": "ListItem",
                 "position": 2,
                 "item": {
-                    "@id": "https://bhagavadgita.io/chapter/{{chapter.chapter_number}}",
+                    "@id": "https://bhagavadgita.io/chapter/{{chapter.chapter_number}}?page=1",
                     "name": "{{config.APP_NAME}} Chapter {{chapter.chapter_number}}",
                     "image": "https://bhagavadgita.io/static/images/sribhagavadgita.jpg"
                 }
@@ -64,7 +64,7 @@
 {% block content %}
   <nav class="breadcrumb">
     <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
-    <a class="breadcrumb-item" href="/chapter/{{chapter.chapter_number}}">{{ _('Chapter') }} {{chapter.chapter_number}}</a>
+    <a class="breadcrumb-item" href="/chapter/{{chapter.chapter_number}}/?page=1">{{ _('Chapter') }} {{chapter.chapter_number}}</a>
     <span class="breadcrumb-item active">{{ _('Verse') }} {{verse.verse_number}}</span>
   </nav>
   <div class="container">
@@ -80,7 +80,7 @@
 <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
                 <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
               {% else %}
-<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
                 <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
               {% endif %} 
               {% endif %}
@@ -95,7 +95,7 @@
                 <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
               </a>
               {% else %}
-<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
                 <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
               </a>
               {% endif %} 
@@ -153,7 +153,7 @@
                 {% if previous_chapter == 0 %}
                   <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('ALL CHAPTERS') }}</a>
                 {% else %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS CHAPTER') }}</a>
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS CHAPTER') }}</a>
                 {% endif %}
               {% endif %}
 
@@ -164,7 +164,7 @@
                 {% if next_chapter == 19 %}
                   <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
                 {% else %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT CHAPTER') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT CHAPTER') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
                 {% endif %}
               {% endif %}
           </div>

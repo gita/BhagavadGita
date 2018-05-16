@@ -9,8 +9,8 @@ from flask import (abort, current_app, flash, jsonify, make_response, redirect,
 from flask_rq import get_queue
 
 from app import babel, db, es
-from app.models.chapter import ChapterModel
-from app.models.verse import VerseModel
+from app.models.chapter import ChapterModel, ChapterModelHindi
+from app.models.verse import VerseModel, VerseModelHindi
 
 from . import main
 from ..email import send_email
@@ -234,16 +234,14 @@ def chapter(chapter_number):
         if json.loads(request.cookies.get('settings'))["language"]:
             language = json.loads(request.cookies.get('settings'))["language"]
 
+    if request.args.get('page'):
+        page_number = int(request.args.get('page'))
+    else:
+        page_number = 1
+
     if language == "en":
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
-        sql = """
-                SELECT *
-                FROM verses v
-                WHERE v.chapter_number = %s
-                ORDER BY v.verse_order
-            """ % (chapter_number)
-
-        verses = db.session.execute(sql)
+        verses = VerseModel.query.filter_by(chapter_number = chapter_number).order_by(VerseModel.verse_order).paginate(per_page=6, page=page_number, error_out=True)
         return render_template(
             'main/chapter.html', chapter=chapter, verses=verses)
     else:
@@ -258,28 +256,8 @@ def chapter_radhakrishna(chapter_number, language):
         abort(404)
     if language not in LANGUAGES.keys():
         abort(404)
-    chapter_table = "chapters_" + language
-    sql = """
-        SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.image_name, c.chapter_number
-        FROM %s ct
-        JOIN
-        chapters c
-        ON
-        c.chapter_number = ct.chapter_number
-        WHERE c.chapter_number = %s
-        ORDER BY c.chapter_number
-    """ % (chapter_table, chapter_number)
-    chapter = db.session.execute(sql).first()
-
-    verses_table = "verses_" + language
-    sql = """
-            SELECT verse_number, meaning, chapter_number
-            FROM %s
-            WHERE chapter_number = %s
-            ORDER BY verse_order
-        """ % (verses_table, chapter_number)
-
-    verses = db.session.execute(sql)
+    chapter = ChapterModel.query.join(ChapterModelHindi, ChapterModel.chapter_number==ChapterModelHindi.chapter_number).add_columns(ChapterModelHindi.name_translation, ChapterModelHindi.name_meaning, ChapterModelHindi.chapter_summary, ChapterModel.image_name, ChapterModel.chapter_number).filter(ChapterModel.chapter_number == chapter_number).order_by(ChapterModel.chapter_number).first()
+    verses = VerseModelHindi.query.filter_by(chapter_number = chapter_number).order_by(VerseModelHindi.verse_order).all()
     return render_template('main/chapter.html', chapter=chapter, verses=verses)
 
 
@@ -306,7 +284,7 @@ def verse(chapter_number, verse_number):
                 """ % (current_user.get_id(), chapter_number, verse_number)
             result = db.session.execute(sql)
             count = [dict(r) for r in result][0]['count']
-            
+
             if count < 1:
                 timestamp = datetime.now()
                 sql = """
@@ -441,7 +419,7 @@ def favourite(chapter_number, verse_number, value):
             """ % (current_user.get_id(), chapter_number, verse_number)
         result = db.session.execute(sql)
         count = [dict(r) for r in result][0]['count']
-        
+
         if value == 1:
             if count < 1:
                 timestamp = datetime.now()
@@ -492,6 +470,63 @@ def about():
 def api():
 
     return render_template('main/api.html')
+
+
+@main.route('/favourite-shlokas/', methods=['GET'])
+def favourite_shlokas():
+    current_app.logger.info("RadhaKrishna")
+    verses = None
+    if current_user.is_authenticated:
+        sql = """
+                SELECT chapter, verse
+                FROM user_favourite
+                WHERE user_id = %s
+                ORDER BY user_favourite_id desc
+            """ % (current_user.get_id())
+        verses = db.session.execute(sql)
+
+    return render_template('main/favourite.html', verses=verses)
+
+
+@main.route('/progress/', methods=['GET'])
+def progress():
+    current_app.logger.info("RadhaKrishna")
+    progress = {}
+    gita = None
+    progress = {key:None for key in range(1, 19)}
+    if current_user.is_authenticated:
+        sql = """
+                SELECT chapter, COUNT(verse)
+                FROM user_progress
+                WHERE user_id = %s
+                GROUP BY chapter
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        user_verses = [dict(r) for r in result]
+
+        sql = """
+                SELECT chapter_number, verses_count
+                FROM chapters
+            """
+        result = db.session.execute(sql)
+        verses = [dict(r) for r in result]
+
+        sql = """
+                SELECT COUNT(verse)
+                FROM user_progress
+                WHERE user_id = %s
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        total_shlokas = [dict(r) for r in result][0]['count']
+
+        for chapter in verses:
+            for chapter_number in user_verses:
+                if chapter['chapter_number'] == chapter_number['chapter']:
+                    progress[chapter['chapter_number']] = float("%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
+
+    if total_shlokas:
+        gita = float("%.2f" % (total_shlokas/700))
+    return render_template('main/progress.html', progress=progress, gita=gita)
 
 
 @main.route('/privacy-policy/', methods=['GET'])

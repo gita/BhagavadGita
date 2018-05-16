@@ -174,8 +174,8 @@
             body {
               padding-left: 0;
             }
-            body > nav > a { 
-              padding-left: 0!important; 
+            body > nav > a {
+              padding-left: 0!important;
             }
           }
 
@@ -263,11 +263,6 @@
               $('#gita').append(`<a class="dropdown-item waves-effect waves-light" href="https://bhagavadgita.io/about/" target="_blank">About Bhagavad Gita</a>`)
               // $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#shiva">About</a>`)
               $('#bhagavadgitafooter').remove();
-            }
-
-            var pathname = window.location.pathname;
-            if (['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/'].includes(pathname)) {
-              $('#android').remove()
             }
 
             $(window).scroll(function() {

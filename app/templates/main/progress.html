@@ -1,0 +1,117 @@
+{% import 'macros/page_macros.html' as page %}
+{% extends 'layouts/base.html' %}
+
+{% block title %}Progress - Bhagavad Gita{% endblock %}
+
+{% block meta_tags %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+  <span class="breadcrumb-item active">{{ _('Progress') }}</span>
+</nav>
+
+<div class="jumbotron" style="margin-top: -1rem;">
+  <div class="container">
+    <div class="text-white text-center d-flex align-items-center">
+      <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
+        <h1 class="card-title pt-3 mb-5 font-bold">{{ _('PROGRESS') }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom: 10vh;">
+  <div class="row" style="margin-bottom: 2rem">
+    <div class="col-md-12" align="center">
+      <div class="bhagavad gita">
+        <strong></strong>
+      </div>
+      <h4 class="font-up font-bold" style="text-align: center;"><strong>{{ _('Overall Bhagavad Gita') }}</strong></h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      {% if current_user.is_authenticated %}
+        {% if verses != None %}
+          <div class="row">
+            {% for chapter, percent in progress.items() %}
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: {{progress[chapter]}}%" aria-valuenow="{{progress[chapter]}}" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <p class="font-up font-bold mt-2 mb-3" style="text-align: center;"><strong>{{ _('Chapter') }} {{chapter}}</strong></p>
+            </div>
+          {% endfor %}
+          </div>
+        {% else %}
+        <div class="card warning-color text-center z-depth-2 h-100">
+          <div class="card-body">
+            <i class="material-icons" style="font-size: 10rem; color: #F57C00">book</i>
+            <h3><strong>No Progress yet.</strong></h3>
+            <h5>Please read some shlokas and come back again.</h5>
+          </div>
+        </div>
+        {% endif %}
+      {% else %}
+      <div class="card warning-color text-center z-depth-2 h-100">
+        <div class="card-body">
+          <i class="material-icons" style="font-size: 10rem; color: #F57C00">book</i>
+          <h3><strong>No Progress yet.</strong></h3>
+          <h5>You need to be a registered Bhagavad Gita user to be able to view your progress. Please login, read some shlokas and come back again.</h5>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+.jumbotron {
+  background-image: url("/static/images/gita.jpg");
+  background-size: cover;
+}
+.btn-rounded {
+    border-radius: 10em;
+}
+.gita {
+  width: 200px;
+  margin: 12px 12px 10px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  line-height: 2.4;
+}
+
+.gita canvas {
+  vertical-align: top;
+}
+
+.gita strong {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 80px;
+  font-size: 60px;
+}
+
+.gita strong i {
+  font-style: normal;
+  font-size: 0.6em;
+  font-weight: normal;
+}
+</style>
+<script>
+$('.bhagavad.gita').circleProgress({
+    value: {{gita}},
+    size: 200,
+    fill: {gradient: [['#FF9800', .5], ['#FFC107', .5]], gradientAngle: Math.PI / 4}
+  }).on('circle-animation-progress', function(event, progress, stepValue) {
+    $(this).find('strong').html(Math.round(100 * stepValue.toFixed(2).substr(1)) + '<i>%</i>');
+  });
+</script>
+{% endblock %}
