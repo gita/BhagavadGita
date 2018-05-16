@@ -256,8 +256,12 @@ def chapter_radhakrishna(chapter_number, language):
         abort(404)
     if language not in LANGUAGES.keys():
         abort(404)
+    if request.args.get('page'):
+        page_number = int(request.args.get('page'))
+    else:
+        page_number = 1
     chapter = ChapterModel.query.join(ChapterModelHindi, ChapterModel.chapter_number==ChapterModelHindi.chapter_number).add_columns(ChapterModelHindi.name_translation, ChapterModelHindi.name_meaning, ChapterModelHindi.chapter_summary, ChapterModel.image_name, ChapterModel.chapter_number).filter(ChapterModel.chapter_number == chapter_number).order_by(ChapterModel.chapter_number).first()
-    verses = VerseModelHindi.query.filter_by(chapter_number = chapter_number).order_by(VerseModelHindi.verse_order).all()
+    verses = VerseModelHindi.query.filter_by(chapter_number = chapter_number).order_by(VerseModelHindi.verse_order).paginate(per_page=6, page=page_number, error_out=True)
     return render_template('main/chapter.html', chapter=chapter, verses=verses)
 
 

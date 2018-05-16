@@ -125,7 +125,11 @@
           <div class="pagination" style="text-align: center">
             {% for page in verses.iter_pages() %}
                 {% if page %}
-                    <a class="{% if request.args.get('page') == page|string %}active{% endif %}" href="{{request.path}}?page={{page}}">{{page}}</a>
+                    {% if request.args.get('page') %}
+                        <a class="{% if request.args.get('page') == page|string %}active{% endif %}" href="{{request.path}}?page={{page}}">{{page}}</a>
+                    {% else  %}
+                        <a class="{% if page == 1 %}active{% endif %}" href="{{request.path}}?page={{page}}">{{page}}</a>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
           </div>
