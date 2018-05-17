@@ -1,15 +1,15 @@
 {
     "name": "Bhagavad Gita",
     "short_name": "Gita",
-    "scope" : "./",
+    "scope": "./",
     "icons": [
         {
-            "src": "/android-chrome-192x192.png",
+            "src": "/static/images/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/android-chrome-512x512.png",
+            "src": "/static/images/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
@@ -19,5 +19,7 @@
     "start_url": "https://bhagavadgita.io/?utm_source=radhakrishna",
     "display": "standalone",
     "gcm_sender_id": "482941778795",
-    "description": "Read, study and recite the Bhagavad Gita Online in a simple, beautiful and easy to use interface. Bhagavad Gita - The Song of The Lord is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality)."
+    "description": "Read, study and recite the Bhagavad Gita Online in a simple, beautiful and easy to use interface. Bhagavad Gita - The Song of The Lord is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality).",
+    "lang": "",
+    "orientation": "natural"
 }
