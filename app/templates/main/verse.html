@@ -637,29 +637,31 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     }
 
     function get_favourite(chapter_number, verse_number) {
-      return JSON.parse(
-        $.ajax({
-          type: 'GET',
-          url: "/get-favourite/" + chapter_number + "/" + verse_number + "/",
-          dataType: 'json',
-          async: false,
-          data: ({}),
-          success: function(msg) {
-            console.log("RadhaKrishna")
-            if (msg === "True") {
-              alert("True")
-              $('#favouriteverse').empty()
-              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
-            } else {
-              alert("False")
-              $('#favouriteverse').empty()
-              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
-            }
-          },
-          error: function(msg) {
-            alert("Please reload and try again.")
-          },
-        }).responseText);
+      // return JSON.parse(
+      //   $.ajax({
+      //     type: 'GET',
+      //     url: "/get-favourite/" + chapter_number + "/" + verse_number + "/",
+      //     dataType: 'json',
+      //     async: false,
+      //     data: ({}),
+      //     success: function(msg) {
+      //       console.log("RadhaKrishna")
+      //       if (msg === "True") {
+      //         alert("True")
+      //         $('#favouriteverse').empty()
+      //         $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
+      //       } else {
+      //         alert("False")
+      //         $('#favouriteverse').empty()
+      //         $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
+      //       }
+      //     },
+      //     error: function(msg) {
+      //       alert("Please reload and try again.")
+      //     },
+      //   }).responseText);
+      $('#favouriteverse').empty()
+      $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
     }
   </script>
   <script>
