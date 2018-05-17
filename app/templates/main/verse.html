@@ -472,6 +472,10 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   </style>
 
 <script>
+  if ({{current_user.is_authenticated|tojson}} === true) {
+        console.log("RadhaKrishnaHanuman")
+        get_favourite({{verse.chapter_number}},{{verse.verse_number}})
+      }
   $(document).ready(function() {
     if (document.cookie.indexOf("settings=") >= 0) {
       var settings = JSON.parse(getCookie('settings'));
@@ -485,6 +489,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         $('#myRange').val(settings['font']);
       }
       if ({{current_user.is_authenticated|tojson}} === true) {
+        console.log("RadhaKrishnaHanuman")
         get_favourite({{verse.chapter_number}},{{verse.verse_number}})
       }
     }
@@ -642,9 +647,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
           success: function(msg) {
             console.log("RadhaKrishna")
             if (msg === "True") {
+              alert("True")
               $('#favouriteverse').empty()
               $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
             } else {
+              alert("False")
               $('#favouriteverse').empty()
               $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
             }
