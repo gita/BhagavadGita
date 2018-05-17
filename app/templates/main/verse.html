@@ -618,22 +618,32 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     }
 
     function favourite(chapter_number, verse_number, value) {
-      return JSON.parse(
-        $.ajax({
-          type: 'GET',
-          url: "/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/",
-          dataType: 'json',
-          async: false,
-          data: ({}),
-          success: function(msg) {
-            if (msg === "RadhaKrishna") {
-              console.log(msg)
-            }
-          },
-          error: function(msg) {
-            alert("Please reload and try again.")
-          },
-        }).responseText);
+      axios.get("/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/")
+      .then(function (response) {
+          console.log(response)
+          if (response.data === "RadhaKrishna") {
+            console.log("Radha")
+          } else {
+            console.log("Krishna")
+          }
+      })
+
+      // return JSON.parse(
+      //   $.ajax({
+      //     type: 'GET',
+      //     url: "/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/",
+      //     dataType: 'json',
+      //     async: false,
+      //     data: ({}),
+      //     success: function(msg) {
+      //       if (msg === "RadhaKrishna") {
+      //         console.log(msg)
+      //       }
+      //     },
+      //     error: function(msg) {
+      //       alert("Please reload and try again.")
+      //     },
+      //   }).responseText);
     }
 
     function get_favourite(chapter_number, verse_number) {
