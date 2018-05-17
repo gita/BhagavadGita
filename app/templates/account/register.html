@@ -18,7 +18,7 @@
         <section class="form-gradient" style="margin-top: 3rem;">
 
             <!--Form with header-->
-            <div class="card">
+            <div class="card" style="margin-bottom: 1rem">
 
                 <!--Header-->
                 <div class="header pt-3 hanuman-gradient">
@@ -68,6 +68,8 @@
                       <button type="submit" class="btn btn-grey btn-rounded z-depth-1a" value="Register" style="border-radius: 10em;">Register</button>
                       <p class="font-small grey-text mt-3">Already have an account? <a href="/account/login" class="dark-grey-text ml-1 font-bold"> Log in</a></p>
 
+                      <p for="developer_agreement">By registering, you agree to our <a href="/terms-of-service">terms</a> and <a href="/privacy-policy">privacy policy</a></p>
+
                     </div>
                     <!--Grid row-->
                    {{ f.end_form(form) }}
@@ -92,6 +94,12 @@
      }
      body > div.container > div > div > div > section {
          margin-top: 5rem!important;
+     }
+     a {
+       color: #FFC107;
+     }
+     a:hover {
+       color: #FF9800;
      }
     </style>
 {% endblock %}

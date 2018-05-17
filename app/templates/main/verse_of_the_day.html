@@ -1,0 +1,65 @@
+{% import 'macros/page_macros.html' as page %}
+{% extends 'layouts/base.html' %}
+
+{% block title %}Bhagavad Gita Verse of the Day{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+  <span class="breadcrumb-item active">{{ _('Bhagavad Gita Verse of the Day') }}</span>
+</nav>
+
+<div class="jumbotron" style="margin-top: -1rem;">
+  <div class="container">
+    <div class="text-white text-center d-flex align-items-center">
+      <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
+        <h1 class="card-title pt-3 mb-5 font-bold">{{ _('Bhagavad Gita Verse of the Day') }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom: 10vh;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card warning-color text-center z-depth-2 h-100">
+        <div class="card-body">
+          <h4 class="font-up font-bold mt-2 mb-3"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
+          <div class="sanskrit-text" align="center">
+            <p style="font-size: 1.4rem;" class="verse-sanskrit"><b>{{verse.text  | replace('"', "")}}</b></p>
+          </div>
+          <h5 class="heading" style="margin-bottom: -1rem"><b><u>{{ _('Transliteration') }}</u></b></h5>
+          <div class="transliteration" align="center" style="font-family: Noto Serif;">
+            <p style="font-size: 1.4rem;" class="verse-transliteration"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
+          </div>
+          <h5 class="heading" style="margin-bottom: -2rem"><b><u>{{ _('Translation') }}</u></b></h5>
+          <br>
+          <div class="meaning" align="center">
+            <p style="font-size: 1.2rem;" class="verse-meaning">{{verse.meaning  | replace('"', "")}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.jumbotron {
+  background-image: url("/static/images/gita/bhagavadgita-2.jpg");
+  background-size: cover;
+}
+.btn-rounded {
+    border-radius: 10em;
+}
+h1 {
+  text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
+}
+.sanskrit-text, .transliteration, .word-meanings, .meaning {
+  white-space: pre-line;
+}
+.sanskrit-text, .transliteration, .word-meanings, .meaning {
+  white-space: pre-line;
+}
+</style>
+
+{% endblock %}

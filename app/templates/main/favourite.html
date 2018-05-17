@@ -27,7 +27,7 @@
   <div class="row">
     <div class="col-md-12">
       {% if current_user.is_authenticated %}
-        {% if verses != None %}
+        {% if verses %}
           <div class="row">
             {% for verse in verses %}
             <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
@@ -65,11 +65,14 @@
 
 <style>
 .jumbotron {
-  background-image: url("/static/images/gita.jpg");
+  background-image: url("/static/images/gita/bhagavadgita-2.jpg");
   background-size: cover;
 }
 .btn-rounded {
     border-radius: 10em;
+}
+h1 {
+  text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
 }
 </style>
 
