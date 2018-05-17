@@ -50,7 +50,7 @@ class Config:
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)
 
-    REDIS_URL = os.getenv('REDISTOGO_URL') or 'http://localhost:6379'
+    REDIS_URL = 'redis://redistogo:20fb3559fff9819c81e45ce7283e5cd7@soldierfish.redistogo.com:11015/'
 
     RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
 

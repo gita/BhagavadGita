@@ -116,8 +116,8 @@ main {
 
 @media -sass-debug-info{filename{}line{font-family:\00003109}}
 .krishna-gradient {
-  background: -webkit-linear-gradient(50deg, #F57C00, #FFC107)!important;
-  background: linear-gradient(40deg, #F57C00, #FFC107)!important;
+  background: -webkit-linear-gradient(50deg, #F57C00, #FFC107);
+  background: linear-gradient(40deg, #F57C00, #FFC107);
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003114}}
