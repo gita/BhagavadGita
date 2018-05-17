@@ -22,7 +22,7 @@ Flask==1.0
 Flask-Assets==0.12
 Flask-Babel==0.11.2
 Flask-Compress==1.4.0
-Flask-Dance==0.13.0
+Flask-Dance==0.14.0
 Flask-JWT==0.3.2
 Flask-Login==0.4.0
 Flask-Mail==0.9.1
