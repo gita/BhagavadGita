@@ -69,7 +69,7 @@ pytz==2017.3
 PyYAML==3.12
 raygun4py==3.1.4
 redis==2.10.5
-requests==2.9.1
+requests==2.18.4
 requests-oauthlib==0.8.0
 rq==0.7.1
 simplejson==3.13.2
