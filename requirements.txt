@@ -61,7 +61,7 @@ pyaml==17.12.1
 pycodestyle==2.4.0
 pyflakes==1.6.0
 PyJWT==1.4.2
-pylint==1.8.4
+pylint==1.9.1
 pyparsing==2.1.10
 python-dateutil==2.6.0
 python-editor==1.0.3
