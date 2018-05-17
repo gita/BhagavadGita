@@ -82,7 +82,7 @@
               {% else %}
 <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
                 <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
-              {% endif %} 
+              {% endif %}
               {% endif %}
 
               {% if next_verse != None %}
@@ -98,11 +98,11 @@
 <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
                 <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
               </a>
-              {% endif %} 
+              {% endif %}
               {% endif %}
 
               <h4 class="font-up font-bold mt-2 mb-3" style="font-size: 1.2rem;"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
-              
+
               <hr>
               <div class="text-center" id="sharebtn">
                 <div class="sharethis-inline-share-buttons"></div>
@@ -113,7 +113,7 @@
               </div>
 
               <div id="favouriteverse">
-                <a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" data-value="0" title="Mark as favourite" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -3rem;">
+                <a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" data-value="0" title="Mark as favourite" onclick="favorite()" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -3rem;">
                   <i class="material-icons" style="font-size: 1.2rem;">favorite_border</i>
                 </a>
               </div>
@@ -217,7 +217,7 @@
     </div>
   </div>
 </div>
-  
+
   <div class="modal fade" id="hanuman" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -443,7 +443,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   margin-bottom: 1rem;
 }
 
-.card .card-body h5 { 
+.card .card-body h5 {
   margin-bottom: -1rem;
   font-size: 1.4rem;
 }
@@ -461,6 +461,14 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 .btn {
   text-transform: none;
 }
+
+.breadcrumb {
+  display: none
+}
+
+.container {
+  margin-top: 4.5rem
+}
   </style>
 
 <script>
@@ -476,16 +484,16 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         $('.heading').css("font-size", settings['font']*1.17 + "rem");
         $('#myRange').val(settings['font']);
       }
-      if ({{current_user.is_authenticated|tojson}} === true) { 
+      if ({{current_user.is_authenticated|tojson}} === true) {
         get_favourite({{verse.chapter_number}},{{verse.verse_number}})
       }
     }
 
-      var ua = navigator.userAgent.toLowerCase(); 
+      var ua = navigator.userAgent.toLowerCase();
       var isAndroid = ua.indexOf("bhagavadgita") > -1;
       if (isAndroid) {
         console.log("RadhaKrishna")
-        
+
         $('#sharebtn').remove();
 
         var text = `Bhagavad Gita - {{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}} \n{{verse.text  | replace('"', "")}} \n{{verse.meaning  | replace('"', "")}} \nShared via the Bhagavad Gita app. Download Now - \nhttps://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita`
@@ -590,17 +598,17 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     }
 
     function favorite() {
-      if ({{current_user.is_authenticated|tojson}} === true) { 
-        if ($('#favourite').data("value") === 0) { 
-          favourite({{verse.chapter_number}},{{verse.verse_number}}, 1) 
-          $('#favouriteverse').empty() 
-          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`) 
-        } else { 
-          favourite({{verse.chapter_number}}, {{verse.verse_number}}, 0) 
-          $('#favouriteverse').empty() 
-          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`) 
-          } 
-      } else { 
+      if ({{current_user.is_authenticated|tojson}} === true) {
+        if ($('#favourite').data("value") === 0) {
+          favourite({{verse.chapter_number}},{{verse.verse_number}}, 1)
+          $('#favouriteverse').empty()
+          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
+        } else {
+          favourite({{verse.chapter_number}}, {{verse.verse_number}}, 0)
+          $('#favouriteverse').empty()
+          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
+          }
+      } else {
         $('#radhakrishnahanuman').modal('show'); }
     }
 
@@ -634,11 +642,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
           success: function(msg) {
             console.log("RadhaKrishna")
             if (msg === "True") {
-              $('#favouriteverse').empty() 
-              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`) 
+              $('#favouriteverse').empty()
+              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
             } else {
-              $('#favouriteverse').empty() 
-              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`) 
+              $('#favouriteverse').empty()
+              $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
             }
           },
           error: function(msg) {

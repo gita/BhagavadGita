@@ -14,7 +14,7 @@
           'success': get_flashed_messages(category_filter=['form-success'])
       } %}
 
-      <section class="form-gradient"  style="margin-top: 3rem;">
+      <section class="form-gradient"  style="margin-top: 3rem; margin-bottom: 1rem">
 
           <!--Form with header-->
           <div class="card">
@@ -29,7 +29,7 @@
               </div>
               <!--Header-->
 
-              <div class="card-body mt-4" style="margin-left: 1rem; margin-right: 0.5rem;">
+              <div class="card-body" style="margin-left: 1rem; margin-right: 0.5rem;">
 
                 {{ f.begin_form(form, flashes) }}
                   <div class="md-form">

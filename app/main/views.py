@@ -11,6 +11,7 @@ from flask_rq import get_queue
 from app import babel, db, es
 from app.models.chapter import ChapterModel, ChapterModelHindi
 from app.models.verse import VerseModel, VerseModelHindi
+from app.models.user import UserFavourite
 
 from . import main
 from ..email import send_email
@@ -481,13 +482,7 @@ def favourite_shlokas():
     current_app.logger.info("RadhaKrishna")
     verses = None
     if current_user.is_authenticated:
-        sql = """
-                SELECT chapter, verse
-                FROM user_favourite
-                WHERE user_id = %s
-                ORDER BY user_favourite_id desc
-            """ % (current_user.get_id())
-        verses = db.session.execute(sql)
+        verses = UserFavourite.query.filter_by(user_id = current_user.get_id()).order_by(UserFavourite.user_favourite_id.desc()).all()
 
     return render_template('main/favourite.html', verses=verses)
 
@@ -532,6 +527,19 @@ def progress():
     if total_shlokas:
         gita = float("%.2f" % (total_shlokas/700))
     return render_template('main/progress.html', progress=progress, gita=gita)
+
+
+@main.route('/verse-of-the-day/', methods=['GET'])
+def verse_of_the_day():
+    current_app.logger.info("RadhaKrishna")
+    sql = """
+            SELECT *
+            FROM verses
+            ORDER BY random()
+            LIMIT 1
+        """
+    verse = db.session.execute(sql).first()
+    return render_template('main/verse_of_the_day.html', verse=verse)
 
 
 @main.route('/privacy-policy/', methods=['GET'])
