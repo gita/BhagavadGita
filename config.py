@@ -97,7 +97,7 @@ class ProductionConfig(Config):
         Config.init_app(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
-        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
+        # flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
 
 
 class HerokuConfig(ProductionConfig):
