@@ -52,7 +52,7 @@ def github_logged_in(blueprint, token):
             token=token,
         )
 
-    user = User.query.filter_by(email=google_info["email"]).first()
+    user = User.query.filter_by(email=github_info["email"]).first()
 
     if oauth.user:
         login_user(oauth.user)
