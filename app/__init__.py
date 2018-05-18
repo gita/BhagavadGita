@@ -35,7 +35,7 @@ github_blueprint = make_github_blueprint(client_id=os.environ.get('GITHUB_KEY'),
     'GITHUB_SECRET'), redirect_to='https://bhagavadgita.io/github_login/github/authorized')
 google_blueprint = make_google_blueprint(client_id=os.environ.get('GOOGLE_KEY'),
                                          client_secret=os.environ.get('GOOGLE_SECRET'),
-                                         scope=["profile", "email"])
+                                         scope=["profile", "email"], redirect_to='https://bhagavadgita.io/google_login/google/authorized')
 facebook_blueprint = make_facebook_blueprint(
     client_id=os.environ.get('FACEBOOK_KEY'), client_secret=os.environ.get('FACEBOOK_SECRET'))
 
