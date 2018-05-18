@@ -31,12 +31,12 @@ oauth = OAuth2Provider()
 oauthclient = OAuth()
 babel = Babel()
 
-github_blueprint = make_github_blueprint(client_id="46674924d5b21e4f463f", client_secret="5f6fafce353f2ccf8ba0b42409ed11b417afb153")
-google_blueprint = make_google_blueprint(client_id="991367790269-68euuc42kviasrisr3oq5ga0r7bhv9s9.apps.googleusercontent.com",
-                                         client_secret="9YF0g--RfqzyVif9zJxcK3NG",
+github_blueprint = make_github_blueprint(client_id=os.environ.get('GITHUB_KEY'), client_secret=os.environ.get('GITHUB_SECRET'))
+google_blueprint = make_google_blueprint(client_id=os.environ.get('GOOGLE_KEY'),
+                                         client_secret=os.environ.get('GOOGLE_SECRET'),
                                          scope=["profile", "email"])
 facebook_blueprint = make_facebook_blueprint(
-    client_id="153654658590446", client_secret="11b200531fb9cebddddfd67c63955dce")
+    client_id=os.environ.get('FACEBOOK_KEY'), client_secret=os.environ.get('FACEBOOK_SECRET'))
 
 es = Elasticsearch(
     [os.environ.get('ES_URL') or 'ES_URL'],
