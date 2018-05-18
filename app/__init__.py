@@ -16,9 +16,9 @@ from elasticsearch import Elasticsearch
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
 
-from flask_dance.contrib.github import make_github_blueprint, github
-from flask_dance.contrib.google import make_google_blueprint, google
-from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
+from .flask_dance.contrib.github import make_github_blueprint, github
+from .flask_dance.contrib.google import make_google_blueprint, google
+from .flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
