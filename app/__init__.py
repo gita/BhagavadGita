@@ -12,7 +12,6 @@ from flask_restful import Api
 from flask_babel import Babel
 from app.lib.flask_oauthlib.client import OAuth
 from elasticsearch import Elasticsearch
-from flask_sslify import SSLify
 
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
@@ -89,9 +88,9 @@ def create_app(config_name):
     assets_env.register('vendor_js', vendor_js)
 
     # Configure SSL if platform supports it
-    # if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
-    #     from flask_sslify import SSLify
-    SSLify(app)
+    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
+        from flask_sslify import SSLify
+        SSLify(app)
 
     # Create app blueprints
     from .main import main as main_blueprint
