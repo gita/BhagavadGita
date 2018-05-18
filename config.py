@@ -99,8 +99,6 @@ class ProductionConfig(Config):
         from werkzeug.contrib.fixers import ProxyFix
         app.wsgi_app = ProxyFix(app.wsgi_app)
 
-        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
-
 
 class HerokuConfig(ProductionConfig):
     @classmethod
