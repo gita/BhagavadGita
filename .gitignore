@@ -7,3 +7,4 @@ venv
 config.env
 *.rdb
 *.rdb
+radhakrishna.env

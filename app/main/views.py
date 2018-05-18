@@ -8,17 +8,20 @@ from flask import (abort, current_app, flash, jsonify, make_response, redirect,
                    render_template, request, url_for, send_from_directory)
 from flask_rq import get_queue
 
-from app import babel, db, es
+from app import babel, db, es, github_blueprint
 from app.models.chapter import ChapterModel, ChapterModelHindi
 from app.models.verse import VerseModel, VerseModelHindi
-from app.models.user import UserFavourite
+from app.models.user import UserFavourite, OAuth, User
 
 from . import main
 from ..email import send_email
 from .forms import ContactForm
 
-from flask_login import current_user
+from flask_login import current_user, login_user
 from datetime import datetime
+
+from flask_dance.consumer import oauth_authorized, oauth_error
+from sqlalchemy.orm.exc import NoResultFound
 
 if sys.version_info[0] < 3:
     reload(sys)
