@@ -90,14 +90,14 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-    SSL_DISABLE = False
+    SSL_DISABLE = (os.environ.get('SSL_DISABLE') and 'True') == 'True'
 
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
-        # flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
+        flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
 
 
 class HerokuConfig(ProductionConfig):
