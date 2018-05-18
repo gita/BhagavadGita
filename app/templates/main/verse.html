@@ -621,10 +621,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       axios.get("/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/")
       .then(function (response) {
           console.log(response)
-          navigator.serviceWorker.register('/radhakrishna.js').then(function(registration) {
-            console.log('Radhe Radhe');
-            registration.update();
-        })
           if (response.data === "RadhaKrishna") {
             console.log("Radha")
           } else {
@@ -687,7 +683,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       //   }).responseText);
     }
   </script>
-  <script>
+  <!-- <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         navigator.serviceWorker.register('/radhakrishna.js').then(function(registration) {
@@ -698,5 +694,5 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         });
     });
   }
-  </script>
+  </script> -->
 {% endblock %}
