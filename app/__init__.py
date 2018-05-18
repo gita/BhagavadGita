@@ -32,7 +32,7 @@ oauthclient = OAuth()
 babel = Babel()
 
 github_blueprint = make_github_blueprint(client_id=os.environ.get('GITHUB_KEY'), client_secret=os.environ.get(
-    'GITHUB_SECRET'), redirect_url='https://bhagavadgita.io/github_login/github/authorized')
+    'GITHUB_SECRET'), redirect_to='https://bhagavadgita.io/github_login/github/authorized')
 google_blueprint = make_google_blueprint(client_id=os.environ.get('GOOGLE_KEY'),
                                          client_secret=os.environ.get('GOOGLE_SECRET'),
                                          scope=["profile", "email"])
