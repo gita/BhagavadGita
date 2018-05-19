@@ -87,13 +87,6 @@ class TestingConfig(Config):
     WTF_CSRF_ENABLED = False
 
 
-def _force_https(app):
-    def wrapper(environ, start_response):
-        environ['wsgi.url_scheme'] = 'https'
-        return app(environ, start_response)
-    return wrapper
-
-
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
@@ -102,7 +95,6 @@ class ProductionConfig(Config):
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
-        app = _force_https(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
         flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
@@ -112,11 +104,10 @@ class HerokuConfig(ProductionConfig):
     @classmethod
     def init_app(cls, app):
         ProductionConfig.init_app(app)
-        app = _force_https(app)
 
         # Handle proxy server headers
-        # from werkzeug.contrib.fixers import ProxyFix
-        # app.wsgi_app = ProxyFix(app.wsgi_app)
+        from werkzeug.contrib.fixers import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app)
 
 
 class UnixConfig(ProductionConfig):
