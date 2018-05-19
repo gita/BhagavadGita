@@ -74,6 +74,17 @@ class Config:
         pass
 
 
+class ReverseProxied(object):
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        scheme = environ.get('HTTP_X_FORWARDED_PROTO')
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+        return self.app(environ, start_response)
+
+
 class DevelopmentConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
@@ -97,6 +108,7 @@ class ProductionConfig(Config):
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
+        app.wsgi_app = ReverseProxied(app.wsgi_app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
         flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
@@ -108,8 +120,8 @@ class HerokuConfig(ProductionConfig):
         ProductionConfig.init_app(app)
 
         # Handle proxy server headers
-        from werkzeug.contrib.fixers import ProxyFix
-        app.wsgi_app = ProxyFix(app.wsgi_app)
+        # from werkzeug.contrib.fixers import ProxyFix
+        # app.wsgi_app = ProxyFix(app.wsgi_app)
 
 
 class UnixConfig(ProductionConfig):
