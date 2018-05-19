@@ -16,9 +16,9 @@ from elasticsearch import Elasticsearch
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
 
-from flask_dance.contrib.github import make_github_blueprint, github
-from flask_dance.contrib.google import make_google_blueprint, google
-from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
+from .flask_dance.contrib.github import make_github_blueprint, github
+from .flask_dance.contrib.google import make_google_blueprint, google
+from .flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -34,7 +34,8 @@ babel = Babel()
 github_blueprint = make_github_blueprint(client_id=os.environ.get('GITHUB_KEY'), client_secret=os.environ.get('GITHUB_SECRET'))
 google_blueprint = make_google_blueprint(client_id=os.environ.get('GOOGLE_KEY'),
                                          client_secret=os.environ.get('GOOGLE_SECRET'),
-                                         scope=["profile", "email"])
+                                         scope=["profile", "email"],
+                                         redirect_url="https://bhagavadgita.io/google_login/google/authorized")
 facebook_blueprint = make_facebook_blueprint(
     client_id=os.environ.get('FACEBOOK_KEY'), client_secret=os.environ.get('FACEBOOK_SECRET'))
 
