@@ -178,9 +178,7 @@ class OAuth2ConsumerBlueprint(BaseOAuthConsumerBlueprint):
 
     def login(self):
         log.debug("client_id = %s", self.client_id)
-        self.session.redirect_uri = url_for(
-            ".authorized", next=request.args.get('next'), _external=True, _scheme='https'
-        )
+        self.session.redirect_uri = "https://bhagavadgita.io/google_login/google/authorized"
         url, state = self.session.authorization_url(
             self.authorization_url, state=self.state,
             **self.authorization_url_params
@@ -232,9 +230,7 @@ class OAuth2ConsumerBlueprint(BaseOAuthConsumerBlueprint):
         self.session._state = state
         del flask.session[state_key]
 
-        self.session.redirect_uri = url_for(
-            ".authorized", next=request.args.get('next'), _external=True, _scheme='https'
-        )
+        self.session.redirect_uri = "https://bhagavadgita.io/google_login/google/authorized"
 
         log.debug("client_id = %s", self.client_id)
         log.debug("client_secret = %s", self.client_secret)

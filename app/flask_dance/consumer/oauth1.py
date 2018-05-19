@@ -154,9 +154,7 @@ class OAuth1ConsumerBlueprint(BaseOAuthConsumerBlueprint):
         lazy.invalidate(self, "session")
 
     def login(self):
-        callback_uri = url_for(
-            ".authorized", next=request.args.get('next'), _external=True, _scheme='https'
-        )
+        callback_uri = "https://bhagavadgita.io/google_login/google/authorized"
         self.session._client.client.callback_uri = to_unicode(callback_uri)
 
         try:
