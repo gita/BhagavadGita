@@ -2,6 +2,7 @@ import os
 import sys
 
 from raygun4py.middleware import flask as flask_raygun
+from werkzeug.contrib.fixers import ProxyFix
 
 PYTHON_VERSION = sys.version_info[0]
 if PYTHON_VERSION == 3:
@@ -95,6 +96,7 @@ class ProductionConfig(Config):
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
+        app.wsgi_app = ProxyFix(app.wsgi_app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
 
         flask_raygun.Provider(app, app.config['RAYGUN_APIKEY']).attach()
@@ -104,9 +106,6 @@ class HerokuConfig(ProductionConfig):
     @classmethod
     def init_app(cls, app):
         ProductionConfig.init_app(app)
-
-        # Handle proxy server headers
-        from werkzeug.contrib.fixers import ProxyFix
         app.wsgi_app = ProxyFix(app.wsgi_app)
 
 
