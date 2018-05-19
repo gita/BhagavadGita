@@ -67,6 +67,8 @@ class Config:
     RQ_DEFAULT_PASSWORD = url.password
     RQ_DEFAULT_DB = 0
 
+    PREFERRED_URL_SCHEME = 'https'
+
     @staticmethod
     def init_app(app):
         pass
