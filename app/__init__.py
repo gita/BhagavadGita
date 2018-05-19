@@ -158,6 +158,15 @@ def create_app(config_name):
     chapter_list_view = ChapterList.as_view('ChapterList')
     app.add_url_rule('/api/v1/chapters', view_func=chapter_list_view)
 
+    def _force_https():
+        if not app.debug: 
+            from flask import _request_ctx_stack
+            if _request_ctx_stack is not None:
+                reqctx = _request_ctx_stack.top
+                reqctx.url_adapter.url_scheme = 'https'
+
+    app.before_request(_force_https)
+
     with app.test_request_context():
         spec.add_path(view=verse_list_view)
         spec.add_path(view=verse_list_chapter_view)
