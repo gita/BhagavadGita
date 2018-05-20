@@ -502,10 +502,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         $('#theme').val(settings['theme']);
         $('#theme').trigger('change.select2');
       }
-      if ({{current_user.is_authenticated|tojson}} === true) {
-        console.log("RadhaKrishnaHanuman")
-        get_favourite({{verse.chapter_number}},{{verse.verse_number}})
-      }
     }
 
       var ua = navigator.userAgent.toLowerCase();
@@ -569,7 +565,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         var theme = settings['theme'];
         setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
       } else {
-        setCookie('settings',JSON.stringify({font: 1, language: language, theme: "Light"}),30);
+        setCookie('settings',JSON.stringify({font: 1, language: "en", theme: "Light"}),30);
       }
     })
 
@@ -588,7 +584,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         var lang = settings['language'];
         setCookie('settings',JSON.stringify({font: size, language: lang, theme: theme}),30);
       } else {
-        setCookie('settings',JSON.stringify({font: 1, language: lang, theme: "Light"}),30);
+        setCookie('settings',JSON.stringify({font: 1, language: "en", theme: theme}),30);
       }
     })
   });

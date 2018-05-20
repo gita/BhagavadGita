@@ -381,9 +381,6 @@ body > div:nth-child(4) {
         if (settings['theme']) {
           $('#theme').val(settings['theme']);
           $('#theme').trigger('change.select2');
-          if (settings['theme'] == "Dark") {
-            $('body').append(`<style id="dark">body{color:#fff;background-color:#121212}.amber.darken-2,.card,.card-body,.modal-content{background-color:#232323!important}.card .card-text{color:#BDBDBD}hr{border-top:1px solid #616161}.sidenav{background-color:#1C1C1C}.sidenav li>a{color:#fff}#mobile-demo>li>a.active,.sidenav .collapsible-header:hover,.sidenav li>a:hover{background-color:#474747}.dropdown-menu{background-color:#1C1C1C}.navbar .dropdown-menu a{color:#fff!important}.navbar .dropdown-menu a:hover{background-color:#474747;color:#fff!important}.select2-container--default .select2-selection--single{background-color:#474747}#email,#first_name,#last_name,#password,#password2,.close,.close:hover,.modal-content,.pagination a,.select2-container--default .select2-selection--single .select2-selection__rendered{color:#fff}.modal-footer{border-top:none!important}</style>`)
-          }
         }
       }
 
@@ -451,7 +448,7 @@ body > div:nth-child(4) {
           var theme = settings['theme'];
           setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
         } else {
-          setCookie('settings',JSON.stringify({font: 1, language: language, theme: "light"}),30);
+          setCookie('settings',JSON.stringify({font: 1, language: language, theme: "Light"}),30);
         }
       })
 
@@ -470,7 +467,7 @@ body > div:nth-child(4) {
           var lang = settings['language'];
           setCookie('settings',JSON.stringify({font: size, language: lang, theme: theme}),30);
         } else {
-          setCookie('settings',JSON.stringify({font: 1, language: lang, theme: "Light"}),30);
+          setCookie('settings',JSON.stringify({font: 1, language: "en", theme: theme}),30);
         }
       })
 
@@ -559,7 +556,7 @@ body > div:nth-child(4) {
       var theme = settings['theme'];
       setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
     } else {
-      setCookie('settings',JSON.stringify({font: size, language: "en", theme: "light"}),30);
+      setCookie('settings',JSON.stringify({font: size, language: "en", theme: "Light"}),30);
     }
   }
 

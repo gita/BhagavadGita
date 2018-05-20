@@ -474,7 +474,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         var theme = settings['theme'];
         setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
       } else {
-        setCookie('settings',JSON.stringify({font: 1, language: language, theme: "dark"}),30);
+        setCookie('settings',JSON.stringify({font: 1, language: language, theme: "Light"}),30);
       }
     })
 
@@ -493,7 +493,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         var lang = settings['language'];
         setCookie('settings',JSON.stringify({font: size, language: lang, theme: theme}),30);
       } else {
-        setCookie('settings',JSON.stringify({font: 1, language: lang, theme: "Light"}),30);
+        setCookie('settings',JSON.stringify({font: 1, language: "en", theme: theme}),30);
       }
     })
 
