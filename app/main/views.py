@@ -587,7 +587,6 @@ def create_reading_plan(reading_plan_id):
             db.session.execute(sql)
             # db.session.commit()
             count+=1
-            break
 
         # db.session.bulk_save_objects(verse_list)
         db.session.commit()
