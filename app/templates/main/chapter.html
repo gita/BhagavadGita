@@ -174,6 +174,16 @@
           <div class="slidecontainer">
             <input type="range" min="0.5" max="2" value="1" step="0.1" class="slider" id="myRange">
           </div>
+          <br>
+          <h5>
+            <b>{{ _('Theme') }}</b>
+          </h5>
+          <div>
+            <select class="js-example-basic-single" id="theme" name="theme" style="width: 100%;">
+              <option value="Light">Light</option>
+              <option value="Dark">Dark</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-warning" data-dismiss="modal">{{ _('Close') }}</button>
@@ -398,6 +408,13 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
         $('.verse-meaning').css("font-size", settings['font'] + "rem");
         $('#myRange').val(settings['font']);
       }
+      if (settings['theme']) {
+        $('#theme').val(settings['theme']);
+        $('#theme').trigger('change.select2');
+        if (settings['theme'] == "Dark") {
+          $('body').append(`<style id="dark">body{color:#fff;background-color:#121212}.amber.darken-2,.card,.card-body,.modal-content{background-color:#232323!important}.card .card-text{color:#BDBDBD}hr{border-top:1px solid #616161}.sidenav{background-color:#1C1C1C}.sidenav li>a{color:#fff}#mobile-demo>li>a.active,.sidenav .collapsible-header:hover,.sidenav li>a:hover{background-color:#474747}.dropdown-menu{background-color:#1C1C1C}.navbar .dropdown-menu a{color:#fff!important}.navbar .dropdown-menu a:hover{background-color:#474747;color:#fff!important}.select2-container--default .select2-selection--single{background-color:#474747}#email,#first_name,#last_name,#password,#password2,.close,.close:hover,.modal-content,.pagination a,.select2-container--default .select2-selection--single .select2-selection__rendered{color:#fff}.modal-footer{border-top:none!important}</style>`)
+        }
+      }
     }
 
     var ua = navigator.userAgent.toLowerCase();
@@ -457,11 +474,32 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));
         var size = settings['font'];
-        setCookie('settings',JSON.stringify({font: size, language: language}),30);
+        var theme = settings['theme'];
+        setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
       } else {
-        setCookie('settings',JSON.stringify({font: 1, language: language}),30);
+        setCookie('settings',JSON.stringify({font: 1, language: language, theme: "dark"}),30);
       }
     })
+
+    $('#theme').on("change", function (e) {
+      theme = $( "#theme option:selected" ).val();
+      if (theme === "Dark") {
+        $('body').append(`<style id="dark">body{color:#fff;background-color:#121212}.amber.darken-2,.card,.card-body,.modal-content{background-color:#232323!important}.card .card-text{color:#BDBDBD}hr{border-top:1px solid #616161}.sidenav{background-color:#1C1C1C}.sidenav li>a{color:#fff}#mobile-demo>li>a.active,.sidenav .collapsible-header:hover,.sidenav li>a:hover{background-color:#474747}.dropdown-menu{background-color:#1C1C1C}.navbar .dropdown-menu a{color:#fff!important}.navbar .dropdown-menu a:hover{background-color:#474747;color:#fff!important}.select2-container--default .select2-selection--single{background-color:#474747}#email,#first_name,#last_name,#password,#password2,.close,.close:hover,.modal-content,.pagination a,.select2-container--default .select2-selection--single .select2-selection__rendered{color:#fff}.modal-footer{border-top:none!important}</style>`)
+      } else {
+        console.log("RadhaKrishna")
+        $('#dark').remove()
+      }
+
+      if (document.cookie.indexOf("settings=") >= 0) {
+        var settings = JSON.parse(getCookie('settings'));
+        var size = settings['font'];
+        var lang = settings['language'];
+        setCookie('settings',JSON.stringify({font: size, language: lang, theme: theme}),30);
+      } else {
+        setCookie('settings',JSON.stringify({font: 1, language: lang, theme: "Light"}),30);
+      }
+    })
+
 
     var verses = $('#verses');
     var chapter_number = {{chapter.chapter_number}}
@@ -526,9 +564,10 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));
         var language = settings['language'];
-        setCookie('settings',JSON.stringify({font: size, language: language}),30);
+        var theme = settings['theme'];
+        setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
       } else {
-        setCookie('settings',JSON.stringify({font: size, language: "en"}),30);
+        setCookie('settings',JSON.stringify({font: size, language: "en", theme: "Light"}),30);
       }
     }
 

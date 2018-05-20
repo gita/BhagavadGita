@@ -201,6 +201,34 @@ def search():
         'main/search.html', verses=verses, query=request.args.get('query'))
 
 
+@main.route('/krishna', methods=['GET', 'POST'])
+def krishna_search():
+    # query = request.args.get('query')
+    # current_app.logger.info(query)
+    # res = es.search(index="verses", body={
+    #   "from": 0, "size": 10,
+    #   "_source": ["meaning"],
+    #   "query": {
+    #     "multi_match": {
+    #       "query": query,
+    #       "fields": ["meaning"]
+    #     }
+    #   }
+    # })
+
+    # verses = res['hits']['hits']
+    sql = """
+        SELECT meaning
+        FROM verses
+        WHERE chapter_number = 1
+    """
+    result = db.session.execute(sql)
+    verses = [r['meaning'] for r in result]
+
+    current_app.logger.info(verses)
+    return jsonify(verses)
+
+
 @main.route('/chapter-numbers', methods=['GET'])
 def get_all_chapter_numbers():
     chapters = ChapterModel.query.order_by(ChapterModel.chapter_number).all()
@@ -497,6 +525,18 @@ def progress():
     gita = None
     total_shlokas = 0
     progress = {key:None for key in range(1, 19)}
+
+    sql = """
+            SELECT EXTRACT(EPOCH FROM timestamp), count(*)
+            FROM user_progress
+            WHERE user_id = 67
+            AND date_part('year', timestamp) = '2018'
+            GROUP BY EXTRACT(EPOCH FROM timestamp)
+        """ 
+    result = db.session.execute(sql)
+    thegita = {r['date_part']:r['count'] for r in result}
+    current_app.logger.info(thegita)
+
     if current_user.is_authenticated:
         sql = """
                 SELECT chapter, COUNT(verse)
@@ -529,7 +569,24 @@ def progress():
 
     if total_shlokas:
         gita = float("%.2f" % (total_shlokas/700))
-    return render_template('main/progress.html', progress=progress, gita=gita)
+    return render_template('main/progress.html', progress=progress, gita=gita, thegita=thegita)
+
+
+@main.route('/thegita/', methods=['GET'])
+def thegita():
+    current_app.logger.info("RadhaKrishna")
+
+    sql = """
+            SELECT EXTRACT(EPOCH FROM timestamp), count(*)
+            FROM user_progress
+            WHERE user_id = %s
+            AND date_part('year', timestamp) = '2018'
+            GROUP BY EXTRACT(EPOCH FROM timestamp)
+        """ % (current_user.get_id())
+    result = db.session.execute(sql)
+    thegita = {r['date_part']:r['count'] for r in result}
+
+    return jsonify(thegita)
 
 
 @main.route('/verse-of-the-day/', methods=['GET'])
