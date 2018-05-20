@@ -140,6 +140,7 @@ verse_dict = {
 @babel.localeselector
 def get_locale():
     if "settings" in request.cookies:
+        current_app.logger.info(request.cookies.get('settings'))
         if json.loads(request.cookies.get('settings'))["language"]:
             return json.loads(request.cookies.get('settings'))["language"]
     return request.accept_languages.best_match(LANGUAGES.keys())
