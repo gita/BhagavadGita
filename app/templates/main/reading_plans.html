@@ -1,0 +1,56 @@
+{% import 'macros/page_macros.html' as page %} {% extends 'layouts/base.html' %} {% block title %}Favourite Shlokas - Bhagavad
+Gita{% endblock %} {% block meta_tags %}
+<meta name="robots" content="noindex"> {% endblock %} {% block content %}
+<nav class="breadcrumb">
+    <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+    <span class="breadcrumb-item active">{{ _('Reading Plans') }}</span>
+</nav>
+
+<div class="jumbotron" style="margin-top: -1rem;">
+    <div class="container">
+        <div class="text-white text-center d-flex align-items-center">
+            <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
+                <h1 class="card-title pt-3 mb-5 font-bold">{{ _('READING PLANS') }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-bottom: 10vh;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                {% for plan in plans %}
+                <div class="col-md-12">
+                    <div class="card amber text-center z-depth-2 h-100">
+                        <div class="card-body">
+                            <h4 class="font-up font-bold white-text mt-2 mb-3">
+                                <strong>{{plan.reading_plan_name|replace('"', "")}}</strong>
+                            </h4>
+                            <p>{{plan.reading_plan_description|replace('"', "")}}</p>
+                            <a class="btn btn-success waves-effect waves-light" href="/create-reading-plan/{{plan.reading_plan_id}}">Start Reading</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .jumbotron {
+        background-image: url("/static/images/gita/bhagavadgita-2.jpg");
+        background-size: cover;
+    }
+
+    .btn-rounded {
+        border-radius: 10em;
+    }
+
+    h1 {
+        text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
+    }
+</style>
+
+{% endblock %}

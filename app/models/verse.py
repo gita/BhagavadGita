@@ -70,3 +70,22 @@ class VerseModelHindi(db.Model):
         self.meaning = meaning
         self.verse_order = verse_order
         self.meaning_large = meaning_large
+
+
+class UserReadingPlanItems(db.Model):
+
+    __tablename__ = 'user_reading_plan_items'
+
+    user_reading_plan_items_id = db.Column(db.Integer, primary_key=True)
+    user_reading_plan_id = db.Column(db.String)
+    timestamp = db.Column(db.TIMESTAMP())
+    chapter_number = db.Column(db.Integer)
+    verse_number = db.Column(db.String)
+    status = db.Column(db.String)
+
+    def __init__(self, user_reading_plan_id, timestamp, chapter_number, verse_number, status):
+        self.user_reading_plan_id = user_reading_plan_id
+        self.timestamp = timestamp
+        self.chapter_number = chapter_number
+        self.verse_number = verse_number
+        self.status = status

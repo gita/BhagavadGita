@@ -27,24 +27,16 @@
  {% if current_user.is_authenticated %}
   <div class="row" style="margin-bottom: 2rem">
     <div class="col-md-12" align="center">
+      <h4 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Overall Bhagavad Gita') }}</u></strong></h4>
       <div class="bhagavad gita">
         <strong></strong>
-      </div>
-      <h4 class="font-up font-bold" style="text-align: center;"><strong>{{ _('Overall Bhagavad Gita') }}</strong></h4>
-      <hr>
-      <div>
-        <button id="thegitaback" style="margin-bottom: 10px; padding: 0.5rem 0.5rem 0.5rem 0.5rem;" class="btn btn-warning">
-          <i class="material-icons">arrow_back</i>
-        </button>
-        <button id="thegitanext" style="margin-bottom: 10px; padding: 0.5rem 0.5rem 0.5rem 0.5rem;" class="btn btn-warning">
-          <i class="material-icons">arrow_forward</i>
-        </button>
-        <div id="thegita" style="position:relative;">
-        </div>
       </div>
     </div>
   </div>
   {% endif %}
+  <hr>
+  <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Chapterwise Progress') }}</u></strong></h5>
+  <br>
   <div class="row">
     <div class="col-md-12">
       {% if current_user.is_authenticated %}
@@ -79,6 +71,24 @@
       {% endif %}
     </div>
   </div>
+
+  <hr>
+
+  {% if current_user.is_authenticated %}
+  <div class="row"></div>
+    <div class="col-md-12" align="center">
+      <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Progress (By Month)') }}</u></strong></h5>
+      <button id="thegitaback" style="margin-bottom: 10px; margin-bottom: 6px; padding: 0.2rem 0.2rem 0.2rem 0.2rem;" class="btn btn-warning">
+        <i class="material-icons">arrow_back</i>
+      </button>
+      <button id="thegitanext" style="margin-bottom: 10px; margin-bottom: 6px; padding: 0.2rem 0.2rem 0.2rem 0.2rem;" class="btn btn-warning">
+        <i class="material-icons">arrow_forward</i>
+      </button>
+      <div id="thegita">
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
 <style>
@@ -213,7 +223,8 @@ cal.init({
 $('.bhagavad.gita').circleProgress({
     value: {{gita}},
     size: 200,
-    fill: {gradient: [['#FF9800', .5], ['#FFC107', .5]], gradientAngle: Math.PI / 4}
+    fill: {gradient: [['#FF9800', .5], ['#FFC107', .5]], gradientAngle: Math.PI / 4},
+    emptyFill: '#BDBDBD'
   }).on('circle-animation-progress', function(event, progress, stepValue) {
     $(this).find('strong').html(Math.round(100 * stepValue.toFixed(2).substr(1)) + '<i>%</i>');
   });

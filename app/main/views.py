@@ -10,7 +10,7 @@ from flask_rq import get_queue
 
 from app import babel, db, es, github_blueprint
 from app.models.chapter import ChapterModel, ChapterModelHindi
-from app.models.verse import VerseModel, VerseModelHindi
+from app.models.verse import VerseModel, VerseModelHindi, UserReadingPlanItems
 from app.models.user import UserFavourite, OAuth, User
 
 from . import main
@@ -18,10 +18,13 @@ from ..email import send_email
 from .forms import ContactForm
 
 from flask_login import current_user, login_user
-from datetime import datetime
+from datetime import datetime, timedelta
+from werkzeug.security import gen_salt
 
 from flask_dance.consumer import oauth_authorized, oauth_error
 from sqlalchemy.orm.exc import NoResultFound
+
+from collections import OrderedDict
 
 if sys.version_info[0] < 3:
     reload(sys)
@@ -517,6 +520,79 @@ def favourite_shlokas():
         verses = UserFavourite.query.filter_by(user_id = current_user.get_id()).order_by(UserFavourite.user_favourite_id.desc()).all()
 
     return render_template('main/favourite.html', verses=verses)
+
+
+@main.route('/reading-plans/', methods=['GET'])
+def reading_plans():
+    current_app.logger.info("RadhaKrishna")
+    plans = None
+    if current_user.is_authenticated:
+        sql = """
+            SELECT *
+            FROM reading_plans
+        """
+        result = db.session.execute(sql)
+        plans = [dict(d) for d in result]
+
+    return render_template('main/reading_plans.html', plans=plans)
+
+
+@main.route('/create-reading-plan/<string:reading_plan_id>', methods=['GET'])
+def create_reading_plan(reading_plan_id):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+            INSERT INTO user_reading_plans
+            VALUES ('%s', '%s', %s)
+            RETURNING user_reading_plan_id
+        """ % (gen_salt(10), reading_plan_id, current_user.get_id())
+        result = db.session.execute(sql)
+        user_reading_plan_id = [dict(d) for d in result][0]['user_reading_plan_id']
+        db.session.commit()
+
+        timestamp = datetime.now()
+
+        sql = """
+            SELECT chapter_number, verse_number
+            FROM verses
+            ORDER BY chapter_number asc, verse_order asc
+        """
+        result = db.session.execute(sql)
+        verses = [OrderedDict(d) for d in result]
+
+        def grouped(iterable, n):
+            return zip(*[iter(iterable)]*n)
+
+        count = 0
+        verse_list = []
+
+        for radha, krishna in grouped(verses, 2):
+            # verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+            #     days=count), radha['chapter_number'], radha['verse_number'], "Pending")
+            # verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+            #     days=count), krishna['chapter_number'], krishna['verse_number'], "Pending")
+            # verse_list.append(verse_one)
+            # verse_list.append(verse_two)
+            # count+=1
+            sql = """
+                INSERT INTO user_reading_plan_items (user_reading_plan_id, timestamp, chapter_number, verse_number, status)
+                VALUES ('%s', '%s', %s, '%s', '%s')
+            """ % (user_reading_plan_id, timestamp+timedelta(days=count), radha['chapter_number'], radha['verse_number'], "Pending")
+            db.session.execute(sql)
+
+            sql = """
+                INSERT INTO user_reading_plan_items (user_reading_plan_id, timestamp, chapter_number, verse_number, status)
+                VALUES ('%s', '%s', %s, '%s', '%s')
+            """ % (user_reading_plan_id, timestamp+timedelta(days=count), krishna['chapter_number'], krishna['verse_number'], "Pending")
+            db.session.execute(sql)
+            # db.session.commit()
+            count+=1
+            break
+
+        # db.session.bulk_save_objects(verse_list)
+        db.session.commit()
+
+    return redirect("/reading-plans/")
 
 
 @main.route('/progress/', methods=['GET'])
