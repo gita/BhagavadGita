@@ -567,28 +567,15 @@ def create_reading_plan(reading_plan_id):
         verse_list = []
 
         for radha, krishna in grouped(verses, 2):
-            # verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-            #     days=count), radha['chapter_number'], radha['verse_number'], "Pending")
-            # verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-            #     days=count), krishna['chapter_number'], krishna['verse_number'], "Pending")
-            # verse_list.append(verse_one)
-            # verse_list.append(verse_two)
-            # count+=1
-            sql = """
-                INSERT INTO user_reading_plan_items (user_reading_plan_id, timestamp, chapter_number, verse_number, status)
-                VALUES ('%s', '%s', %s, '%s', '%s')
-            """ % (user_reading_plan_id, timestamp+timedelta(days=count), radha['chapter_number'], radha['verse_number'], "Pending")
-            db.session.execute(sql)
-
-            sql = """
-                INSERT INTO user_reading_plan_items (user_reading_plan_id, timestamp, chapter_number, verse_number, status)
-                VALUES ('%s', '%s', %s, '%s', '%s')
-            """ % (user_reading_plan_id, timestamp+timedelta(days=count), krishna['chapter_number'], krishna['verse_number'], "Pending")
-            db.session.execute(sql)
-            # db.session.commit()
+            verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+                days=count), radha['chapter_number'], radha['verse_number'], "Pending")
+            verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+                days=count), krishna['chapter_number'], krishna['verse_number'], "Pending")
+            verse_list.append(verse_one)
+            verse_list.append(verse_two)
             count+=1
 
-        # db.session.bulk_save_objects(verse_list)
+        db.session.bulk_save_objects(verse_list)
         db.session.commit()
 
     return redirect("/reading-plans/")
