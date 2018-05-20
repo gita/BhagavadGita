@@ -250,6 +250,37 @@
         <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5a8d87d4d57467001383cda2&product=inline-share-buttons" defer></script>
 
         <script>
+          function setCookie(name,value,days) {
+              var expires = "";
+              if (days) {
+                  var date = new Date();
+                  date.setTime(date.getTime() + (days*24*60*60*1000));
+                  expires = "; expires=" + date.toUTCString();
+              }
+              document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+          }
+
+          function getCookie(name) {
+              var nameEQ = name + "=";
+              var ca = document.cookie.split(';');
+              for(var i=0;i < ca.length;i++) {
+                  var c = ca[i];
+                  while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                  if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+              }
+              return null;
+          }
+          function eraseCookie(name) {
+              document.cookie = name+'=; Max-Age=-99999999;';
+          }
+
+          var settings = JSON.parse(getCookie('settings'));
+          if (settings['theme']) {
+            if (settings['theme'] == "Dark") {
+              $('body').append(`<style id="dark">body{color:#fff;background-color:#121212}.amber.darken-2,.card,.card-body,.modal-content{background-color:#232323!important}.card .card-text{color:#BDBDBD}hr{border-top:1px solid #616161}.sidenav{background-color:#1C1C1C}.sidenav li>a{color:#fff}#mobile-demo>li>a.active,.sidenav .collapsible-header:hover,.sidenav li>a:hover{background-color:#474747}.dropdown-menu{background-color:#1C1C1C}.navbar .dropdown-menu a{color:#fff!important}.navbar .dropdown-menu a:hover{background-color:#474747;color:#fff!important}.select2-container--default .select2-selection--single{background-color:#474747}#email,#first_name,#last_name,#password,#password2,.close,.close:hover,.modal-content,.pagination a,.select2-container--default .select2-selection--single .select2-selection__rendered{color:#fff}.modal-footer{border-top:none!important}</style>`)
+            }
+          }
+
           $(document).ready(function() {
             $('.sidenav').sidenav();
             $('.collapsible').collapsible();
@@ -264,6 +295,7 @@
               // $('#gita').append(`<a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#shiva">About</a>`)
               $('#bhagavadgitafooter').remove();
             }
+
 
             if (['/account/register', '/account/login', '/account/reset-password', '/account/manage/info', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps', '/account/manage/apps/new'].indexOf(window.location.pathname) >= 0) {
               $('#bhagavadgitafooter').remove()

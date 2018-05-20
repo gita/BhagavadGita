@@ -501,9 +501,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       if (settings['theme']) {
         $('#theme').val(settings['theme']);
         $('#theme').trigger('change.select2');
-        if (settings['theme'] == "Dark") {
-          $('body').append(`<style id="dark">body{color:#fff;background-color:#121212}.amber.darken-2,.card,.card-body,.modal-content{background-color:#232323!important}.card .card-text{color:#BDBDBD}hr{border-top:1px solid #616161}.sidenav{background-color:#1C1C1C}.sidenav li>a{color:#fff}#mobile-demo>li>a.active,.sidenav .collapsible-header:hover,.sidenav li>a:hover{background-color:#474747}.dropdown-menu{background-color:#1C1C1C}.navbar .dropdown-menu a{color:#fff!important}.navbar .dropdown-menu a:hover{background-color:#474747;color:#fff!important}.select2-container--default .select2-selection--single{background-color:#474747}#email,#first_name,#last_name,#password,#password2,.close,.close:hover,.modal-content,.pagination a,.select2-container--default .select2-selection--single .select2-selection__rendered{color:#fff}.modal-footer{border-top:none!important}</style>`)
-        }
       }
       if ({{current_user.is_authenticated|tojson}} === true) {
         console.log("RadhaKrishnaHanuman")
@@ -614,30 +611,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
       } else {
         setCookie('settings',JSON.stringify({font: size, language: "en", theme: "Light"}),30);
       }
-    }
-
-    function setCookie(name,value,days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-    }
-
-    function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-        }
-        return null;
-    }
-    function eraseCookie(name) {
-        document.cookie = name+'=; Max-Age=-99999999;';
     }
 
     function favorite() {
