@@ -59,7 +59,7 @@ packaging==16.8
 psycopg2==2.7
 pyaml==17.12.1
 pycodestyle==2.4.0
-pyflakes==1.6.0
+pyflakes==2.0.0
 PyJWT==1.6.1
 pylint==1.9.1
 pyparsing==2.2.0
