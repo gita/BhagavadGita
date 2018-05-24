@@ -11,7 +11,7 @@ bs4==0.0.1
 certifi==2018.1.18
 click==6.7
 click-conf==0.0.1
-click-stream==0.0.4
+click-stream==0.0.6
 colorama==0.3.9
 elasticsearch==6.2.0
 elasticsearch-loader==0.2.2
