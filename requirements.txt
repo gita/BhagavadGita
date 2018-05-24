@@ -42,7 +42,7 @@ ipaddress==1.0.22
 isort==4.3.4
 itsdangerous==0.24
 Jinja2==2.10
-jsmin==2.2.1
+jsmin==2.2.2
 jsonpickle==0.9.6
 jsonschema==2.6.0
 lazy==1.3
