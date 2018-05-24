@@ -18,7 +18,7 @@ elasticsearch-loader==0.2.2
 Faker==0.7.7
 flake8==3.5.0
 flasgger==0.8.0
-Flask==1.0
+Flask==1.0.2
 Flask-Assets==0.12
 Flask-Babel==0.11.2
 Flask-Compress==1.4.0
