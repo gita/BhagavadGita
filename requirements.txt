@@ -55,7 +55,7 @@ marshmallow-sqlalchemy==0.13.2
 mccabe==0.6.1
 mistune==0.8.3
 oauthlib==2.0.7
-packaging==16.8
+packaging==17.1
 psycopg2==2.7
 pyaml==17.12.1
 pycodestyle==2.4.0
