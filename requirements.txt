@@ -24,7 +24,7 @@ Flask-Babel==0.11.2
 Flask-Compress==1.4.0
 Flask-Dance==0.14.0
 Flask-JWT==0.3.2
-Flask-Login==0.4.0
+Flask-Login==0.4.1
 Flask-Mail==0.9.1
 Flask-Migrate==2.1.1
 flask-msearch==0.1.5
