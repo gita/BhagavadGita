@@ -19,6 +19,7 @@ from .forms import ContactForm
 
 from flask_login import current_user, login_user
 from datetime import datetime, timedelta
+import time
 from werkzeug.security import gen_salt
 
 from flask_dance.consumer import oauth_authorized, oauth_error
@@ -207,27 +208,20 @@ def search():
 
 @main.route('/krishna', methods=['GET', 'POST'])
 def krishna_search():
-    # query = request.args.get('query')
-    # current_app.logger.info(query)
-    # res = es.search(index="verses", body={
-    #   "from": 0, "size": 10,
-    #   "_source": ["meaning"],
-    #   "query": {
-    #     "multi_match": {
-    #       "query": query,
-    #       "fields": ["meaning"]
-    #     }
-    #   }
-    # })
+    query = request.args.get('query')
+    current_app.logger.info(query)
+    res = es.search(index="verses", body={
+      "from": 0, "size": 10,
+      "_source": ["meaning"],
+      "query": {
+        "multi_match": {
+          "query": query,
+          "fields": ["meaning"]
+        }
+      }
+    })
 
-    # verses = res['hits']['hits']
-    sql = """
-        SELECT meaning
-        FROM verses
-        WHERE chapter_number = 1
-    """
-    result = db.session.execute(sql)
-    verses = [r['meaning'] for r in result]
+    verses = res['hits']['hits']
 
     current_app.logger.info(verses)
     return jsonify(verses)
@@ -302,9 +296,12 @@ def chapter_radhakrishna(chapter_number, language):
 
 
 @main.route(
-    '/chapter/<int:chapter_number>/verse/<string:verse_number>/',
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/', defaults={'batch_id': None, 'user_reading_plan_id': None, 'batch_total': None, 'batch_no': None},
     methods=['GET'])
-def verse(chapter_number, verse_number):
+@main.route(
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:user_reading_plan_id>/batch/<int:batch_id>/batch_total/<int:batch_total>/batch_no/<int:batch_no>/',
+    methods=['GET'])
+def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_total, batch_no):
     if chapter_number not in range(1, 19):
         abort(404)
     if verse_number in verse_dict[chapter_number]:
@@ -382,7 +379,11 @@ def verse(chapter_number, verse_number):
                 verse=verse,
                 next_verse=next_verse,
                 previous_verse=previous_verse,
-                language=language)
+                language=language,
+                user_reading_plan_id=user_reading_plan_id,
+                batch_id=batch_id,
+                batch_no=batch_no,
+                batch_total=batch_total)
 
         else:
             return redirect('/chapter/' + str(chapter_number) + '/verse/' +
@@ -522,10 +523,28 @@ def favourite_shlokas():
     return render_template('main/favourite.html', verses=verses)
 
 
-@main.route('/reading-plans/', methods=['GET'])
-def reading_plans():
+@main.route('/badges/', methods=['GET'])
+def badges():
     current_app.logger.info("RadhaKrishna")
-    plans = None
+    badges = None
+    if current_user.is_authenticated:
+        sql = """
+            SELECT *
+            FROM badges
+        """
+        result = db.session.execute(sql)
+        badges = [dict(d) for d in result]
+
+    return render_template('main/badges.html', badges=badges)
+
+
+@main.route('/reading-plans/<string:message>', methods=['GET'])
+@main.route('/reading-plans/', defaults={'message': None}, methods=['GET'])
+def reading_plans(message):
+    current_app.logger.info("RadhaKrishna")
+    plans = []
+    user_plans = []
+    batch_list = []
     if current_user.is_authenticated:
         sql = """
             SELECT *
@@ -534,7 +553,25 @@ def reading_plans():
         result = db.session.execute(sql)
         plans = [dict(d) for d in result]
 
-    return render_template('main/reading_plans.html', plans=plans)
+        sql = """
+            SELECT reading_plan_id, user_reading_plan_id, status
+            FROM user_reading_plans
+            WHERE user_id = %s
+        """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        user_plans = [dict(d) for d in result]
+
+        timestamp = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
+
+        sql = """
+            SELECT DISTINCT(batch_id), user_reading_plan_id
+            FROM user_reading_plan_items
+            WHERE to_char(timestamp, 'YYYY-MM-DD') = '%s'
+        """ % (timestamp)
+        result = db.session.execute(sql)
+        batch_list = [dict(d) for d in result]
+
+    return render_template('main/reading_plans.html', plans=plans, user_plans=user_plans, batch_list=batch_list, message=message)
 
 
 @main.route('/create-reading-plan/<string:reading_plan_id>', methods=['GET'])
@@ -543,7 +580,7 @@ def create_reading_plan(reading_plan_id):
     if current_user.is_authenticated:
         sql = """
             INSERT INTO user_reading_plans
-            VALUES ('%s', '%s', %s)
+            VALUES ('%s', '%s', %s, 0)
             RETURNING user_reading_plan_id
         """ % (gen_salt(10), reading_plan_id, current_user.get_id())
         result = db.session.execute(sql)
@@ -564,21 +601,219 @@ def create_reading_plan(reading_plan_id):
             return zip(*[iter(iterable)]*n)
 
         count = 0
+        batch_id = 1
         verse_list = []
 
         for radha, krishna in grouped(verses, 2):
             verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-                days=count), radha['chapter_number'], radha['verse_number'], "Pending")
+                days=count), radha['chapter_number'], radha['verse_number'], 0, batch_id)
             verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-                days=count), krishna['chapter_number'], krishna['verse_number'], "Pending")
+                days=count), krishna['chapter_number'], krishna['verse_number'], 0, batch_id)
             verse_list.append(verse_one)
             verse_list.append(verse_two)
             count+=1
+            batch_id += 1
+        verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+                days=count), verses[-1]['chapter_number'], verses[-1]['verse_number'], 0, batch_id)
+        verse_list.append(verse_one)
 
         db.session.bulk_save_objects(verse_list)
         db.session.commit()
 
-    return redirect("/reading-plans/")
+    return redirect("/reading-plan/" + str(user_reading_plan_id) + '/1')
+
+@main.route('/reading-plan/<string:user_reading_plan_id>/<int:batch_id>', methods=['GET'])
+def reading_plan(user_reading_plan_id, batch_id):
+    current_app.logger.info("RadhaKrishna")
+    plans = None
+    is_done = 'False'
+    if current_user.is_authenticated:
+        sql = """
+            SELECT urpi.user_reading_plan_item_id, urpi.chapter_number, urpi.verse_number, to_char(timestamp, 'DD MONTH YYYY') as day, urpi.batch_id, urpi.status
+            FROM user_reading_plan_items urpi
+            JOIN user_reading_plans urp
+            ON urpi.user_reading_plan_id = urp.user_reading_plan_id
+            WHERE urp.user_id = %s
+            AND urp.user_reading_plan_id = '%s'
+            AND urpi.batch_id = '%s'
+            ORDER BY urpi.user_reading_plan_item_id asc
+        """ % (current_user.get_id(), user_reading_plan_id, batch_id)
+        result = db.session.execute(sql)
+        plans = [dict(d) for d in result]
+
+        sql = """
+            SELECT COUNT(DISTINCT batch_id) as count
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        total_batches = [dict(d) for d in result][0]['count']
+
+        sql = """
+            SELECT COUNT(*) as count
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+            AND status = 1
+        """ % (user_reading_plan_id, batch_id)
+        result = db.session.execute(sql)
+        is_done = [dict(d) for d in result][0]['count']
+        if is_done == 2: is_done = 'True'
+
+        sql = """
+            SELECT status
+            FROM user_reading_plans
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        status = [dict(r) for r in result][0]['status']
+
+        if status == 1: return redirect(url_for('main.reading_plans'))
+
+    return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches)
+
+
+@main.route('/get-next-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
+def get_next_verse(user_reading_plan_id, batch_id, verse_number, chapter_number):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+            UPDATE user_reading_plan_items
+            SET status = 1
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+            AND chapter_number = %s
+            AND verse_number = '%s'
+        """ % (user_reading_plan_id, batch_id, chapter_number, verse_number)
+        db.session.execute(sql)
+        db.session.commit()
+
+        sql = """
+            SELECT COUNT(*) as total
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        total_verses = [dict(r) for r in result][0]['total']
+
+        sql = """
+            SELECT COUNT(*) as done
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND status = 1
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        done_verses = [dict(r) for r in result][0]['done']
+
+        if total_verses == done_verses:
+            sql = """
+                UPDATE user_reading_plans
+                SET status = 1
+                WHERE user_reading_plan_id = '%s'
+            """ % (user_reading_plan_id)
+            db.session.execute(sql)
+            db.session.commit()
+
+        sql = """
+            SELECT chapter_number, verse_number
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+            AND status = 0
+            ORDER BY user_reading_plan_item_id
+        """ % (user_reading_plan_id, batch_id)
+        result = db.session.execute(sql)
+        next_verse = [dict(r) for r in result]
+        if next_verse != []:
+            return jsonify(next_verse[0])
+        else:
+            return jsonify("None")
+
+
+@main.route('/get-previous-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
+def get_previous_verse(user_reading_plan_id, batch_id, verse_number, chapter_number):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+            SELECT chapter_number, verse_number
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+            AND status = 1
+            ORDER BY user_reading_plan_item_id
+        """ % (user_reading_plan_id, batch_id)
+        result = db.session.execute(sql)
+        previous_verse = [dict(r) for r in result]
+        current_app.logger.info(previous_verse)
+        if previous_verse != []:
+            return jsonify(previous_verse[0])
+        else:
+            return jsonify("None")
+
+
+@main.route('/delete-plan/<string:user_reading_plan_id>/', methods=['GET'])
+def delete_plan(user_reading_plan_id):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+            DELETE FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        db.session.execute(sql)
+
+        sql = """
+            DELETE FROM user_reading_plans
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        db.session.execute(sql)
+        db.session.commit()
+
+        return redirect(url_for('main.reading_plans'))
+
+
+@main.route('/update-verse-status/<string:user_reading_plan_id>/<int:batch_id>/<int:user_reading_plan_item_id>/<int:status>/', methods=['GET'])
+def update_verse_status(user_reading_plan_id, batch_id, user_reading_plan_item_id, status):
+    current_app.logger.info("RadhaKrishna")
+    if current_user.is_authenticated:
+        sql = """
+            UPDATE user_reading_plan_items
+            SET status = %s
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+            AND user_reading_plan_item_id = %s
+        """ % (status, user_reading_plan_id, batch_id, user_reading_plan_item_id)
+        db.session.execute(sql)
+        db.session.commit()
+
+        sql = """
+            SELECT COUNT(*) as total
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        total_verses = [dict(r) for r in result][0]['total']
+        current_app.logger.info(total_verses)
+
+        sql = """
+            SELECT COUNT(*) as done
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND status = 1
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        done_verses = [dict(r) for r in result][0]['done']
+        current_app.logger.info(done_verses)
+
+        if total_verses == done_verses:
+            sql = """
+                UPDATE user_reading_plans
+                SET status = 1
+                WHERE user_reading_plan_id = '%s'
+            """ % (user_reading_plan_id)
+            db.session.execute(sql)
+            db.session.commit()
+
+    return jsonify("RadhaKrishna")
 
 
 @main.route('/progress/', methods=['GET'])
@@ -595,7 +830,7 @@ def progress():
             WHERE user_id = 67
             AND date_part('year', timestamp) = '2018'
             GROUP BY EXTRACT(EPOCH FROM timestamp)
-        """ 
+        """
     result = db.session.execute(sql)
     thegita = {r['date_part']:r['count'] for r in result}
     current_app.logger.info(thegita)

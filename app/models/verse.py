@@ -82,10 +82,12 @@ class UserReadingPlanItems(db.Model):
     chapter_number = db.Column(db.Integer)
     verse_number = db.Column(db.String)
     status = db.Column(db.String)
+    batch_id = db.Column(db.String)
 
-    def __init__(self, user_reading_plan_id, timestamp, chapter_number, verse_number, status):
+    def __init__(self, user_reading_plan_id, timestamp, chapter_number, verse_number, status, batch_id):
         self.user_reading_plan_id = user_reading_plan_id
         self.timestamp = timestamp
         self.chapter_number = chapter_number
         self.verse_number = verse_number
         self.status = status
+        self.batch_id = batch_id

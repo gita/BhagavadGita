@@ -1,0 +1,341 @@
+{% import 'macros/page_macros.html' as page %} {% extends 'layouts/base.html' %} {% block title %}Favourite Shlokas - Bhagavad
+Gita{% endblock %} {% block meta_tags %}
+<meta name="robots" content="noindex"> {% endblock %} {% block content %}
+<nav class="breadcrumb">
+    <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
+    <span class="breadcrumb-item active">{{ _('GITA') }}</span>
+</nav>
+
+<div class="jumbotron" style="margin-top: -1rem;">
+    <div class="container">
+        <div class="text-white text-center d-flex align-items-center">
+            <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
+                <h1 class="card-title pt-3 mb-5 font-bold">{{ _('GITA DAILY') }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" style="margin-bottom: 5vh;">
+    <div class="row">
+        <div class="col-md-12" align="center">
+            <div class="btn-group">
+                {% if batch_id != '1' %}
+                {% set previous_url = request.path[:-1] + ((request.path[-1]|int)-1)|string %}
+                <a class="btn btn-warning" href="{{previous_url}}"><i class="fa fa-arrow-left"></i></a>
+                {% endif %}
+                <a class="btn btn-warning" id="select_date">
+                    {{plans[0]['day']}}
+                </a>
+                {% if request.path[-1] != '328' %}
+                {% set next_url = request.path[:-1] + ((request.path[-1]|int)+1)|string %}
+                <a class="btn btn-warning" href="{{next_url}}"><i class="fa fa-arrow-right"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-bottom: 10vh;">
+    <div class="row">
+        <div class="col-md-12">
+            <h5 align="center"><u><strong>Day ({{batch_id}}/{{total_batches}})</strong></u></h5>
+            {% if is_done == 'True' %}
+            <div align="center">
+                <i class="material-icons" style="font-size: 10rem; color: #F57C00">check_circle</i>
+                <h3><strong>All done.</strong></h3>
+            </div>
+            {% endif %}
+            <hr>
+            {% for plan in plans %}
+            <div class="card warning-color text-center z-depth-2">
+                <div class="card-body">
+                    <div class="checkbox icheck-warning">
+                      <input type="checkbox" value="" id="{{plan.user_reading_plan_item_id}}" {%if plan.status == 1%}checked{% endif %}/>
+                      <label class="form-check-label" for="{{plan.user_reading_plan_item_id}}"><strong>{{ _('Chapter') }} {{plan.chapter_number}} {{ _('Verse') }} {{plan.verse_number}}</strong></label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+            <div align="center">
+              <a class="btn btn-success" href="/chapter/{{plans[0]['chapter_number']}}/verse/{{plans[0]['verse_number']}}/{{user_reading_plan_id}}/batch/{{batch_id}}/batch_total/{{plans|length}}/batch_no/1/"><i class="fa fa-book"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="radhakrishnahanuman" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="radhakrishnaTitle">{{ _('Go to day') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p>Choose from the options below to go to a specific day.</p>
+          <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+              <select class="js-example-basic-single" id="day" name="day" style="width: 100%;">
+                <option value="0" disabled="true" selected="true">{{ _('Select Day') }}</option>
+                {% for i in range(1, total_batches+1) %}
+                <option value="{{i}}">Day {{i}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-warning btn-rounded waves-effect waves-light" data-dismiss="modal">{{ _('Close') }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@font-face {
+  font-family: 'Samarkan';
+  src: url('/static/font/samarkan.woff') format('woff'),
+   url('/static/font/samarkan.woff') format('truetype');
+}
+
+    .jumbotron {
+        background-image: url("/static/images/gita/bhagavadgita-2.jpg");
+        background-size: cover;
+    }
+
+    .btn-rounded {
+        border-radius: 10em;
+    }
+
+    h1 {
+        text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
+    }
+
+    .nav-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: -webkit-box;
+    display: -moz-box;
+    }
+    .nav-tabs>li {
+    float: none;
+    }
+
+ [class*="icheck-"] {
+    min-height: 22px;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    padding-left: 0px;
+}
+
+.icheck-inline {
+    display: inline-block;
+}
+
+    .icheck-inline + .icheck-inline {
+        margin-left: .75rem;
+        margin-top: 6px;
+    }
+
+[class*="icheck-"] > label {
+    padding-left: 29px !important;
+    min-height: 22px;
+    line-height: 22px;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+[class*="icheck-"] > input:first-child {
+    position: absolute !important;
+    opacity: 0;
+    margin: 0;
+}
+
+    [class*="icheck-"] > input:first-child:disabled {
+        cursor: default;
+    }
+
+    [class*="icheck-"] > input:first-child + label::before,
+    [class*="icheck-"] > input:first-child + input[type="hidden"] + label::before {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #FFECB3;
+        border-radius: 0px;
+        margin-left: -29px;
+    }
+
+    [class*="icheck-"] > input:first-child:checked + label::after,
+    [class*="icheck-"] > input:first-child:checked + input[type="hidden"] + label::after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 9px;
+        height: 17px;
+        border: solid 2px #fff;
+        border-left: none;
+        border-top: none;
+        transform: translate(10.75px, 1.5px) rotate(45deg);
+        -ms-transform: translate(10.75px, 1.5px) rotate(45deg);
+    }
+
+[class*="icheck-"] > input[type="radio"]:first-child + label::before,
+[class*="icheck-"] > input[type="radio"]:first-child + input[type="hidden"] + label::before {
+    border-radius: 50%;
+}
+
+[class*="icheck-"] > input:first-child:not(:checked):not(:disabled):hover + label::before,
+[class*="icheck-"] > input:first-child:not(:checked):not(:disabled):hover + input[type="hidden"] + label::before {
+    border-width: 2px;
+}
+
+[class*="icheck-"] > input:first-child:disabled + label,
+[class*="icheck-"] > input:first-child:disabled + input[type="hidden"] + label,
+[class*="icheck-"] > input:first-child:disabled + label::before,
+[class*="icheck-"] > input:first-child:disabled + input[type="hidden"] + label::before {
+    pointer-events: none;
+    cursor: default;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .65;
+}
+
+.icheck-warning > input:first-child:not(:checked):not(:disabled):hover + label::before,
+.icheck-warning > input:first-child:not(:checked):not(:disabled):hover + input[type="hidden"] + label::before {
+    border-color: #BDBDBD;
+}
+
+.icheck-warning > input:first-child:checked + label::before,
+.icheck-warning > input:first-child:checked + input[type="hidden"] + label::before {
+    background-color: #FF9800;
+    border-color: #F57C00;
+}
+
+body > div:nth-child(8) > div > div > div > div > div > label {
+  font-family: samarkan;
+  font-size: 2rem
+}
+
+body > div:nth-child(8) > div > div > div > div > div > label > strong {
+  margin-left: 1rem;
+  line-height: 2rem!important;
+}
+
+.btn-success {
+    background-color: #4CAF50!important;
+    color: #fff!important;
+}
+
+.select2 .selection .select2-selection--single, .select2-container--default .select2-search--dropdown .select2-search__field {
+    border-width: 0 0 1px 0 !important;
+    border-radius: 0 !important;
+    height: 2.05rem;
+}
+
+.select2-container--default .select2-selection--multiple, .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-width: 0 0 1px 0 !important;
+    border-radius: 0 !important;
+}
+
+.select2-results__option {
+    color: #66bb6a;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #eee !important;
+    color: #66bb6a !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #e1e1e1 !important;
+}
+
+.select2-dropdown {
+    border: none !important;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.select2-container--default .select2-results__option[role=group] .select2-results__group {
+    background-color: #333333;
+    color: #fff;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+    margin-top: 0 !important;
+}
+
+.select2-container .select2-search--inline .select2-search__field:focus {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.select2-container .select2-selection--multiple {
+    min-height: 2.05rem !important;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #ddd !important;
+    color: rgba(0,0,0,0.26);
+    border-bottom: 1px dotted rgba(0,0,0,0.26);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    color: #FF9800 !important;
+}
+
+.select2-results__option {
+    color: #FF9800;
+}
+
+input[type=search]:not(.browser-default):focus:not([readonly]) {
+  border-bottom: 1px solid #FF9800;
+  box-shadow: 0 1px 0 0 #FF9800;
+}
+</style>
+
+<script>
+    $('.js-example-basic-single').select2();
+    $(':checkbox').change(function() {
+        if (this.checked) {
+            update_status("{{user_reading_plan_id}}", {{batch_id}}, this.id, 1)
+        } else {
+            update_status("{{user_reading_plan_id}}", {{batch_id}}, this.id, 0)
+        }
+    });
+
+    function update_status(user_reading_plan_id, batch_id, id, status) {
+      axios.get("/update-verse-status/" + user_reading_plan_id + '/' + batch_id + '/' + id + '/' + status + '/')
+      .then(function (response) {
+          console.log("RadhaKrishna")
+        })
+    }
+
+    $('#select_date').click(function(e) {
+      e.preventDefault()
+      $('#radhakrishnahanuman').modal()
+    })
+
+    $('#day').on("change", function (e) {
+      day = $( "#day option:selected" ).val();
+        window.location.href = "/reading-plan/{{user_reading_plan_id}}/" + day;
+    })
+</script>
+
+{% endblock %}

@@ -136,6 +136,10 @@
           href="/favourite-shlokas/">{{ _('Favourite Shlokas') }}</a>
       </li>
       <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.reading_plans' %}active{% endif %}"
+          href="/reading-plans/">{{ _('Reading Plans') }}</a>
+      </li>
+      <li>
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.progress' %}active{% endif %}"
           href="/progress/">{{ _('Progress') }}</a>
       </li>
@@ -147,6 +151,12 @@
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.verse_of_the_day' %}active{% endif %}"
           href="/verse-of-the-day/">{{ _('Verse of the day') }}</a>
       </li>
+      {% if current_user.is_authenticated %}
+      <li>
+        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.badges' %}active{% endif %}"
+          href="/badges/">{{ _('Badges') }}</a>
+      </li>
+      {% endif %}
       <hr>
       <li>
         {{ account_items(current_user) }}

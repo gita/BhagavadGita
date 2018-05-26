@@ -72,17 +72,37 @@
       <div class="col-md-12">
         <div class="card orange lighten-3 text-center z-depth-2 h-100" id="verse-card">
           <div class="card-body">
+            {% if batch_id != None and user_reading_plan_id != None %}
+              {% if batch_no > 1 %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light previous-btn"
+              style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+              <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+              {% else %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light"
+              href="/reading-plan/{{user_reading_plan_id}}/{{batch_id}}"
+              style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+              <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+              {% endif %}
+
+              <a class="btn btn-success btn-rounded waves-effect waves-light next-btn"
+              style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+              <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+
+            {% else %}
               {% if previous_verse != None %}
               <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}/"
  style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
                 <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
-              {% else %} {% set previous_chapter = chapter.chapter_number - 1 %} {% if previous_chapter == 0 %}
-<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
-                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
               {% else %}
-<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
-                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
-              {% endif %}
+
+                {% set previous_chapter = chapter.chapter_number - 1 %}
+                {% if previous_chapter == 0 %}
+  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                  <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+                {% else %}
+  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                  <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+                {% endif %}
               {% endif %}
 
               {% if next_verse != None %}
@@ -100,6 +120,8 @@
               </a>
               {% endif %}
               {% endif %}
+
+            {% endif %}
 
               <h4 class="font-up font-bold mt-2 mb-3" style="font-size: 1.2rem;"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
 
@@ -146,25 +168,45 @@
               {% endif %}
               <br>
               <p></p>
-              {% if previous_verse != None %}
-                <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS VERSE') }}</a>
-              {% else %}
-                {% set previous_chapter = chapter.chapter_number - 1 %}
-                {% if previous_chapter == 0 %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('ALL CHAPTERS') }}</a>
-                {% else %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.85rem 1.13rem;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i> {{ _('PREVIOUS CHAPTER') }}</a>
-                {% endif %}
-              {% endif %}
 
-              {% if next_verse != None %}
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT VERSE') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
-              {% else %}
-                {% set next_chapter = chapter.chapter_number + 1 %}
-                {% if next_chapter == 19 %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.13rem;">{{ _('ALL CHAPTERS') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+              {% if batch_id != None and user_reading_plan_id != None %}
+                {% if batch_no > 1 %}
+                <a class="btn btn-warning btn-rounded waves-effect waves-light previous-btn"
+                style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
                 {% else %}
-                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.85rem 1.7rem;">{{ _('NEXT CHAPTER') }} <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                <a class="btn btn-warning btn-rounded waves-effect waves-light"
+                href="/reading-plan/{{user_reading_plan_id}}/{{batch_id}}"
+                style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+                {% endif %}
+
+                <a class="btn btn-success btn-rounded waves-effect waves-light next-btn"
+                style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+
+              {% else %}
+
+                {% if previous_verse != None %}
+                  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+                {% else %}
+                  {% set previous_chapter = chapter.chapter_number - 1 %}
+                  {% if previous_chapter == 0 %}
+                    <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+                  {% else %}
+                    <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;"><i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
+                  {% endif %}
+                {% endif %}
+
+                {% if next_verse != None %}
+                <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;"><i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                {% else %}
+                  {% set next_chapter = chapter.chapter_number + 1 %}
+                  {% if next_chapter == 19 %}
+                    <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;"><i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                  {% else %}
+                    <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;"><i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                  {% endif %}
                 {% endif %}
               {% endif %}
           </div>
@@ -479,6 +521,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 .container {
   margin-top: 4.5rem
 }
+
+.btn-success {
+    background-color: #4CAF50!important;
+    color: #fff!important;
+}
   </style>
 
 <script>
@@ -634,23 +681,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
             console.log("Krishna")
           }
       })
-
-      // return JSON.parse(
-      //   $.ajax({
-      //     type: 'GET',
-      //     url: "/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/",
-      //     dataType: 'json',
-      //     async: false,
-      //     data: ({}),
-      //     success: function(msg) {
-      //       if (msg === "RadhaKrishna") {
-      //         console.log(msg)
-      //       }
-      //     },
-      //     error: function(msg) {
-      //       alert("Please reload and try again.")
-      //     },
-      //   }).responseText);
     }
 
     function get_favourite(chapter_number, verse_number) {
@@ -665,29 +695,41 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
             $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
           }
         })
-      // return JSON.parse(
-      //   $.ajax({
-      //     type: 'GET',
-      //     url: "/get-favourite/" + chapter_number + "/" + verse_number + "/",
-      //     dataType: 'json',
-      //     async: false,
-      //     data: ({}),
-      //     success: function(msg) {
-      //       console.log("RadhaKrishna")
-      //       if (msg === "True") {
-      //         alert("True")
-      //         $('#favouriteverse').empty()
-      //         $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
-      //       } else {
-      //         alert("False")
-      //         $('#favouriteverse').empty()
-      //         $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
-      //       }
-      //     },
-      //     error: function(msg) {
-      //       alert("Please reload and try again.")
-      //     },
-      //   }).responseText);
+    }
+
+    $('.next-btn').click(function(e) {
+      e.preventDefault();
+      next_verse("{{user_reading_plan_id}}", {{batch_id}}, {{verse.chapter_number}}, "{{verse.verse_number}}")
+    })
+
+    $('.previous-btn').click(function(e) {
+      e.preventDefault();
+      previous_verse("{{user_reading_plan_id}}", {{batch_id}}, {{verse.chapter_number}}, "{{verse.verse_number}}")
+    })
+
+
+    function next_verse(user_reading_plan_id, batch_id, chapter_number, verse_number) {
+      axios.get("/get-next-verse/" + user_reading_plan_id + '/' + batch_id + '/' + chapter_number + "/" + verse_number + "/")
+      .then(function (response) {
+          console.log(response['data']['chapter_number'])
+          if (response.data === "None") {
+            window.location.href = "/reading-plan/{{user_reading_plan_id}}/{{batch_id}}"
+          } else {
+            window.location.href = '/chapter/' + response['data']['chapter_number'] + "/verse/" + response['data']['verse_number'] + '/' + user_reading_plan_id + '/batch/' + batch_id + '/batch_total/' + {{batch_total}} + '/batch_no/' + ({{batch_no}} + 1) + '/';
+          }
+        })
+    }
+
+    function previous_verse(user_reading_plan_id, batch_id, chapter_number, verse_number) {
+      axios.get("/get-previous-verse/" + user_reading_plan_id + '/' + batch_id + '/' + chapter_number + "/" + verse_number + "/")
+      .then(function (response) {
+          console.log(response['data']['chapter_number'])
+          if (response.data === "None") {
+            window.location.href = "/reading-plan/{{user_reading_plan_id}}/{{batch_id}}"
+          } else {
+            window.location.href = '/chapter/' + response['data']['chapter_number'] + "/verse/" + response['data']['verse_number'] + '/' + user_reading_plan_id + '/batch/' + batch_id + '/batch_total/' + {{batch_total}} + '/batch_no/' + ({{batch_no}} - 1) + '/';
+          }
+        })
     }
   </script>
   <script>
