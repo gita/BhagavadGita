@@ -1,10 +1,10 @@
 'use strict';
-const cacheName = 'bhagavadgitaio';
+const cacheName = 'bhagavadgita';
 const startPage = 'https://bhagavadgita.io/';
 const offlinePage = 'https://bhagavadgita.io/';
 const fallbackImage = 'https://bhagavadgita.io/static/images/sribhagavadgita.jpg';
 const filesToCache = [startPage, offlinePage, fallbackImage];
-const neverCacheUrls = ['/register'];
+const neverCacheUrls = ['/register', '/favourite/', '/get-favourite/'];
 
 self.addEventListener('install', function(e) {
     console.log('BhagavadGita service worker installation');
