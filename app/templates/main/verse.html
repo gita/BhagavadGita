@@ -681,7 +681,7 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     function favourite(chapter_number, verse_number, value) {
       axios.get("/favourite/" + chapter_number + "/" + verse_number + "/" + value + "/")
       .then(function (response) {
-          if (response.data) {
+          if (response.data.length > 0) {
             $('body').append(`<div class="modal fade" id="vrindavan` + response.data[0].badge_id + `" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered" role="document"> <div class="modal-content"> <div class="modal-header text-center" style="border-bottom: none"> <h5 class="modal-title w-100" id="vrindavanTitle">{{_('Achievement Unlocked')}}</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div><div class="modal-body"> <div align="center"> <img src="` + response.data[0].badge_image + `" alt="Complete" height="100" width="100"> <h5>` + response.data[0].badge_name + `</h5> <br><p>` + response.data[0].badge_description + `</p><p> <b>Jai Shri Krishna!</b> </p></div></div></div></div></div>`)
             const badge_list = response.data
             if (badge_list != []) {
@@ -701,29 +701,9 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
           if (response.data === "True") {
             $('#favouriteverse').empty()
             $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/radhakrishna.js').then(function(registration) {
-                      console.log('Radhe Radhe');
-                      registration.update();
-                  }).catch(function(error) {
-                      console.log('Jai Shri Radha Krishna ' + error);
-                  });
-              });
-            }
           } else {
             $('#favouriteverse').empty()
             $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/radhakrishna.js').then(function(registration) {
-                      console.log('Radhe Radhe');
-                      registration.update();
-                  }).catch(function(error) {
-                      console.log('Jai Shri Radha Krishna ' + error);
-                  });
-              });
-            }
           }
         })
     }
@@ -762,17 +742,5 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
           }
         })
     }
-  </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/radhakrishna.js').then(function(registration) {
-            console.log('Radhe Radhe');
-            registration.update();
-        }).catch(function(error) {
-            console.log('Jai Shri Radha Krishna ' + error);
-        });
-    });
-  }
   </script>
 {% endblock %}
