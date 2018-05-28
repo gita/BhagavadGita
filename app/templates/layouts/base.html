@@ -157,6 +157,34 @@
           </div>
         </div>
 
+        {% if badge_list %}
+        {% for badge in badge_list %}
+        <div class="modal fade" id="vrindavan{{badge['badge_id']}}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header text-center" style="border-bottom: none">
+                <h5 class="modal-title w-100" id="vrindavanTitle">{{ _('Achievement Unlocked') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div align="center">
+                  <img src="{{badge['badge_image']}}" alt="Complete" height="100" width="100">
+                  <h5>{{badge['badge_name']}}</h5>
+                  <br>
+                  <p>{{badge['badge_description']}}</p>
+                  <p>
+                    <b>Jai Shri Krishna!</b>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
         <style>
           body {
             padding-left: 300px;
@@ -316,6 +344,28 @@
               $('html, body').animate({scrollTop: 0}, 300);
             })
           });
+
+          const badge_list = {{badge_list|safe}}
+          if (badge_list != []) {
+            for (const s of badge_list) {
+              var vrindavan = '#vrindavan' + s['badge_id']
+              $(vrindavan).modal()
+            }
+          }
+
+          function share() {
+            axios.get("/share")
+            .then(function (response) {
+                $('body').append(`<div class="modal fade" id="vrindavan` + response.data[0].badge_id + `" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered" role="document"> <div class="modal-content"> <div class="modal-header text-center" style="border-bottom: none"> <h5 class="modal-title w-100" id="vrindavanTitle">{{_('Achievement Unlocked')}}</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div><div class="modal-body"> <div align="center"> <img src="` + response.data[0].badge_image + `" alt="Complete" height="100" width="100"> <h5>` + response.data[0].badge_name + `</h5> <br><p>` + response.data[0].badge_description + `</p><p> <b>Jai Shri Krishna!</b> </p></div></div></div></div></div>`)
+                const badge_list = response.data
+                if (badge_list != []) {
+                  for (const s of badge_list) {
+                    var vrindavan = '#vrindavan' + response.data[0].badge_id
+                    $(vrindavan).modal()
+                  }
+                }
+            })
+          }
         </script>
     </body>
 </html>

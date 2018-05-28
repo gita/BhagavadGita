@@ -24,21 +24,23 @@
 </div>
 
 <div class="container" style="margin-bottom: 10vh;">
-  <div class="row">
-    <div class="col-md-12">
       {% if current_user.is_authenticated %}
-        {% if badges %}
+        <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
+          <h3>{{ _('Your Badges') }}</h3>
+        </div>
+        {% if user_badges %}
           <div class="row">
             {% for badge in badges %}
-            <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
-              <div class="card white darken-1 text-center z-depth-2 h-100">
-                <a class="waves-effect waves-light">
-                  <div class="card-body">
-                      <img class="card-img-top" src="/static/images/book.png" alt="Card image">
-                  </div>
-                </a>
+            {% if badge['badge_id'] in user_badges %}
+            <div class="col-lg-3 col-md-3 col-sm-4 col-6 mb-3 h-100">
+              <div class="card">
+                <img class="card-img-top" src="{{badge['badge_image']}}" alt="{{badge['badge_name']}}">
+                <div class="card-body">
+                  <h5 class="card-title text-center"><strong>{{badge['badge_name']}}</strong></h5>
+                </div>
               </div>
             </div>
+          {% endif %}
           {% endfor %}
           </div>
         {% else %}
@@ -46,11 +48,34 @@
           <div class="card-body">
             <i class="material-icons" style="font-size: 10rem; color: #F57C00">grade</i>
             <h3><strong>No Badges yet.</strong></h3>
-            <h5>Please read through some of the chapters and come back again.</h5>
+            <h5>Please earn some badges and come back again.</h5>
           </div>
         </div>
         {% endif %}
+
+        <br>
+        <hr>
+
+        <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
+          <h3>{{ _('Badges To Be Earned') }}</h3>
+        </div>
+        <br>
+          <div class="row">
+            {% for badge in badges %}
+            {% if badge['badge_id'] not in user_badges %}
+            <div class="col-lg-3 col-md-3 col-sm-4 col-6 mb-3 h-100">
+              <div class="card">
+                <img class="card-img-top" src="{{badge['badge_image']}}" alt="{{badge['badge_name']}}" style="filter: grayscale(100%)">
+                <div class="card-body">
+                  <h5 class="card-title text-center"><strong>{{badge['badge_name']}}</strong></h5>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
       {% else %}
+
       <div class="card warning-color text-center z-depth-2 h-100">
         <div class="card-body">
           <i class="material-icons" style="font-size: 10rem; color: #F57C00">grade</i>
@@ -59,8 +84,6 @@
         </div>
       </div>
       {% endif %}
-    </div>
-  </div>
 </div>
 
 <style>
@@ -73,6 +96,18 @@
 }
 h1 {
   text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
+}
+.hanuman-gradient-text[data-color="hanuman-gradient"][data-direction="horizontal"] * {
+  background-image: linear-gradient(to right,#ff4f0f,#fd8e26);
+}
+.hanuman-gradient-text[data-color="hanuman-gradient"] *, .list-icon-holder[data-icon_type="numerical"] span {
+  color: #ff4f0f;
+  background: linear-gradient(to bottom right,#ff4f0f,#fd8e26);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  display: inline-block;
 }
 </style>
 

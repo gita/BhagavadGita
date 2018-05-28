@@ -140,7 +140,6 @@ verse_dict = {
     },
 }
 
-
 @babel.localeselector
 def get_locale():
     if "settings" in request.cookies:
@@ -152,6 +151,7 @@ def get_locale():
 
 @main.route('/', methods=['GET'])
 def index():
+    badge_list = []
     language = "en"
     if "settings" in request.cookies:
         if json.loads(request.cookies.get('settings'))["language"]:
@@ -161,13 +161,14 @@ def index():
         chapters = ChapterModel.query.order_by(
             ChapterModel.chapter_number).all()
         return render_template(
-            'main/index.html', chapters=chapters, language=language)
+            'main/index.html', chapters=chapters, language=language, badge_list=badge_list)
     else:
         return redirect('/' + language + '/')
 
 
 @main.route('/<string:language>/', methods=['GET'])
 def index_radhakrishna(language):
+    badge_list = []
     if language not in LANGUAGES.keys():
         abort(404)
     chapter_table = "chapters_" + language
@@ -183,11 +184,12 @@ def index_radhakrishna(language):
     chapters = db.session.execute(sql)
 
     return render_template(
-        'main/index.html', chapters=chapters, language=language)
+        'main/index.html', chapters=chapters, language=language, badge_list=badge_list)
 
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
+    badge_list = []
     query = request.args.get('query')
     res = es.search(index="verses", body={
       "from": 0, "size": 1000,
@@ -203,7 +205,7 @@ def search():
 
     current_app.logger.info(verses)
     return render_template(
-        'main/search.html', verses=verses, query=request.args.get('query'))
+        'main/search.html', verses=verses, query=request.args.get('query'), badge_list=badge_list)
 
 
 @main.route('/krishna', methods=['GET', 'POST'])
@@ -257,6 +259,7 @@ def get_all_verse_numbers(chapter_number):
 
 @main.route('/chapter/<int:chapter_number>/', methods=['GET'])
 def chapter(chapter_number):
+    badge_list = []
     if chapter_number not in range(1, 19):
         abort(404)
     language = "en"
@@ -273,7 +276,7 @@ def chapter(chapter_number):
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
         verses = VerseModel.query.filter_by(chapter_number = chapter_number).order_by(VerseModel.verse_order).paginate(per_page=6, page=page_number, error_out=True)
         return render_template(
-            'main/chapter.html', chapter=chapter, verses=verses)
+            'main/chapter.html', chapter=chapter, verses=verses, badge_list=badge_list)
     else:
         return redirect(
             '/chapter/' + str(chapter_number) + '/' + language + '/')
@@ -282,6 +285,7 @@ def chapter(chapter_number):
 @main.route(
     '/chapter/<int:chapter_number>/<string:language>/', methods=['GET'])
 def chapter_radhakrishna(chapter_number, language):
+    badge_list = []
     if chapter_number not in range(1, 19):
         abort(404)
     if language not in LANGUAGES.keys():
@@ -292,7 +296,7 @@ def chapter_radhakrishna(chapter_number, language):
         page_number = 1
     chapter = ChapterModel.query.join(ChapterModelHindi, ChapterModel.chapter_number==ChapterModelHindi.chapter_number).add_columns(ChapterModelHindi.name_translation, ChapterModelHindi.name_meaning, ChapterModelHindi.chapter_summary, ChapterModel.image_name, ChapterModel.chapter_number).filter(ChapterModel.chapter_number == chapter_number).order_by(ChapterModel.chapter_number).first()
     verses = VerseModelHindi.query.filter_by(chapter_number = chapter_number).order_by(VerseModelHindi.verse_order).paginate(per_page=6, page=page_number, error_out=True)
-    return render_template('main/chapter.html', chapter=chapter, verses=verses)
+    return render_template('main/chapter.html', chapter=chapter, verses=verses, badge_list = badge_list)
 
 
 @main.route(
@@ -302,6 +306,8 @@ def chapter_radhakrishna(chapter_number, language):
     '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:user_reading_plan_id>/batch/<int:batch_id>/batch_total/<int:batch_total>/batch_no/<int:batch_no>/',
     methods=['GET'])
 def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_total, batch_no):
+    badge = {}
+    badge_list = []
     if chapter_number not in range(1, 19):
         abort(404)
     if verse_number in verse_dict[chapter_number]:
@@ -331,6 +337,69 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
 
                 db.session.execute(sql)
                 db.session.commit()
+
+            sql = """
+                    SELECT COUNT(*) as count
+                    FROM user_progress
+                    WHERE user_id = %s
+                """ % (current_user.get_id())
+            result = db.session.execute(sql)
+            total = [dict(r) for r in result][0]['count']
+
+            badge_id_list = []
+            verse_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
+            if total in verse_badges.keys(): badge_id_list.append(verse_badges[total])
+
+            sql = """
+                    SELECT COUNT(*) as count
+                    FROM verses
+                    WHERE chapter_number = %s
+                """ % (chapter_number)
+            result = db.session.execute(sql)
+            total_chapter_count = [dict(r) for r in result][0]['count']
+
+            sql = """
+                    SELECT COUNT(*) as count
+                    FROM user_progress
+                    WHERE user_id = %s
+                    AND chapter = %s
+                """ % (current_user.get_id(), chapter_number)
+            result = db.session.execute(sql)
+            chapter_count = [dict(r) for r in result][0]['count']
+
+            chapter_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
+            
+            if chapter_count == total_chapter_count: badge_id_list.append(chapter_number+9)
+
+            if badge_id_list != []:
+                for badge_id in badge_id_list:
+                    sql = """
+                            SELECT COUNT(*) as count
+                            FROM user_badges
+                            WHERE user_id = %s
+                            AND badge_id = %s
+                        """ % (current_user.get_id(), badge_id)
+                    result = db.session.execute(sql)
+                    badge_count = [dict(r) for r in result][0]['count']
+
+                    if badge_count < 1:
+                        timestamp = datetime.now()
+                        sql = """
+                            INSERT INTO user_badges (user_id, badge_id, timestamp)
+                            VALUES (%s, %s, '%s')
+                        """ % (current_user.get_id(), badge_id, timestamp)
+                        db.session.execute(sql)
+                        db.session.commit()
+
+                        sql = """
+                            SELECT *
+                            FROM badges
+                            WHERE badge_id = %s
+                        """ % (badge_id)
+                        result = db.session.execute(sql)
+                        badge = [dict(r) for r in result][0]
+                        badge_list.append(badge)
+            current_app.logger.info(badge_list)
 
         if "settings" in request.cookies:
             if json.loads(request.cookies.get('settings'))["language"]:
@@ -383,7 +452,8 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                 user_reading_plan_id=user_reading_plan_id,
                 batch_id=batch_id,
                 batch_no=batch_no,
-                batch_total=batch_total)
+                batch_total=batch_total,
+                badge_list=badge_list)
 
         else:
             return redirect('/chapter/' + str(chapter_number) + '/verse/' +
@@ -391,9 +461,14 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
 
 
 @main.route(
-    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/',
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/', defaults={'batch_id': None, 'user_reading_plan_id': None, 'batch_total': None, 'batch_no': None},
     methods=['GET'])
-def verse_radhakrishna(chapter_number, verse_number, language):
+@main.route(
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/<string:user_reading_plan_id>/batch/<int:batch_id>/batch_total/<int:batch_total>/batch_no/<int:batch_no>/',
+    methods=['GET'])
+def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan_id, batch_id, batch_total, batch_no):
+    badge = {}
+    badge_list = []
     if chapter_number not in range(1, 19):
         abort(404)
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
@@ -415,6 +490,92 @@ def verse_radhakrishna(chapter_number, verse_number, language):
 
     if verse is None:
         abort(404)
+
+    if current_user.is_authenticated:
+        sql = """
+                SELECT COUNT(user_progress_id)
+                FROM user_progress
+                WHERE user_id = %s
+                AND chapter = %s
+                AND verse = '%s'
+            """ % (current_user.get_id(), chapter_number, verse_number)
+        result = db.session.execute(sql)
+        count = [dict(r) for r in result][0]['count']
+
+        if count < 1:
+            timestamp = datetime.now()
+            sql = """
+                    INSERT INTO user_progress (user_id, chapter, verse, timestamp)
+                    VALUES (%s, %s, '%s', '%s')
+                """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+
+            db.session.execute(sql)
+            db.session.commit()
+
+        sql = """
+                SELECT COUNT(*) as count
+                FROM user_progress
+                WHERE user_id = %s
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        total = [dict(r) for r in result][0]['count']
+
+        badge_id_list = []
+        verse_badges = {1: 1, 10: 5, 100: 7, 500: 8, 700: 9}
+        if total in verse_badges.keys():
+            badge_id_list.append(verse_badges[total])
+
+        sql = """
+                SELECT COUNT(*) as count
+                FROM verses
+                WHERE chapter_number = %s
+            """ % (chapter_number)
+        result = db.session.execute(sql)
+        total_chapter_count = [dict(r) for r in result][0]['count']
+
+        sql = """
+                SELECT COUNT(*) as count
+                FROM user_progress
+                WHERE user_id = %s
+                AND chapter = %s
+            """ % (current_user.get_id(), chapter_number)
+        result = db.session.execute(sql)
+        chapter_count = [dict(r) for r in result][0]['count']
+
+        chapter_badges = {1: 1, 10: 5, 100: 7, 500: 8, 700: 9}
+
+        if chapter_count == total_chapter_count:
+            badge_id_list.append(chapter_number+9)
+
+        if badge_id_list != []:
+            for badge_id in badge_id_list:
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_badges
+                        WHERE user_id = %s
+                        AND badge_id = %s
+                    """ % (current_user.get_id(), badge_id)
+                result = db.session.execute(sql)
+                badge_count = [dict(r) for r in result][0]['count']
+
+                if badge_count < 1:
+                    timestamp = datetime.now()
+                    sql = """
+                        INSERT INTO user_badges (user_id, badge_id, timestamp)
+                        VALUES (%s, %s, '%s')
+                    """ % (current_user.get_id(), badge_id, timestamp)
+                    db.session.execute(sql)
+                    db.session.commit()
+
+                    sql = """
+                        SELECT *
+                        FROM badges
+                        WHERE badge_id = %s
+                    """ % (badge_id)
+                    result = db.session.execute(sql)
+                    badge = [dict(r) for r in result][0]
+                    badge_list.append(badge)
+        current_app.logger.info(badge_list)
 
     max_verse_number = VerseModel.query.order_by(
         VerseModel.verse_order.desc()).filter_by(
@@ -442,7 +603,12 @@ def verse_radhakrishna(chapter_number, verse_number, language):
         verse=verse,
         next_verse=next_verse,
         previous_verse=previous_verse,
-        language=language)
+        language=language,
+        user_reading_plan_id=user_reading_plan_id,
+        batch_id=batch_id,
+        batch_no=batch_no,
+        batch_total=batch_total,
+        badge_list=badge_list)
 
 
 @main.route(
@@ -450,6 +616,7 @@ def verse_radhakrishna(chapter_number, verse_number, language):
     methods=['GET'])
 def favourite(chapter_number, verse_number, value):
     current_app.logger.info("RadhaKrishna")
+    badge_list = []
     if current_user.is_authenticated:
         sql = """
                 SELECT COUNT(user_favourite_id)
@@ -477,7 +644,88 @@ def favourite(chapter_number, verse_number, value):
                 """ % (current_user.get_id(), chapter_number, verse_number)
         db.session.execute(sql)
         db.session.commit()
-    return jsonify("RadhaKrishna")
+
+        sql = """
+                SELECT COUNT(*) as count
+                FROM user_favourite
+                WHERE user_id = %s
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        total = [dict(r) for r in result][0]['count']
+
+        badge_id_list = []
+        badge_favorites = {1:28, 10:29, 100:30}
+        if total in badge_favorites.keys():
+            badge_id_list.append(badge_favorites[total])
+
+        if badge_id_list != []:
+            for badge_id in badge_id_list:
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_badges
+                        WHERE user_id = %s
+                        AND badge_id = %s
+                    """ % (current_user.get_id(), badge_id)
+                result = db.session.execute(sql)
+                badge_count = [dict(r) for r in result][0]['count']
+
+                if badge_count < 1:
+                    timestamp = datetime.now()
+                    sql = """
+                        INSERT INTO user_badges (user_id, badge_id, timestamp)
+                        VALUES (%s, %s, '%s')
+                    """ % (current_user.get_id(), badge_id, timestamp)
+                    db.session.execute(sql)
+                    db.session.commit()
+
+                    sql = """
+                        SELECT *
+                        FROM badges
+                        WHERE badge_id = %s
+                    """ % (badge_id)
+                    result = db.session.execute(sql)
+                    badge = [dict(r) for r in result][0]
+                    badge_list.append(badge)
+    return jsonify(badge_list)
+
+
+@main.route(
+    '/share',
+    methods=['GET'])
+def share():
+    current_app.logger.info("RadhaKrishna")
+    badge_list = []
+    if current_user.is_authenticated:
+        badge_id_list = [34]
+        if badge_id_list != []:
+            for badge_id in badge_id_list:
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_badges
+                        WHERE user_id = %s
+                        AND badge_id = %s
+                    """ % (current_user.get_id(), badge_id)
+                result = db.session.execute(sql)
+                badge_count = [dict(r) for r in result][0]['count']
+
+                if badge_count < 1:
+                    timestamp = datetime.now()
+                    sql = """
+                        INSERT INTO user_badges (user_id, badge_id, timestamp)
+                        VALUES (%s, %s, '%s')
+                    """ % (current_user.get_id(), badge_id, timestamp)
+                    db.session.execute(sql)
+                    db.session.commit()
+
+                    sql = """
+                        SELECT *
+                        FROM badges
+                        WHERE badge_id = %s
+                    """ % (badge_id)
+                    result = db.session.execute(sql)
+                    badge = [dict(r) for r in result][0]
+                    badge_list.append(badge)
+    return jsonify(badge_list)
 
 
 @main.route(
@@ -515,27 +763,39 @@ def api():
 
 @main.route('/favourite-shlokas/', methods=['GET'])
 def favourite_shlokas():
+    badge_list = []
     current_app.logger.info("RadhaKrishna")
     verses = None
     if current_user.is_authenticated:
         verses = UserFavourite.query.filter_by(user_id = current_user.get_id()).order_by(UserFavourite.user_favourite_id.desc()).all()
 
-    return render_template('main/favourite.html', verses=verses)
+    return render_template('main/favourite.html', verses=verses, badge_list = badge_list)
 
 
 @main.route('/badges/', methods=['GET'])
 def badges():
     current_app.logger.info("RadhaKrishna")
     badges = None
+    badge_list = []
     if current_user.is_authenticated:
         sql = """
             SELECT *
             FROM badges
+            ORDER BY badges.badge_id
         """
         result = db.session.execute(sql)
         badges = [dict(d) for d in result]
 
-    return render_template('main/badges.html', badges=badges)
+        sql = """
+            SELECT badge_id
+            FROM user_badges
+            WHERE user_id = %s
+            ORDER BY badge_id
+        """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        user_badges = [d['badge_id'] for d in result]
+
+    return render_template('main/badges.html', badges=badges, user_badges=user_badges, badge_list = badge_list)
 
 
 @main.route('/reading-plans/<string:message>', methods=['GET'])
@@ -545,7 +805,50 @@ def reading_plans(message):
     plans = []
     user_plans = []
     batch_list = []
+    badge_list = []
     if current_user.is_authenticated:
+        sql = """
+                SELECT COUNT(*) as count
+                FROM user_reading_plans
+                WHERE user_id = %s
+                AND status = 1
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        total = [dict(r) for r in result][0]['count']
+
+        badge_id_list = []
+        if total == 1:
+            badge_id_list.append(32)
+
+        if badge_id_list != []:
+            for badge_id in badge_id_list:
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_badges
+                        WHERE user_id = %s
+                        AND badge_id = %s
+                    """ % (current_user.get_id(), badge_id)
+                result = db.session.execute(sql)
+                badge_count = [dict(r) for r in result][0]['count']
+
+                if badge_count < 1:
+                    timestamp = datetime.now()
+                    sql = """
+                        INSERT INTO user_badges (user_id, badge_id, timestamp)
+                        VALUES (%s, %s, '%s')
+                    """ % (current_user.get_id(), badge_id, timestamp)
+                    db.session.execute(sql)
+                    db.session.commit()
+
+                    sql = """
+                        SELECT *
+                        FROM badges
+                        WHERE badge_id = %s
+                    """ % (badge_id)
+                    result = db.session.execute(sql)
+                    badge = [dict(r) for r in result][0]
+                    badge_list.append(badge)
+
         sql = """
             SELECT *
             FROM reading_plans
@@ -571,7 +874,7 @@ def reading_plans(message):
         result = db.session.execute(sql)
         batch_list = [dict(d) for d in result]
 
-    return render_template('main/reading_plans.html', plans=plans, user_plans=user_plans, batch_list=batch_list, message=message)
+    return render_template('main/reading_plans.html', plans=plans, user_plans=user_plans, batch_list=batch_list, message=message, badge_list=badge_list)
 
 
 @main.route('/create-reading-plan/<string:reading_plan_id>', methods=['GET'])
@@ -627,7 +930,48 @@ def reading_plan(user_reading_plan_id, batch_id):
     current_app.logger.info("RadhaKrishna")
     plans = None
     is_done = 'False'
+    badge_list = []
     if current_user.is_authenticated:
+        sql = """
+                SELECT COUNT(*) as count
+                FROM user_reading_plans
+                WHERE user_id = %s
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        total = [dict(r) for r in result][0]['count']
+
+        badge_id_list = []
+        if total == 1: badge_id_list.append(31)
+
+        if badge_id_list != []:
+            for badge_id in badge_id_list:
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_badges
+                        WHERE user_id = %s
+                        AND badge_id = %s
+                    """ % (current_user.get_id(), badge_id)
+                result = db.session.execute(sql)
+                badge_count = [dict(r) for r in result][0]['count']
+
+                if badge_count < 1:
+                    timestamp = datetime.now()
+                    sql = """
+                        INSERT INTO user_badges (user_id, badge_id, timestamp)
+                        VALUES (%s, %s, '%s')
+                    """ % (current_user.get_id(), badge_id, timestamp)
+                    db.session.execute(sql)
+                    db.session.commit()
+
+                    sql = """
+                        SELECT *
+                        FROM badges
+                        WHERE badge_id = %s
+                    """ % (badge_id)
+                    result = db.session.execute(sql)
+                    badge = [dict(r) for r in result][0]
+                    badge_list.append(badge)
+
         sql = """
             SELECT urpi.user_reading_plan_item_id, urpi.chapter_number, urpi.verse_number, to_char(timestamp, 'DD MONTH YYYY') as day, urpi.batch_id, urpi.status
             FROM user_reading_plan_items urpi
@@ -670,7 +1014,7 @@ def reading_plan(user_reading_plan_id, batch_id):
 
         if status == 1: return redirect(url_for('main.reading_plans'))
 
-    return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches)
+    return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list)
 
 
 @main.route('/get-next-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
@@ -822,6 +1166,7 @@ def progress():
     progress = {}
     gita = None
     total_shlokas = 0
+    badge_list = []
     progress = {key:None for key in range(1, 19)}
 
     sql = """
@@ -833,7 +1178,6 @@ def progress():
         """
     result = db.session.execute(sql)
     thegita = {r['date_part']:r['count'] for r in result}
-    current_app.logger.info(thegita)
 
     if current_user.is_authenticated:
         sql = """
@@ -867,7 +1211,7 @@ def progress():
 
     if total_shlokas:
         gita = float("%.2f" % (total_shlokas/700))
-    return render_template('main/progress.html', progress=progress, gita=gita, thegita=thegita)
+    return render_template('main/progress.html', progress=progress, gita=gita, thegita=thegita, badge_list = badge_list)
 
 
 @main.route('/thegita/', methods=['GET'])
@@ -890,6 +1234,7 @@ def thegita():
 @main.route('/verse-of-the-day/', methods=['GET'])
 def verse_of_the_day():
     current_app.logger.info("RadhaKrishna")
+    badge_list = []
     sql = """
             SELECT *
             FROM verses
@@ -897,17 +1242,18 @@ def verse_of_the_day():
             LIMIT 1
         """
     verse = db.session.execute(sql).first()
-    return render_template('main/verse_of_the_day.html', verse=verse)
+    return render_template('main/verse_of_the_day.html', verse=verse, badge_list = badge_list)
 
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
-
-    return render_template('main/privacy-policy.html')
+    badge_list = []
+    return render_template('main/privacy-policy.html', badge_list=badge_list)
 
 
 @main.route('/bhagavad-gita-quotes/', methods=['GET'])
 def bhagavad_gita_quotes():
+    badge_list = []
     quotes = [
         "Whenever dharma declines and the purpose of life is forgotten, I manifest myself on earth. I am born in every age to protect the good, to destroy evil, and to reestablish dharma.",
         "As they approach me, so I receive them. All paths, Arjuna, lead to me.",
@@ -1011,17 +1357,18 @@ def bhagavad_gita_quotes():
         "I have shared this profound truth with you, Arjuna. Those who understand it will attain wisdom; they will have done that which has to be done.",
         "I give you these precious words of wisdom; reflect on them and then do as you choose."
     ]
-    return render_template('main/bhagavad-gita-quotes.html', quotes=quotes)
+    return render_template('main/bhagavad-gita-quotes.html', quotes=quotes, badge_list = badge_list)
 
 
 @main.route('/terms-of-service/', methods=['GET'])
 def terms_of_service():
-
-    return render_template('main/terms-of-service.html')
+    badge_list = []
+    return render_template('main/terms-of-service.html', badge_list = badge_list)
 
 
 @main.route('/contact/', methods=['GET', 'POST'])
 def contact():
+    badge_list = []
     form = ContactForm()
     if form.validate_on_submit():
         args_dict = {}
@@ -1043,7 +1390,7 @@ def contact():
             'Thank you for your message. We will try to reply as soon as possible.'
         )
         return redirect(url_for('main.index'))
-    return render_template('main/contact.html', form=form)
+    return render_template('main/contact.html', form=form, badge_list=badge_list)
 
 
 @main.route('/setcookie', methods=['GET'])
