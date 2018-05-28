@@ -689,6 +689,16 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
               $(vrindavan).modal()
             }
           }
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/radhakrishna.js').then(function(registration) {
+                    console.log('Radhe Radhe');
+                    registration.update();
+                }).catch(function(error) {
+                    console.log('Jai Shri Radha Krishna ' + error);
+                });
+            });
+          }
       })
     }
 
