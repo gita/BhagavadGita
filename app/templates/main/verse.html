@@ -72,6 +72,7 @@
       <div class="col-md-12">
         <div class="card orange lighten-3 text-center z-depth-2 h-100" id="verse-card">
           <div class="card-body">
+            <h4 class="font-up font-bold mt-2 mb-3" style="font-size: 1.2rem;"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
             {% if batch_id != None and user_reading_plan_id != None %}
               {% if batch_no > 1 %}
               <a class="btn btn-warning btn-rounded waves-effect waves-light previous-btn"
@@ -123,7 +124,13 @@
 
             {% endif %}
 
-              <h4 class="font-up font-bold mt-2 mb-3" style="font-size: 1.2rem;"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
+            {% if read == True %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" style="font-size: 0.7rem; padding: 0.5rem 1.10rem; margin-top: 0.3rem; box-shadow: none">
+                <i class="fa fa-check" style="font-size: 1rem;"></i> Read</a>
+            {% else %}
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" style="font-size: 0.7rem; padding: 0.5rem 1.10rem; margin-top: 0.3rem; box-shadow: none">
+                 Reading</a>
+            {% endif %}
 
               <hr>
               <div class="text-center" id="sharebtn">

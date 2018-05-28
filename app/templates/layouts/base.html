@@ -185,6 +185,16 @@
         {% endfor %}
         {% endif %}
 
+        <div class="modal fade" id="goloka" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/account/register" style="position: absolute; right: 0; bottom: 10px;">{{ _('Register Now') }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <style>
           body {
             padding-left: 300px;
@@ -273,6 +283,13 @@
           .btn-share {
             width: 15rem;
           }
+
+          .modal-body {
+            background-image: url('/static/images/gita.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 400px;
+          }
         </style>
 
         <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5a8d87d4d57467001383cda2&product=inline-share-buttons" defer></script>
@@ -300,6 +317,17 @@
           }
           function eraseCookie(name) {
               document.cookie = name+'=; Max-Age=-99999999;';
+          }
+
+          if ({{current_user.is_authenticated|tojson}} === false) {
+            if (document.cookie.indexOf("visits=") >= 0) {
+              var visits = JSON.parse(getCookie('visits'));
+              if (visits%10 === 0) {$(goloka).modal()}
+              setCookie('visits',visits+1,30);
+            } else {
+              $(goloka).modal()
+              setCookie('visits',1,30);
+            }
           }
           
           if (document.cookie.indexOf("settings=") >= 0) {

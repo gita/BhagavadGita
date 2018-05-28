@@ -308,6 +308,7 @@ def chapter_radhakrishna(chapter_number, language):
 def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_total, batch_no):
     badge = {}
     badge_list = []
+    read = False
     if chapter_number not in range(1, 19):
         abort(404)
     if verse_number in verse_dict[chapter_number]:
@@ -316,90 +317,6 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                         str(verse_dict[chapter_number][verse_number]) + '/')
     else:
         language = "en"
-
-        if current_user.is_authenticated:
-            sql = """
-                    SELECT COUNT(user_progress_id)
-                    FROM user_progress
-                    WHERE user_id = %s
-                    AND chapter = %s
-                    AND verse = '%s'
-                """ % (current_user.get_id(), chapter_number, verse_number)
-            result = db.session.execute(sql)
-            count = [dict(r) for r in result][0]['count']
-
-            if count < 1:
-                timestamp = datetime.now()
-                sql = """
-                        INSERT INTO user_progress (user_id, chapter, verse, timestamp)
-                        VALUES (%s, %s, '%s', '%s')
-                    """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
-
-                db.session.execute(sql)
-                db.session.commit()
-
-            sql = """
-                    SELECT COUNT(*) as count
-                    FROM user_progress
-                    WHERE user_id = %s
-                """ % (current_user.get_id())
-            result = db.session.execute(sql)
-            total = [dict(r) for r in result][0]['count']
-
-            badge_id_list = []
-            verse_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
-            if total in verse_badges.keys(): badge_id_list.append(verse_badges[total])
-
-            sql = """
-                    SELECT COUNT(*) as count
-                    FROM verses
-                    WHERE chapter_number = %s
-                """ % (chapter_number)
-            result = db.session.execute(sql)
-            total_chapter_count = [dict(r) for r in result][0]['count']
-
-            sql = """
-                    SELECT COUNT(*) as count
-                    FROM user_progress
-                    WHERE user_id = %s
-                    AND chapter = %s
-                """ % (current_user.get_id(), chapter_number)
-            result = db.session.execute(sql)
-            chapter_count = [dict(r) for r in result][0]['count']
-
-            chapter_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
-            
-            if chapter_count == total_chapter_count: badge_id_list.append(chapter_number+9)
-
-            if badge_id_list != []:
-                for badge_id in badge_id_list:
-                    sql = """
-                            SELECT COUNT(*) as count
-                            FROM user_badges
-                            WHERE user_id = %s
-                            AND badge_id = %s
-                        """ % (current_user.get_id(), badge_id)
-                    result = db.session.execute(sql)
-                    badge_count = [dict(r) for r in result][0]['count']
-
-                    if badge_count < 1:
-                        timestamp = datetime.now()
-                        sql = """
-                            INSERT INTO user_badges (user_id, badge_id, timestamp)
-                            VALUES (%s, %s, '%s')
-                        """ % (current_user.get_id(), badge_id, timestamp)
-                        db.session.execute(sql)
-                        db.session.commit()
-
-                        sql = """
-                            SELECT *
-                            FROM badges
-                            WHERE badge_id = %s
-                        """ % (badge_id)
-                        result = db.session.execute(sql)
-                        badge = [dict(r) for r in result][0]
-                        badge_list.append(badge)
-            current_app.logger.info(badge_list)
 
         if "settings" in request.cookies:
             if json.loads(request.cookies.get('settings'))["language"]:
@@ -442,6 +359,92 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                     chapter_number=chapter_number,
                     verse_order=next_verse_order).first()
 
+            if current_user.is_authenticated:
+                sql = """
+                        SELECT COUNT(user_progress_id)
+                        FROM user_progress
+                        WHERE user_id = %s
+                        AND chapter = %s
+                        AND verse = '%s'
+                    """ % (current_user.get_id(), chapter_number, verse_number)
+                result = db.session.execute(sql)
+                count = [dict(r) for r in result][0]['count']
+
+                if count == 1: read = True
+
+                if count < 1:
+                    timestamp = datetime.now()
+                    sql = """
+                            INSERT INTO user_progress (user_id, chapter, verse, timestamp)
+                            VALUES (%s, %s, '%s', '%s')
+                        """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+
+                    db.session.execute(sql)
+                    db.session.commit()
+
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_progress
+                        WHERE user_id = %s
+                    """ % (current_user.get_id())
+                result = db.session.execute(sql)
+                total = [dict(r) for r in result][0]['count']
+
+                badge_id_list = []
+                verse_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
+                if total in verse_badges.keys(): badge_id_list.append(verse_badges[total])
+
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM verses
+                        WHERE chapter_number = %s
+                    """ % (chapter_number)
+                result = db.session.execute(sql)
+                total_chapter_count = [dict(r) for r in result][0]['count']
+
+                sql = """
+                        SELECT COUNT(*) as count
+                        FROM user_progress
+                        WHERE user_id = %s
+                        AND chapter = %s
+                    """ % (current_user.get_id(), chapter_number)
+                result = db.session.execute(sql)
+                chapter_count = [dict(r) for r in result][0]['count']
+
+                chapter_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
+                
+                if chapter_count == total_chapter_count: badge_id_list.append(chapter_number+9)
+
+                if badge_id_list != []:
+                    for badge_id in badge_id_list:
+                        sql = """
+                                SELECT COUNT(*) as count
+                                FROM user_badges
+                                WHERE user_id = %s
+                                AND badge_id = %s
+                            """ % (current_user.get_id(), badge_id)
+                        result = db.session.execute(sql)
+                        badge_count = [dict(r) for r in result][0]['count']
+
+                        if badge_count < 1:
+                            timestamp = datetime.now()
+                            sql = """
+                                INSERT INTO user_badges (user_id, badge_id, timestamp)
+                                VALUES (%s, %s, '%s')
+                            """ % (current_user.get_id(), badge_id, timestamp)
+                            db.session.execute(sql)
+                            db.session.commit()
+
+                            sql = """
+                                SELECT *
+                                FROM badges
+                                WHERE badge_id = %s
+                            """ % (badge_id)
+                            result = db.session.execute(sql)
+                            badge = [dict(r) for r in result][0]
+                            badge_list.append(badge)
+                current_app.logger.info(badge_list)
+
             return render_template(
                 'main/verse.html',
                 chapter=chapter,
@@ -453,7 +456,8 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                 batch_id=batch_id,
                 batch_no=batch_no,
                 batch_total=batch_total,
-                badge_list=badge_list)
+                badge_list=badge_list,
+                read=read)
 
         else:
             return redirect('/chapter/' + str(chapter_number) + '/verse/' +
@@ -469,6 +473,7 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
 def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan_id, batch_id, batch_total, batch_no):
     badge = {}
     badge_list = []
+    read = False
     if chapter_number not in range(1, 19):
         abort(404)
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
@@ -501,6 +506,8 @@ def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan
             """ % (current_user.get_id(), chapter_number, verse_number)
         result = db.session.execute(sql)
         count = [dict(r) for r in result][0]['count']
+
+        if count == 1: read = True
 
         if count < 1:
             timestamp = datetime.now()
@@ -608,7 +615,8 @@ def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan
         batch_id=batch_id,
         batch_no=batch_no,
         batch_total=batch_total,
-        badge_list=badge_list)
+        badge_list=badge_list,
+        read=read)
 
 
 @main.route(
