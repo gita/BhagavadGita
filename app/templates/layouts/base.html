@@ -353,6 +353,8 @@
             }
           }
 
+          $('#whatsappbtn, #facebookbtn, #twitterbtn').click(function() { share() })
+
           function share() {
             axios.get("/share")
             .then(function (response) {
