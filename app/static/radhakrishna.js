@@ -1,5 +1,5 @@
 'use strict';
-const cacheName = 'bhagavadgita';
+const cacheName = 'bhagavadgitaio';
 const startPage = 'https://bhagavadgita.io/';
 const offlinePage = 'https://bhagavadgita.io/';
 const fallbackImage = 'https://bhagavadgita.io/static/images/sribhagavadgita.jpg';
