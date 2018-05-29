@@ -72,51 +72,52 @@
       <div class="col-md-12">
         <div class="card orange lighten-3 text-center z-depth-2 h-100" id="verse-card">
           <div class="card-body">
-            <h4 class="font-up font-bold mt-2 mb-3" style="font-size: 1.2rem;"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
+            <h4 class="font-up font-bold mt-2" style="font-size: 2rem; font-family: samarkan"><strong>{{ _('Chapter') }} {{verse.chapter_number}}, {{ _('Verse') }} {{verse.verse_number}}</strong></h4>
+            <div>
             {% if batch_id != None and user_reading_plan_id != None %}
               {% if batch_no > 1 %}
               <a class="btn btn-warning btn-rounded waves-effect waves-light previous-btn"
-              style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+              style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
               <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
               {% else %}
               <a class="btn btn-warning btn-rounded waves-effect waves-light"
               href="/reading-plan/{{user_reading_plan_id}}/{{batch_id}}"
-              style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+              style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
               <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
               {% endif %}
 
               <a class="btn btn-success btn-rounded waves-effect waves-light next-btn"
-              style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+              style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
               <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i></a>
 
             {% else %}
               {% if previous_verse != None %}
               <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{previous_verse.verse_number}}/"
- style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+ style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
                 <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
               {% else %}
 
                 {% set previous_chapter = chapter.chapter_number - 1 %}
                 {% if previous_chapter == 0 %}
-  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
                   <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
                 {% else %}
-  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+  <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{previous_chapter}}/?page=1" style="float: left; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
                   <i class="fa fa-arrow-left" style="font-size: 0.7rem;"></i></a>
                 {% endif %}
               {% endif %}
 
               {% if next_verse != None %}
               <a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{verse.chapter_number}}/verse/{{next_verse.verse_number}}/"
-                style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+                style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
                 <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
               </a>
               {% else %} {% set next_chapter = chapter.chapter_number + 1 %} {% if next_chapter == 19 %}
-<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
                 <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
               </a>
               {% else %}
-<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 0;">
+<a class="btn btn-warning btn-rounded waves-effect waves-light" href="/chapter/{{next_chapter}}/?page=1" style="float: right; font-size: 0.7rem; padding: 0.7rem 1.13rem; margin-top: 1rem;">
                 <i class="fa fa-arrow-right" style="font-size: 0.7rem;"></i>
               </a>
               {% endif %}
@@ -124,13 +125,16 @@
 
             {% endif %}
 
+            {% if current_user.is_authenticated %}
             {% if read == True %}
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" style="font-size: 0.7rem; padding: 0.5rem 1.10rem; margin-top: 0.3rem; box-shadow: none">
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" style="font-size: 0.7rem; padding: 0.5rem 1.10rem; margin-top: 1.4rem; box-shadow: none">
                 <i class="fa fa-check" style="font-size: 1rem;"></i> Read</a>
             {% else %}
-              <a class="btn btn-warning btn-rounded waves-effect waves-light" style="font-size: 0.7rem; padding: 0.5rem 1.10rem; margin-top: 0.3rem; box-shadow: none">
+              <a class="btn btn-warning btn-rounded waves-effect waves-light" style="font-size: 0.7rem; padding: 0.5rem 1.10rem; margin-top: 1.4rem; box-shadow: none">
                  Reading</a>
             {% endif %}
+            {% endif %}
+          </div>
 
               <hr>
               <div class="text-center" id="sharebtn">
@@ -304,6 +308,12 @@
   <style>
   body {
     background-color: #E9ECEF;
+  }
+
+  @font-face {
+    font-family: 'Samarkan';
+    src: url('/static/font/samarkan.woff') format('woff'),
+     url('/static/font/samarkan.woff') format('truetype');
   }
 
   .jumbotron {
@@ -745,13 +755,12 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   </script>
   <script>
 if (navigator.serviceWorker.controller) {
-  console.log('[PWA Builder] active service worker found, no need to register')
 } else {
   //Register the ServiceWorker
-  navigator.serviceWorker.register('pwabuilder-sw.js', {
+  navigator.serviceWorker.register('radhakrishna.js', {
     scope: './'
   }).then(function(reg) {
-    console.log('Service worker has been registered for scope:'+ reg.scope);
+    // console.log('Service worker has been registered for scope:'+ reg.scope);
   });
 }
   </script>

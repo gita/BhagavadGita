@@ -467,6 +467,7 @@ def get_facebook_oauth_token():
 @account.route('/login', methods=['GET', 'POST'])
 def login():
     """Log in an existing user."""
+    badge_list=[]
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -477,12 +478,13 @@ def login():
             return redirect(request.args.get('next') or url_for('main.index'))
         else:
             flash('Invalid email or password.', 'form-error')
-    return render_template('account/login.html', form=form)
+    return render_template('account/login.html', form=form, badge_list=badge_list)
 
 
 @account.route('/register', methods=['GET', 'POST'])
 def register():
     """Register a new user, and send them a confirmation email."""
+    badge_list = []
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(
@@ -503,7 +505,7 @@ def register():
         flash('A confirmation link has been sent to {}.'.format(user.email),
               'warning')
         return redirect(url_for('main.index'))
-    return render_template('account/register.html', form=form)
+    return render_template('account/register.html', form=form, badge_list=badge_list)
 
 
 @account.route('/logout')
@@ -523,12 +525,14 @@ def logout():
 @login_required
 def manage():
     """Display a user's account information."""
-    return render_template('account/manage.html', user=current_user, form=None)
+    badge_list=[]
+    return render_template('account/manage.html', user=current_user, form=None, badge_list=badge_list)
 
 
 @account.route('/reset-password', methods=['GET', 'POST'])
 def reset_password_request():
     """Respond to existing user's request to reset their password."""
+    badge_list=[]
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = RequestResetPasswordForm()
@@ -548,12 +552,13 @@ def reset_password_request():
         flash('A password reset link has been sent to {}.'.format(
             form.email.data), 'warning')
         return redirect(url_for('account.login'))
-    return render_template('account/reset_password.html', form=form)
+    return render_template('account/reset_password.html', form=form, badge_list=badge_list)
 
 
 @account.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     """Reset an existing user's password."""
+    badge_list=[]
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = ResetPasswordForm()
@@ -569,13 +574,14 @@ def reset_password(token):
             flash('The password reset link is invalid or has expired.',
                   'form-error')
             return redirect(url_for('main.index'))
-    return render_template('account/reset_password.html', form=form)
+    return render_template('account/reset_password.html', form=form, badge_list=badge_list)
 
 
 @account.route('/manage/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     """Change an existing user's password."""
+    badge_list=[]
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
@@ -586,13 +592,14 @@ def change_password():
             return redirect(url_for('main.index'))
         else:
             flash('Original password is invalid.', 'form-error')
-    return render_template('account/manage.html', form=form, user=current_user)
+    return render_template('account/manage.html', form=form, user=current_user, badge_list=badge_list)
 
 
 @account.route('/manage/change-email', methods=['GET', 'POST'])
 @login_required
 def change_email_request():
     """Respond to existing user's request to change their email."""
+    badge_list=[]
     form = ChangeEmailForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.password.data):
@@ -613,7 +620,7 @@ def change_email_request():
             return redirect(url_for('main.index'))
         else:
             flash('Invalid email or password.', 'form-error')
-    return render_template('account/manage.html', form=form, user=current_user)
+    return render_template('account/manage.html', form=form, user=current_user, badge_list=badge_list)
 
 
 @account.route('/manage/change-email/<token>', methods=['GET', 'POST'])
@@ -727,6 +734,7 @@ def unconfirmed():
 @account.route('/manage/apps/new', methods=['GET', 'POST'])
 @login_required
 def create_app():
+    badge_list=[]
     form = CreateAppForm()
     if form.validate_on_submit():
         app = App(
@@ -758,12 +766,13 @@ def create_app():
         return redirect(
             url_for('account.update_app', application_id=app.application_id))
     return render_template(
-        'account/create_app.html', user=current_user._get_current_object(), form=form)
+        'account/create_app.html', user=current_user._get_current_object(), form=form, badge_list=badge_list)
 
 
 @account.route('/manage/apps/<string:application_id>', methods=['GET', 'POST'])
 @login_required
 def update_app(application_id):
+    badge_list=[]
     app = App.query.filter_by(application_id=application_id).first()
     client = Client.query.filter_by(app_id=application_id).first()
     client_id = client.client_id
@@ -787,17 +796,19 @@ def update_app(application_id):
         form=form,
         app_name=form_dict['application_name'],
         client_id=client_id,
-        client_secret=client_secret)
+        client_secret=client_secret,
+        badge_list=badge_list)
 
 
 @account.route('/manage/apps', methods=['GET', 'POST'])
 @login_required
 def all_apps():
+    badge_list=[]
     if current_user.is_anonymous or current_user.confirmed:
         apps_list = App.query.filter_by(user_id=current_user.id).all()
         current_app.logger.info(apps_list)
         return render_template(
-            'account/all_apps.html', user=current_user, apps_list=apps_list)
+            'account/all_apps.html', user=current_user, apps_list=apps_list, badge_list=badge_list)
     return redirect(url_for('account.unconfirmed'))
 
 

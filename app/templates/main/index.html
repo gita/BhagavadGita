@@ -363,9 +363,9 @@ body > div:nth-child(4) {
   margin-top: 3.5rem;
 }
 
-@media only screen and (max-width : 992px) { 
-  h1 { 
-    display: none; 
+@media only screen and (max-width : 992px) {
+  h1 {
+    display: none;
   }
 }
 </style>
@@ -395,7 +395,7 @@ body > div:nth-child(4) {
         hreflang = "en"
       }
 
-      var ua = navigator.userAgent.toLowerCase(); 
+      var ua = navigator.userAgent.toLowerCase();
       var isAndroid = ua.indexOf("bhagavadgita") > -1;
       if (isAndroid) {
         console.log("RadhaKrishna")
@@ -586,14 +586,13 @@ body > div:nth-child(4) {
 </script>
 <script>
 if (navigator.serviceWorker.controller) {
-  console.log('[PWA Builder] active service worker found, no need to register')
 } else {
-  //Register the ServiceWorker
-  navigator.serviceWorker.register('pwabuilder-sw.js', {
-    scope: './'
-  }).then(function(reg) {
-    console.log('Service worker has been registered for scope:'+ reg.scope);
-  });
+//Register the ServiceWorker
+navigator.serviceWorker.register('radhakrishna.js', {
+  scope: './'
+}).then(function(reg) {
+  // console.log('Service worker has been registered for scope:'+ reg.scope);
+});
 }
 </script>
 {% endblock %}
