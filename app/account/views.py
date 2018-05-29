@@ -312,6 +312,14 @@ def google_authorized(resp):
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
+<<<<<<< HEAD
+        )
+    session['google_token'] = (resp['access_token'], '')
+    user_google = google.get('userinfo').data
+
+    # Check if user already exists, else update
+    user = User.query.filter_by(email=user_google["email"]).first()
+=======
         )
     session['google_token'] = (resp['access_token'], '')
     user_google = google.get('userinfo').data
@@ -346,6 +354,68 @@ def google_authorized(resp):
 
     return False
 
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
+
+
+@account.route('/github-login-krishna')
+def github_login():
+    return github.authorize(
+        callback=url_for('account.github_authorized', _external=True))
+
+@account.route('/github/authorized')
+@github.authorized_handler
+def github_authorized(resp):
+    if resp is None:
+        flash("Failed to log in with github.", category="error")
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['github_token'] = (resp['access_token'], '')
+    user_github = github.get('user').data
+
+    # Check if user already exists, else update
+    user = User.query.filter_by(email=user_github["email"]).first()
+>>>>>>> 5cd3ce4ecf7de6f658300901eb1ebdd02a424daf
+
+    if user:
+        login_user(user, True)
+        flash('You are now logged in. Welcome back!', 'success')
+        return redirect(request.args.get('next') or url_for('main.index'))
+
+    else:
+        # Create a new local user account for this user
+        max_id = db.session.query(db.func.max(User.id)).scalar()
+        user = User(
+            id=max_id+1,
+<<<<<<< HEAD
+            email=user_google["email"],
+            social_id=user_google["id"],
+            social_provider="google",
+            first_name=user_google["name"],
+=======
+            email=user_github["email"],
+            social_id=user_github["id"],
+            social_provider="github",
+            username=user_github["login"],
+            first_name=user_github["name"],
+>>>>>>> 5cd3ce4ecf7de6f658300901eb1ebdd02a424daf
+            confirmed=True)
+
+        # Save and commit our database models
+        db.session.add(user)
+        db.session.commit()
+
+        session['user_id'] = user.id
+        login_user(user, True)
+        flash('You are now logged in. Welcome!', 'success')
+        return redirect(request.args.get('next') or url_for('main.index'))
+
+    return False
+
+<<<<<<< HEAD
 @google.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
@@ -390,10 +460,13 @@ def github_authorized():
     return redirect(url_for('account.github_login'))
 
 
+=======
+>>>>>>> 5cd3ce4ecf7de6f658300901eb1ebdd02a424daf
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
 
+<<<<<<< HEAD
 # @account.route('/github-login-krishna')
 # def github_login():
 #     return github.authorize(
@@ -447,6 +520,8 @@ def get_github_oauth_token():
 # def get_github_oauth_token():
 #     return session.get('github_token')
 
+=======
+>>>>>>> 5cd3ce4ecf7de6f658300901eb1ebdd02a424daf
 
 @account.route('/facebook-login-krishna')
 def facebook_login():
