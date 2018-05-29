@@ -4,7 +4,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_assets import Environment
-from flask_wtf import CsrfProtect
+from flask_wtf import CSRFProtect
 from flask_compress import Compress
 from flask_rq import RQ
 from app.lib.flask_oauthlib.provider import OAuth2Provider
@@ -16,27 +16,26 @@ from elasticsearch import Elasticsearch
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
 
-from flask_dance.contrib.github import make_github_blueprint, github
-from flask_dance.contrib.google import make_google_blueprint, google
-from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
+# from flask_dance.contrib.github import make_github_blueprint, github
+# from flask_dance.contrib.google import make_google_blueprint, google
+# from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 mail = Mail()
 db = SQLAlchemy()
-csrf = CsrfProtect()
+csrf = CSRFProtect()
 compress = Compress()
-csrf = CsrfProtect()
 oauth = OAuth2Provider()
 oauthclient = OAuth()
 babel = Babel()
 
-github_blueprint = make_github_blueprint(client_id=os.environ.get('GITHUB_KEY'), client_secret=os.environ.get('GITHUB_SECRET'))
-google_blueprint = make_google_blueprint(client_id=os.environ.get('GOOGLE_KEY'),
-                                         client_secret=os.environ.get('GOOGLE_SECRET'),
-                                         scope=["profile", "email"])
-facebook_blueprint = make_facebook_blueprint(
-    client_id=os.environ.get('FACEBOOK_KEY'), client_secret=os.environ.get('FACEBOOK_SECRET'))
+# github_blueprint = make_github_blueprint(client_id=os.environ.get('GITHUB_KEY'), client_secret=os.environ.get('GITHUB_SECRET'))
+# google_blueprint = make_google_blueprint(client_id=os.environ.get('GOOGLE_KEY'),
+#                                          client_secret=os.environ.get('GOOGLE_SECRET'),
+#                                          scope=["profile", "email"])
+# facebook_blueprint = make_facebook_blueprint(
+#     client_id=os.environ.get('FACEBOOK_KEY'), client_secret=os.environ.get('FACEBOOK_SECRET'))
 
 es = Elasticsearch(
     [os.environ.get('ES_URL') or 'ES_URL'],
@@ -108,9 +107,9 @@ def create_app(config_name):
     from app.api.docs import docs as docs_blueprint
     app.register_blueprint(docs_blueprint)
 
-    app.register_blueprint(github_blueprint, url_prefix='/github_login')
-    app.register_blueprint(google_blueprint, url_prefix='/google_login')
-    app.register_blueprint(facebook_blueprint, url_prefix='/facebook_login')
+    # app.register_blueprint(github_blueprint, url_prefix='/github_login')
+    # app.register_blueprint(google_blueprint, url_prefix='/google_login')
+    # app.register_blueprint(facebook_blueprint, url_prefix='/facebook_login')
 
     from flasgger import APISpec, Schema, Swagger, fields
 
@@ -159,7 +158,7 @@ def create_app(config_name):
     app.add_url_rule('/api/v1/chapters', view_func=chapter_list_view)
 
     def _force_https():
-        if not app.debug: 
+        if not app.debug:
             from flask import _request_ctx_stack
             if _request_ctx_stack is not None:
                 reqctx = _request_ctx_stack.top

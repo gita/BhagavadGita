@@ -7,139 +7,319 @@ from flask_rq import get_queue
 from werkzeug.security import gen_salt
 
 from . import account
-from .. import db, oauthclient, github_blueprint, google_blueprint, facebook_blueprint
+from .. import db, oauthclient
+# from .. import github_blueprint, google_blueprint, facebook_blueprint
 from ..email import send_email
-from ..models import App, Client, User, Token, OAuth
+from ..models import App, Client, User, Token
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreateAppForm,
                     CreatePasswordForm, LoginForm, RegistrationForm,
                     RequestResetPasswordForm, ResetPasswordForm, UpdateAppForm)
 from flask_mail import Mail, Message
 from .. import mail
-from flask_dance.consumer import oauth_authorized, oauth_error
-from sqlalchemy.orm.exc import NoResultFound
-from flask_dance.contrib.github import github
-from flask_dance.contrib.google import google
-from flask_dance.contrib.facebook import facebook
+# from flask_dance.consumer import oauth_authorized, oauth_error
+# from sqlalchemy.orm.exc import NoResultFound
+# from flask_dance.contrib.github import github
+# from flask_dance.contrib.google import google
+# from flask_dance.contrib.facebook import facebook
 
 
 # create/login local user on successful OAuth login
-@oauth_authorized.connect_via(github_blueprint)
-def github_logged_in(blueprint, token):
-    if not token:
-        flash("Failed to log in with GitHub.", category="error")
-        return False
+# @oauth_authorized.connect_via(github_blueprint)
+# def github_logged_in(blueprint, token):
+#     if not token:
+#         flash("Failed to log in with GitHub.", category="error")
+#         return False
 
-    resp = blueprint.session.get("/user")
-    if not resp.ok:
-        msg = "Failed to fetch user info from GitHub."
-        flash(msg, category="error")
-        return False
+#     resp = blueprint.session.get("/user")
+#     if not resp.ok:
+#         msg = "Failed to fetch user info from GitHub."
+#         flash(msg, category="error")
+#         return False
 
-    github_info = resp.json()
-    github_user_id = str(github_info["id"])
+#     github_info = resp.json()
+#     github_user_id = str(github_info["id"])
 
-    # Find this OAuth token in the database, or create it
-    query = OAuth.query.filter_by(
-        provider=blueprint.name,
-        provider_user_id=github_user_id,
-    )
-    try:
-        oauth = query.one()
-    except NoResultFound:
-        oauth = OAuth(
-            provider=blueprint.name,
-            provider_user_id=github_user_id,
-            token=token,
-        )
+#     # Find this OAuth token in the database, or create it
+#     query = OAuth.query.filter_by(
+#         provider=blueprint.name,
+#         provider_user_id=github_user_id,
+#     )
+#     try:
+#         oauth = query.one()
+#     except NoResultFound:
+#         oauth = OAuth(
+#             provider=blueprint.name,
+#             provider_user_id=github_user_id,
+#             token=token,
+#         )
 
-    user = User.query.filter_by(email=github_info["email"]).first()
+#     user = User.query.filter_by(email=github_info["email"]).first()
 
-    if oauth.user:
-        login_user(oauth.user)
-        flash('You are now logged in. Welcome back!', 'success')
-        return redirect(request.args.get('next') or url_for('main.index'))
+#     if oauth.user:
+#         login_user(oauth.user)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
 
-    elif user:
-        login_user(user, True)
-        flash('You are now logged in. Welcome back!', 'success')
-        return redirect(request.args.get('next') or url_for('main.index'))
+#     elif user:
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
 
-    else:
-        # Create a new local user account for this user
-        max_id = db.session.query(db.func.max(User.id)).scalar()
-        user = User(
-            id=max_id+1,
-            email=github_info["email"],
-            social_id=github_info["id"],
-            social_provider="github",
-            username=github_info["login"],
-            first_name=github_info["name"],
-            confirmed=True)
-        # Associate the new local user account with the OAuth token
-        oauth.user = user
-        # Save and commit our database models
-        db.session.add_all([user, oauth])
-        db.session.commit()
-        # Log in the new local user account
-        login_user(user, True)
-        flash('You are now logged in. Welcome!', 'success')
-        return redirect(request.args.get('next') or url_for('main.index'))
+#     else:
+#         # Create a new local user account for this user
+#         max_id = db.session.query(db.func.max(User.id)).scalar()
+#         user = User(
+#             id=max_id+1,
+#             email=github_info["email"],
+#             social_id=github_info["id"],
+#             social_provider="github",
+#             username=github_info["login"],
+#             first_name=github_info["name"],
+#             confirmed=True)
+#         # Associate the new local user account with the OAuth token
+#         oauth.user = user
+#         # Save and commit our database models
+#         db.session.add_all([user, oauth])
+#         db.session.commit()
+#         # Log in the new local user account
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
 
-    # Disable Flask-Dance's default behavior for saving the OAuth token
-    return False
-
-
-@oauth_error.connect_via(github_blueprint)
-def github_error(blueprint, error, error_description=None, error_uri=None):
-    msg = (
-        "OAuth error from {name}! "
-        "error={error} description={description} uri={uri}"
-    ).format(
-        name=blueprint.name,
-        error=error,
-        description=error_description,
-        uri=error_uri,
-    )
-    flash(msg, category="error")
+#     # Disable Flask-Dance's default behavior for saving the OAuth token
+#     return False
 
 
-@oauth_authorized.connect_via(google_blueprint)
-def google_logged_in(blueprint, token):
-    if not token:
+# @oauth_error.connect_via(github_blueprint)
+# def github_error(blueprint, error, error_description=None, error_uri=None):
+#     msg = (
+#         "OAuth error from {name}! "
+#         "error={error} description={description} uri={uri}"
+#     ).format(
+#         name=blueprint.name,
+#         error=error,
+#         description=error_description,
+#         uri=error_uri,
+#     )
+#     flash(msg, category="error")
+
+
+# @oauth_authorized.connect_via(google_blueprint)
+# def google_logged_in(blueprint, token):
+#     if not token:
+#         flash("Failed to log in with Google.", category="error")
+#         return False
+#
+#     resp = blueprint.session.get("/oauth2/v2/userinfo")
+#     if not resp.ok:
+#         msg = "Failed to fetch user info from Google."
+#         flash(msg, category="error")
+#         return False
+#
+#     google_info = resp.json()
+#     google_user_id = str(google_info["id"])
+#
+#     # Find this OAuth token in the database, or create it
+#     query = OAuth.query.filter_by(
+#         provider=blueprint.name,
+#         provider_user_id=google_user_id,
+#     )
+#     try:
+#         oauth = query.one()
+#     except NoResultFound:
+#         oauth = OAuth(
+#             provider=blueprint.name,
+#             provider_user_id=google_user_id,
+#             token=token,
+#         )
+#
+#     user = User.query.filter_by(email=google_info["email"]).first()
+#
+#     if oauth.user:
+#         login_user(oauth.user)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+#
+#     elif user:
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+#
+#     else:
+#         # Create a new local user account for this user
+#         max_id = db.session.query(db.func.max(User.id)).scalar()
+#         user = User(
+#             id=max_id+1,
+#             email=google_info["email"],
+#             social_id=google_info["id"],
+#             social_provider="google",
+#             first_name=google_info["name"],
+#             confirmed=True)
+#         # Associate the new local user account with the OAuth token
+#         oauth.user = user
+#         # Save and commit our database models
+#         db.session.add_all([user, oauth])
+#         db.session.commit()
+#         # Log in the new local user account
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+#
+#     # Disable Flask-Dance's default behavior for saving the OAuth token
+#     return False
+
+
+# @oauth_error.connect_via(google_blueprint)
+# def google_error(blueprint, error, error_description=None, error_uri=None):
+#     msg = (
+#         "OAuth error from {name}! "
+#         "error={error} description={description} uri={uri}"
+#     ).format(
+#         name=blueprint.name,
+#         error=error,
+#         description=error_description,
+#         uri=error_uri,
+#     )
+#     flash(msg, category="error")
+
+
+# @oauth_authorized.connect_via(facebook_blueprint)
+# def facebook_logged_in(blueprint, token):
+#     if not token:
+#         flash("Failed to log in with Facebook.", category="error")
+#         return False
+
+#     resp = blueprint.session.get("/me?fields=name,email,id")
+#     if not resp.ok:
+#         msg = "Failed to fetch user info from Facebook."
+#         flash(msg, category="error")
+#         return False
+
+#     facebook_info = resp.json()
+#     facebook_user_id = str(facebook_info["id"])
+
+#     # Find this OAuth token in the database, or create it
+#     query = OAuth.query.filter_by(
+#         provider=blueprint.name,
+#         provider_user_id=facebook_user_id,
+#     )
+#     try:
+#         oauth = query.one()
+#     except NoResultFound:
+#         oauth = OAuth(
+#             provider=blueprint.name,
+#             provider_user_id=facebook_user_id,
+#             token=token,
+#         )
+
+#     user = User.query.filter_by(email=facebook_info["email"]).first()
+
+#     if oauth.user:
+#         login_user(oauth.user)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+
+#     elif user:
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+
+#     else:
+#         # Create a new local user account for this user
+#         max_id = db.session.query(db.func.max(User.id)).scalar()
+#         user = User(
+#             id=max_id+1,
+#             email=facebook_info["email"],
+#             social_id=facebook_info["id"],
+#             social_provider="facebook",
+#             first_name=facebook_info["name"],
+#             confirmed=True)
+#         # Associate the new local user account with the OAuth token
+#         oauth.user = user
+#         # Save and commit our database models
+#         db.session.add_all([user, oauth])
+#         db.session.commit()
+#         # Log in the new local user account
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+
+#     # Disable Flask-Dance's default behavior for saving the OAuth token
+#     return False
+
+
+# @oauth_error.connect_via(facebook_blueprint)
+# def facebook_error(blueprint, error, error_description=None, error_uri=None):
+#     msg = (
+#         "OAuth error from {name}! "
+#         "error={error} description={description} uri={uri}"
+#     ).format(
+#         name=blueprint.name,
+#         error=error,
+#         description=error_description,
+#         uri=error_uri,
+#     )
+#     flash(msg, category="error")
+
+
+google = oauthclient.remote_app(
+    'google',
+    consumer_key=os.environ.get('GOOGLE_KEY'),
+    consumer_secret=os.environ.get('GOOGLE_SECRET'),
+    request_token_params={
+        'scope': 'email'
+    },
+    base_url='https://www.googleapis.com/oauth2/v1/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+)
+
+github = oauthclient.remote_app(
+    'github',
+    consumer_key=os.environ.get('GITHUB_KEY'),
+    consumer_secret=os.environ.get('GITHUB_SECRET'),
+    request_token_params={'scope': 'user:email'},
+    base_url='https://api.github.com/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://github.com/login/oauth/access_token',
+    authorize_url='https://github.com/login/oauth/authorize')
+
+facebook = oauthclient.remote_app(
+    'facebook',
+    consumer_key=os.environ.get('FACEBOOK_KEY'),
+    consumer_secret=os.environ.get('FACEBOOK_SECRET'),
+    request_token_params={'scope': 'email'},
+    base_url='https://graph.facebook.com',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    access_token_method='GET',
+    authorize_url='https://www.facebook.com/dialog/oauth')
+
+
+@account.route('/google-login-krishna')
+def google_login():
+    return google.authorize(
+        callback=url_for('account.google_authorized', _external=True))
+
+@account.route('/google/authorized')
+@google.authorized_handler
+def google_authorized(resp):
+    if resp is None:
         flash("Failed to log in with Google.", category="error")
-        return False
-
-    resp = blueprint.session.get("/oauth2/v2/userinfo")
-    if not resp.ok:
-        msg = "Failed to fetch user info from Google."
-        flash(msg, category="error")
-        return False
-
-    google_info = resp.json()
-    google_user_id = str(google_info["id"])
-
-    # Find this OAuth token in the database, or create it
-    query = OAuth.query.filter_by(
-        provider=blueprint.name,
-        provider_user_id=google_user_id,
-    )
-    try:
-        oauth = query.one()
-    except NoResultFound:
-        oauth = OAuth(
-            provider=blueprint.name,
-            provider_user_id=google_user_id,
-            token=token,
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
         )
-    
-    user = User.query.filter_by(email=google_info["email"]).first()
+    session['google_token'] = (resp['access_token'], '')
+    user_google = google.get('userinfo').data
 
-    if oauth.user:
-        login_user(oauth.user)
-        flash('You are now logged in. Welcome back!', 'success')
-        return redirect(request.args.get('next') or url_for('main.index'))
+    # Check if user already exists, else update
+    user = User.query.filter_by(email=user_google["email"]).first()
 
-    elif user:
+    if user:
         login_user(user, True)
         flash('You are now logged in. Welcome back!', 'success')
         return redirect(request.args.get('next') or url_for('main.index'))
@@ -149,76 +329,146 @@ def google_logged_in(blueprint, token):
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
             id=max_id+1,
-            email=google_info["email"],
-            social_id=google_info["id"],
+            email=user_google["email"],
+            social_id=user_google["id"],
             social_provider="google",
-            first_name=google_info["name"],
+            first_name=user_google["name"],
             confirmed=True)
-        # Associate the new local user account with the OAuth token
-        oauth.user = user
+
         # Save and commit our database models
-        db.session.add_all([user, oauth])
+        db.session.add(user)
         db.session.commit()
-        # Log in the new local user account
+
+        session['user_id'] = user.id
         login_user(user, True)
         flash('You are now logged in. Welcome!', 'success')
         return redirect(request.args.get('next') or url_for('main.index'))
 
-    # Disable Flask-Dance's default behavior for saving the OAuth token
     return False
 
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
 
-@oauth_error.connect_via(google_blueprint)
-def google_error(blueprint, error, error_description=None, error_uri=None):
-    msg = (
-        "OAuth error from {name}! "
-        "error={error} description={description} uri={uri}"
-    ).format(
-        name=blueprint.name,
-        error=error,
-        description=error_description,
-        uri=error_uri,
-    )
-    flash(msg, category="error")
+@account.route('/github-login')
+def github_login():
+    if 'github_token' in session:
+        me = github.get('user')
+        email = me.data.get('email')
+        name = me.data.get('name')
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+        else:
+            max_id = db.session.query(db.func.max(User.id)).scalar()
+            user = User(
+                id=max_id+1,
+                email=email,
+                social_id=me.data.get('id'),
+                social_provider="github",
+                username=me.data.get('login'),
+                first_name=name,
+                confirmed=True)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+    return github.authorize(
+        callback=url_for('account.github_authorized', _external=True))
 
 
-@oauth_authorized.connect_via(facebook_blueprint)
-def facebook_logged_in(blueprint, token):
-    if not token:
-        flash("Failed to log in with Facebook.", category="error")
-        return False
+@account.route('/github/authorized')
+def github_authorized():
+    resp = github.authorized_response()
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s resp=%s' % (
+            request.args['error'], request.args['error_description'], resp)
+    session['github_token'] = (resp['access_token'], '')
+    return redirect(url_for('account.github_login'))
 
-    resp = blueprint.session.get("/me?fields=name,email,id")
-    if not resp.ok:
-        msg = "Failed to fetch user info from Facebook."
-        flash(msg, category="error")
-        return False
 
-    facebook_info = resp.json()
-    facebook_user_id = str(facebook_info["id"])
+@github.tokengetter
+def get_github_oauth_token():
+    return session.get('github_token')
 
-    # Find this OAuth token in the database, or create it
-    query = OAuth.query.filter_by(
-        provider=blueprint.name,
-        provider_user_id=facebook_user_id,
-    )
-    try:
-        oauth = query.one()
-    except NoResultFound:
-        oauth = OAuth(
-            provider=blueprint.name,
-            provider_user_id=facebook_user_id,
-            token=token,
+# @account.route('/github-login-krishna')
+# def github_login():
+#     return github.authorize(
+#         callback=url_for('account.github_authorized', _external=True))
+#
+# @account.route('/github/authorized')
+# @github.authorized_handler
+# def github_authorized(resp):
+#     if resp is None:
+#         flash("Failed to log in with github.", category="error")
+#         return 'Access denied: reason=%s error=%s' % (
+#             request.args['error_reason'],
+#             request.args['error_description']
+#         )
+#     current_app.logger.info(resp)
+#     session['github_token'] = (resp['access_token'], '')
+#     user_github = github.get('user').data
+#
+#     # Check if user already exists, else update
+#     user = User.query.filter_by(email=user_github["email"]).first()
+#
+#     if user:
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome back!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+#
+#     else:
+#         # Create a new local user account for this user
+#         max_id = db.session.query(db.func.max(User.id)).scalar()
+#         user = User(
+#             id=max_id+1,
+#             email=user_github["email"],
+#             social_id=user_github["id"],
+#             social_provider="github",
+#             username=user_github["login"],
+#             first_name=user_github["name"],
+#             confirmed=True)
+#
+#         # Save and commit our database models
+#         db.session.add(user)
+#         db.session.commit()
+#
+#         session['user_id'] = user.id
+#         login_user(user, True)
+#         flash('You are now logged in. Welcome!', 'success')
+#         return redirect(request.args.get('next') or url_for('main.index'))
+#
+#     return False
+#
+# @github.tokengetter
+# def get_github_oauth_token():
+#     return session.get('github_token')
+
+
+@account.route('/facebook-login-krishna')
+def facebook_login():
+    return facebook.authorize(
+        callback=url_for('account.facebook_authorized', _external=True))
+
+@account.route('/facebook/authorized')
+@facebook.authorized_handler
+def facebook_authorized(resp):
+    if resp is None:
+        flash("Failed to log in with facebook.", category="error")
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
         )
-    
-    user = User.query.filter_by(email=facebook_info["email"]).first()
+    session['facebook_token'] = (resp['access_token'], '')
+    user_facebook = facebook.get('/me?fields=name,email,id').data
 
-    if oauth.user:
-        login_user(oauth.user)
-        flash('You are now logged in. Welcome back!', 'success')
-        return redirect(request.args.get('next') or url_for('main.index'))
+    # Check if user already exists, else update
+    user = User.query.filter_by(email=user_facebook["email"]).first()
 
-    elif user:
+    if user:
         login_user(user, True)
         flash('You are now logged in. Welcome back!', 'success')
         return redirect(request.args.get('next') or url_for('main.index'))
@@ -228,37 +478,26 @@ def facebook_logged_in(blueprint, token):
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
             id=max_id+1,
-            email=facebook_info["email"],
-            social_id=facebook_info["id"],
+            email=user_facebook["email"],
+            social_id=user_facebook["id"],
             social_provider="facebook",
-            first_name=facebook_info["name"],
+            first_name=user_facebook["name"],
             confirmed=True)
-        # Associate the new local user account with the OAuth token
-        oauth.user = user
+
         # Save and commit our database models
-        db.session.add_all([user, oauth])
+        db.session.add(user)
         db.session.commit()
-        # Log in the new local user account
+
+        session['user_id'] = user.id
         login_user(user, True)
         flash('You are now logged in. Welcome!', 'success')
         return redirect(request.args.get('next') or url_for('main.index'))
 
-    # Disable Flask-Dance's default behavior for saving the OAuth token
     return False
 
-
-@oauth_error.connect_via(facebook_blueprint)
-def facebook_error(blueprint, error, error_description=None, error_uri=None):
-    msg = (
-        "OAuth error from {name}! "
-        "error={error} description={description} uri={uri}"
-    ).format(
-        name=blueprint.name,
-        error=error,
-        description=error_description,
-        uri=error_uri,
-    )
-    flash(msg, category="error")
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('facebook_token')
 
 
 @account.route('/login', methods=['GET', 'POST'])
@@ -306,6 +545,10 @@ def register():
 @account.route('/logout')
 @login_required
 def logout():
+    session.pop('google_token', None)
+    session.pop('github_token', None)
+    session.pop('facebook_token', None)
+    session.pop('user_id', None)
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))
@@ -546,7 +789,7 @@ def create_app():
             template='account/email/confirm_app',
             user=current_user._get_current_object(),
             app_name=form.application_name.data)
-            
+
         flash('You application has been created.', 'success')
         return redirect(
             url_for('account.update_app', application_id=app.application_id))

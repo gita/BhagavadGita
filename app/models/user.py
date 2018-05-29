@@ -3,9 +3,10 @@ from flask_login import AnonymousUserMixin, UserMixin, current_user
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
+# from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
 
-from .. import db, login_manager, github_blueprint, google_blueprint, facebook_blueprint
+from .. import db, login_manager
+# from .. import github_blueprint, google_blueprint, facebook_blueprint
 
 
 class Permission:
@@ -298,11 +299,11 @@ class App(db.Model):
     user = db.relationship('User')
 
 
-class OAuth(OAuthConsumerMixin, db.Model):
-    provider_user_id = db.Column(db.String(256), unique=True)
-
-    user_id = db.Column(db.ForeignKey('users.id'))
-    user = db.relationship('User')
+# class OAuth(OAuthConsumerMixin, db.Model):
+#     provider_user_id = db.Column(db.String(256), unique=True)
+#
+#     user_id = db.Column(db.ForeignKey('users.id'))
+#     user = db.relationship('User')
 
 
 class UserProgress(db.Model):
@@ -325,13 +326,14 @@ class UserFavourite(db.Model):
     user = db.relationship('User')
 
 
-github_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_user)
-google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_user)
-facebook_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_user)
+# github_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_user)
+# google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_user)
+# facebook_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user=current_user)
 
 login_manager.anonymous_user = AnonymousUser
 
 
 @login_manager.user_loader
 def load_user(user_id):
+    current_app.logger.info(user_id)
     return User.query.get(int(user_id))

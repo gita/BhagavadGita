@@ -8,10 +8,10 @@ from flask import (abort, current_app, flash, jsonify, make_response, redirect,
                    render_template, request, url_for, send_from_directory)
 from flask_rq import get_queue
 
-from app import babel, db, es, github_blueprint
+from app import babel, db, es
 from app.models.chapter import ChapterModel, ChapterModelHindi
 from app.models.verse import VerseModel, VerseModelHindi, UserReadingPlanItems
-from app.models.user import UserFavourite, OAuth, User
+from app.models.user import UserFavourite, User
 
 from . import main
 from ..email import send_email
@@ -21,9 +21,6 @@ from flask_login import current_user, login_user
 from datetime import datetime, timedelta
 import time
 from werkzeug.security import gen_salt
-
-from flask_dance.consumer import oauth_authorized, oauth_error
-from sqlalchemy.orm.exc import NoResultFound
 
 from collections import OrderedDict
 
@@ -412,7 +409,7 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                 chapter_count = [dict(r) for r in result][0]['count']
 
                 chapter_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
-                
+
                 if chapter_count == total_chapter_count: badge_id_list.append(chapter_number+9)
 
                 if badge_id_list != []:
