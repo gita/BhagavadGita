@@ -65,7 +65,7 @@ pylint==1.9.1
 pyparsing==2.2.0
 python-dateutil==2.7.3
 python-editor==1.0.3
-pytz==2017.3
+pytz==2018.4
 PyYAML==3.12
 raygun4py==3.1.4
 redis==2.10.6
