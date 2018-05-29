@@ -25,6 +25,7 @@
 
 <div class="container" style="margin-bottom: 10vh;">
  {% if current_user.is_authenticated %}
+ {% if gita %}
   <div class="row" style="margin-bottom: 2rem">
     <div class="col-md-12" align="center">
       <h4 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Overall Bhagavad Gita') }}</u></strong></h4>
@@ -37,7 +38,8 @@
   <hr>
   <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Chapterwise Progress') }}</u></strong></h5>
   <br>
-  
+  {% endif %}
+
   {% endif %}
   <div class="row">
     <div class="col-md-12">
@@ -221,6 +223,7 @@ cal.init({
 });
 </script>
 
+{% if gita %}
 <script>
 $('.bhagavad.gita').circleProgress({
     value: {{gita}},
@@ -231,4 +234,5 @@ $('.bhagavad.gita').circleProgress({
     $(this).find('strong').html(Math.round(100 * stepValue.toFixed(2).substr(1)) + '<i>%</i>');
   });
 </script>
+{% endif %}
 {% endblock %}
