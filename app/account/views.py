@@ -358,32 +358,34 @@ def get_google_oauth_token():
     return session.get('google_token')
 
 
-@account.route('/github-login-krishna')
+# Radha Krishna
+
+@account.route('/github-login')
 def github_login():
-    # if 'github_token' in session:
-    #     me = github.get('user')
-    #     email = me.data.get('email')
-    #     name = me.data.get('name')
-    #     user = User.query.filter_by(email=email).first()
-    #     if user is not None:
-    #         login_user(user, True)
-    #         flash('You are now logged in. Welcome back!', 'success')
-    #         return redirect(request.args.get('next') or url_for('main.index'))
-    #     else:
-    #         max_id = db.session.query(db.func.max(User.id)).scalar()
-    #         user = User(
-    #             id=max_id+1,
-    #             email=email,
-    #             social_id=me.data.get('id'),
-    #             social_provider="github",
-    #             username=me.data.get('login'),
-    #             first_name=name,
-    #             confirmed=True)
-    #         db.session.add(user)
-    #         db.session.commit()
-    #         login_user(user, True)
-    #         flash('You are now logged in. Welcome back!', 'success')
-    #         return redirect(request.args.get('next') or url_for('main.index'))
+    if 'github_token' in session:
+        me = github.get('user')
+        email = me.data.get('email')
+        name = me.data.get('name')
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
+        else:
+            max_id = db.session.query(db.func.max(User.id)).scalar()
+            user = User(
+                id=max_id+1,
+                email=email,
+                social_id=me.data.get('id'),
+                social_provider="github",
+                username=me.data.get('login'),
+                first_name=name,
+                confirmed=True)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, True)
+            flash('You are now logged in. Welcome back!', 'success')
+            return redirect(request.args.get('next') or url_for('main.index'))
     return github.authorize(
         callback=url_for('account.github_authorized', _external=True))
 
@@ -391,87 +393,16 @@ def github_login():
 @account.route('/github/authorized')
 def github_authorized():
     resp = github.authorized_response()
-
-    if resp is None:
-        flash("An error occurred.", "danger")
-        return redirect("/account/login")
-
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s resp=%s' % (
+            request.args['error'], request.args['error_description'], resp)
     session['github_token'] = (resp['access_token'], '')
-    user_github = github.get('user').data
-
-    user = User.query.filter_by(email=user_github["email"]).first()
-
-    if not user:
-        # Create a new local user account for this user
-        max_id = db.session.query(db.func.max(User.id)).scalar()
-        user = User(
-            id=max_id+1,
-            email=user_github["email"],
-            social_id=user_github["id"],
-            social_provider="github",
-            username=user_github["login"],
-            first_name=user_github["name"],
-            confirmed=True)
-
-        # Save and commit our database models
-        db.session.add(user)
-        db.session.commit()
-
-    login_user(user, remember=True)
-    flash("You are now signed up.", "success")
-    return redirect(request.args.get('next') or url_for('main.index'))
+    return redirect(url_for('account.github_login'))
 
 
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
-
-
-# Radha Krishna
-
-# @account.route('/github-login')
-# def github_login():
-#     if 'github_token' in session:
-#         me = github.get('user')
-#         email = me.data.get('email')
-#         name = me.data.get('name')
-#         user = User.query.filter_by(email=email).first()
-#         if user is not None:
-#             login_user(user, True)
-#             flash('You are now logged in. Welcome back!', 'success')
-#             return redirect(request.args.get('next') or url_for('main.index'))
-#         else:
-#             max_id = db.session.query(db.func.max(User.id)).scalar()
-#             user = User(
-#                 id=max_id+1,
-#                 email=email,
-#                 social_id=me.data.get('id'),
-#                 social_provider="github",
-#                 username=me.data.get('login'),
-#                 first_name=name,
-#                 confirmed=True)
-#             db.session.add(user)
-#             db.session.commit()
-#             login_user(user, True)
-#             flash('You are now logged in. Welcome back!', 'success')
-#             return redirect(request.args.get('next') or url_for('main.index'))
-#     return github.authorize(
-#         callback=url_for('account.github_authorized', _external=True))
-#
-#
-# @account.route('/github/authorized')
-# def github_authorized():
-#     resp = github.authorized_response()
-#     if resp is None or resp.get('access_token') is None:
-#         return 'Access denied: reason=%s error=%s resp=%s' % (
-#             request.args['error'], request.args['error_description'], resp)
-#     session['github_token'] = (resp['access_token'], '')
-#     return redirect(url_for('account.github_login'))
-#
-#
-# @github.tokengetter
-# def get_github_oauth_token():
-#     return session.get('github_token')
 
 # Radha krishna
 
