@@ -4,9 +4,9 @@ Frontend and REST API for BhagavadGita.io
 
 **Backend** - Flask
 
-**Frontend** - MDBootstrap
+**Frontend** - Bootstrap 4
 
-**Database** - PostgreSQL
+**Database** - PostgreSQL, ElasticSearch
 
 ## REST API
 
