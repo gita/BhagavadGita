@@ -10,7 +10,8 @@ Gita{% endblock %} {% block meta_tags %}
     <div class="container">
         <div class="text-white text-center d-flex align-items-center">
             <div class="py-5" style="width: 100%; padding-top: 8rem!important;">
-                <h1 class="card-title pt-3 mb-5 font-bold">{{ _('GITA DAILY') }}</h1>
+                <h1 class="card-title pt-3 font-bold">{{reading_plan['reading_plan_name']}}</h1>
+                <h4 class="card-title pt-3 font-bold">{{reading_plan['reading_plan_description']}}</h4>
             </div>
         </div>
     </div>
@@ -28,7 +29,7 @@ Gita{% endblock %} {% block meta_tags %}
                 <a class="btn btn-warning" id="select_date">
                     {{plans[0]['day']}}
                 </a>
-                {% if request.path[-1] != '328' %}
+                {% if batch_id != total_batches %}
                 {% set next_url = request.path[:-1] + ((request.path[-1]|int)+1)|string %}
                 <a class="btn btn-warning" href="{{next_url}}"><i class="fa fa-arrow-right"></i></a>
                 {% endif %}
@@ -113,7 +114,7 @@ Gita{% endblock %} {% block meta_tags %}
         border-radius: 10em;
     }
 
-    h1 {
+    h1, h4 {
         text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
     }
 

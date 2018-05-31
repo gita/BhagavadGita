@@ -887,48 +887,70 @@ def create_reading_plan(reading_plan_id):
     current_app.logger.info("RadhaKrishna")
     if current_user.is_authenticated:
         sql = """
-            INSERT INTO user_reading_plans
-            VALUES ('%s', '%s', %s, 0)
-            RETURNING user_reading_plan_id
-        """ % (gen_salt(10), reading_plan_id, current_user.get_id())
+                SELECT COUNT(user_reading_plan_id) as count
+                FROM user_reading_plans
+                WHERE user_id = %s
+                AND reading_plan_id = '%s'
+            """ % (current_user.get_id(), reading_plan_id)
         result = db.session.execute(sql)
-        user_reading_plan_id = [dict(d) for d in result][0]['user_reading_plan_id']
-        db.session.commit()
+        count = [dict(r) for r in result][0]['count']
 
-        timestamp = datetime.now()
+        if count < 1:
+            sql = """
+                INSERT INTO user_reading_plans
+                VALUES ('%s', '%s', %s, 0)
+                RETURNING user_reading_plan_id
+            """ % (gen_salt(10), reading_plan_id, current_user.get_id())
+            result = db.session.execute(sql)
+            user_reading_plan_id = [dict(d) for d in result][0]['user_reading_plan_id']
 
-        sql = """
-            SELECT chapter_number, verse_number
-            FROM verses
-            ORDER BY chapter_number asc, verse_order asc
-        """
-        result = db.session.execute(sql)
-        verses = [OrderedDict(d) for d in result]
+            timestamp = datetime.now()
 
-        def grouped(iterable, n):
-            return zip(*[iter(iterable)]*n)
+            sql = """
+                SELECT chapter_number, verse_number
+                FROM verses
+                ORDER BY chapter_number asc, verse_order asc
+            """
+            result = db.session.execute(sql)
+            verses = [OrderedDict(d) for d in result]
 
-        count = 0
-        batch_id = 1
-        verse_list = []
+            # def grouped(iterable, n):
+            #     return zip(*[iter(iterable)]*n)
 
-        for radha, krishna in grouped(verses, 2):
-            verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-                days=count), radha['chapter_number'], radha['verse_number'], 0, batch_id)
-            verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-                days=count), krishna['chapter_number'], krishna['verse_number'], 0, batch_id)
-            verse_list.append(verse_one)
-            verse_list.append(verse_two)
-            count+=1
-            batch_id += 1
-        verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-                days=count), verses[-1]['chapter_number'], verses[-1]['verse_number'], 0, batch_id)
-        verse_list.append(verse_one)
+            count = 0
+            batch_id = 1
+            verse_list = []
 
-        db.session.bulk_save_objects(verse_list)
-        db.session.commit()
+            # for radha, krishna in grouped(verses, 2):
+            #     verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+            #         days=count), radha['chapter_number'], radha['verse_number'], 0, batch_id)
+            #     verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+            #         days=count), krishna['chapter_number'], krishna['verse_number'], 0, batch_id)
+            #     verse_list.append(verse_one)
+            #     verse_list.append(verse_two)
+            #     count+=1
+            #     batch_id += 1
+            # verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
+            #         days=count), verses[-1]['chapter_number'], verses[-1]['verse_number'], 0, batch_id)
+            # verse_list.append(verse_one)
 
-    return redirect("/reading-plan/" + str(user_reading_plan_id) + '/1')
+            # db.session.bulk_save_objects(verse_list)
+            # db.session.commit()
+
+            def split(a, n):
+                k, m = divmod(len(a), n)
+                return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
+
+            for verse_day in list(split(verses, 365)):
+                for verse in verse_day:
+                    verse_obj = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(days=count), verse['chapter_number'], verse['verse_number'], 0, batch_id)
+                    verse_list.append(verse_obj)
+                count+=1
+                batch_id+=1
+            db.session.bulk_save_objects(verse_list)
+            db.session.commit()
+
+            return redirect("/reading-plan/" + str(user_reading_plan_id) + '/1')
 
 @main.route('/reading-plan/<string:user_reading_plan_id>/<int:batch_id>', methods=['GET'])
 def reading_plan(user_reading_plan_id, batch_id):
@@ -1017,9 +1039,19 @@ def reading_plan(user_reading_plan_id, batch_id):
         result = db.session.execute(sql)
         status = [dict(r) for r in result][0]['status']
 
+        sql = """
+            SELECT rp.*
+            FROM reading_plans rp
+            JOIN user_reading_plans urp
+            ON rp.reading_plan_id = urp.reading_plan_id
+            WHERE user_reading_plan_id = '%s'
+        """ % (user_reading_plan_id)
+        result = db.session.execute(sql)
+        reading_plan = [dict(r) for r in result][0]
+
         if status == 1: return redirect(url_for('main.reading_plans'))
 
-    return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list)
+    return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list, reading_plan=reading_plan)
 
 
 @main.route('/get-next-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])

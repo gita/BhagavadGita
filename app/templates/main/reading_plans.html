@@ -32,21 +32,21 @@ Gita{% endblock %} {% block meta_tags %}
             <div class="row">
                 {% if plans != [] %}
                 {% for plan in plans %}
-                <div class="col-md-12">
+                <div class="col-md-12" style="margin-bottom: 1rem">
                     <div class="card amber text-center z-depth-2 h-100">
                         <div class="card-body">
                             <h4 class="font-up font-bold white-text mt-2 mb-3">
-                                <strong>{{plan.reading_plan_name|replace('"', "")}}</strong>
+                                <strong>{{plan.reading_plan_name}}</strong>
                             </h4>
-                            <p>{{plan.reading_plan_description|replace('"', "")}}</p>
+                            <p>{{plan.reading_plan_description}}</p>
                             {% if user_plans != [] %}
                             {% for user_plan in user_plans %}
-                            {% if plan.reading_plan_id|replace("'", "") == user_plan['reading_plan_id']|replace("'", "") %}
+                            {% if plan.reading_plan_id == user_plan['reading_plan_id'] %}
                             {% if user_plan['status'] != 1 %}
                                 {% if batch_list != [] %}
                                 {% for batch in batch_list %}
                                 {% if batch['user_reading_plan_id'] == user_plan['user_reading_plan_id'] %}
-                                <a class="btn btn-warning waves-effect waves-light" href="/reading-plan/{{user_plan['user_reading_plan_id']|replace("'", "")}}/{{batch["batch_id"]}}">Resume Reading</a>
+                                <a class="btn btn-warning waves-effect waves-light" href="/reading-plan/{{user_plan['user_reading_plan_id']}}/{{batch['batch_id']}}">Resume Reading</a>
                                 {% endif %}
                                 {% endfor %}
                                 {% endif %}
@@ -56,6 +56,8 @@ Gita{% endblock %} {% block meta_tags %}
                                 <br>
                                 <h5 style="color: #F57C00">Reading Plan Complete</h5>
                             {% endif %}
+                            {% else %}
+                                <a class="btn btn-success waves-effect waves-light" href="/create-reading-plan/{{plan.reading_plan_id}}">Start Reading</a>
                             {% endif %}
                             {% endfor %}
                             {% else %}
