@@ -692,6 +692,7 @@ def get_favourite(chapter_number, verse_number):
         if count == 1:
             return jsonify("True")
         return jsonify("False")
+    abort(401)
 
 
 @main.route('/about/', methods=['GET'])
@@ -876,6 +877,8 @@ def create_reading_plan(reading_plan_id):
             db.session.commit()
 
             return redirect("/reading-plan/" + str(user_reading_plan_id) + '/1')
+    else:
+        abort(401)
 
 @main.route('/reading-plan/<string:user_reading_plan_id>/<int:batch_id>', methods=['GET'])
 def reading_plan(user_reading_plan_id, batch_id):
@@ -976,7 +979,9 @@ def reading_plan(user_reading_plan_id, batch_id):
 
         if status == 1: return redirect(url_for('main.reading_plans'))
 
-    return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list, reading_plan=reading_plan)
+        return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list, reading_plan=reading_plan)
+    else:
+        abort(401)
 
 
 @main.route('/get-next-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
@@ -1034,6 +1039,8 @@ def get_next_verse(user_reading_plan_id, batch_id, verse_number, chapter_number)
             return jsonify(next_verse[0])
         else:
             return jsonify("None")
+    else:
+        abort(401)
 
 
 @main.route('/get-previous-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
@@ -1055,6 +1062,8 @@ def get_previous_verse(user_reading_plan_id, batch_id, verse_number, chapter_num
             return jsonify(previous_verse[0])
         else:
             return jsonify("None")
+    else:
+        abort(401)
 
 
 @main.route('/delete-plan/<string:user_reading_plan_id>/', methods=['GET'])
@@ -1075,6 +1084,8 @@ def delete_plan(user_reading_plan_id):
         db.session.commit()
 
         return redirect(url_for('main.reading_plans'))
+    else:
+        abort(401)
 
 
 @main.route('/update-verse-status/<string:user_reading_plan_id>/<int:batch_id>/<int:user_reading_plan_item_id>/<int:status>/', methods=['GET'])
@@ -1119,7 +1130,9 @@ def update_verse_status(user_reading_plan_id, batch_id, user_reading_plan_item_i
             db.session.execute(sql)
             db.session.commit()
 
-    return jsonify("RadhaKrishna")
+        return jsonify("RadhaKrishna")
+    else:
+        abort(401)
 
 
 @main.route('/progress/', methods=['GET'])

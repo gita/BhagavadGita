@@ -75,24 +75,6 @@
       {% endif %}
     </div>
   </div>
-
-  <hr>
-
-  {% if current_user.is_authenticated %}
-  <div class="row"></div>
-    <div class="col-md-12" align="center">
-      <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Progress (By Month)') }}</u></strong></h5>
-      <button id="thegitaback" style="margin-bottom: 10px; margin-bottom: 6px; padding: 0.2rem 0.2rem 0.2rem 0.2rem;" class="btn btn-warning">
-        <i class="material-icons">arrow_back</i>
-      </button>
-      <button id="thegitanext" style="margin-bottom: 10px; margin-bottom: 6px; padding: 0.2rem 0.2rem 0.2rem 0.2rem;" class="btn btn-warning">
-        <i class="material-icons">arrow_forward</i>
-      </button>
-      <div id="thegita">
-      </div>
-    </div>
-  </div>
-  {% endif %}
 </div>
 
 <style>
@@ -134,94 +116,7 @@
 h1 {
   text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
 }
-#thegita .graph-label {
-  font-weight: bold;
-  font-size: 18px;
-  fill: #fff;
-}
-
-#thegita .domain-background {
-  fill: #2d3a47;
-}
-
-#thegita .grap-rect {
-  fill: #35252d;
-}
-
-#thegita .q0 {
-  fill: #35252d;
-}
-
-#thegita .q1 {
-  fill: #FFE0B2;
-  opacity: 1
-}
-
-#thegita .q2 {
-  fill: #FFC107;
-  opacity: 1
-}
-
-#thegita .q3 {
-  fill: #FF9800;
-  opacity: 1
-}
-
-#thegita .q4 {
-  fill: #F57C00;
-  opacity: 1
-}
-
-#thegita .q5 {
-  fill: #FF5722;
-  opacity: 1
-}
-
-#thegita .q6 {
-  fill: #F57C00;
-  opacity: 1
-}
-
-#thegita .graph-rect:hover {
-  fill: #fff;
-  opacity: 1;
-  stroke-width: 0;
-}
-
 </style>
-
-<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
-
-<script type="text/javascript">
-var cal = new CalHeatMap();
-cal.init({
-  itemSelector: "#thegita",
-  domain: "month",
-  subDomain: "x_day",
-  data: "/thegita",
-  cellSize: 15,
-  cellRadius: 3,
-  cellPadding: 5,
-  range: 1,
-  domainMargin: 20,
-  animationDuration: 800,
-  domainDynamicDimension: false,
-  previousSelector: "#thegitaback",
-  nextSelector: "#thegitanext",
-  label: {
-    position: "left",
-    offset: {
-      x: 20,
-      y: 35
-    },
-    width: 110
-  },
-  legend: [1, 5, 10, 20],
-  tooltip: true
-});
-</script>
 
 {% if gita %}
 <script>
