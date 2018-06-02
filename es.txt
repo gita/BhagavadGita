@@ -19,16 +19,10 @@ PUT verses/_mapping/verse
     "meaning": {
       "type": "text"
     },
-    "meaning_large": {
-      "type": "text"
-    },
     "chapter_number": {
       "type": "integer"
     },
     "verse_order": {
-      "type": "integer"
-    },
-    "id": {
       "type": "integer"
     }
   }

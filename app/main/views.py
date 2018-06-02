@@ -128,7 +128,7 @@ def index_radhakrishna(language):
 def search():
     badge_list = []
     query = request.args.get('query')
-    res = es.search(index="verses", body={
+    res = es.search(index="*", body={
       "from": 0, "size": 1000,
       "query": {
         "multi_match": {
@@ -149,7 +149,7 @@ def search():
 def krishna_search():
     query = request.args.get('query')
     current_app.logger.info(query)
-    res = es.search(index="verses", body={
+    res = es.search(index="verses_hi", body={
       "from": 0, "size": 10,
       "_source": ["meaning"],
       "query": {
@@ -1145,14 +1145,19 @@ def progress():
     progress = {key:None for key in range(1, 19)}
 
     sql = """
-            SELECT EXTRACT(EPOCH FROM timestamp), count(*)
+            SELECT EXTRACT(EPOCH FROM timestamp::date), count(*)
             FROM user_progress
             WHERE user_id = 67
-            AND date_part('year', timestamp) = '2018'
-            GROUP BY EXTRACT(EPOCH FROM timestamp)
+            GROUP BY timestamp::date
         """
     result = db.session.execute(sql)
-    thegita = {r['date_part']:r['count'] for r in result}
+    thegita = []
+    for r in result:
+        d = {}
+        d['x'] = r['date_part']
+        d['y'] = r['count']
+        thegita.append(d)
+    current_app.logger.info(thegita)
 
     if current_user.is_authenticated:
         sql = """
@@ -1186,7 +1191,7 @@ def progress():
 
         if total_shlokas:
             gita = float("%.2f" % (total_shlokas/692))
-    return render_template('main/progress.html', progress=progress, gita=gita, thegita=thegita, badge_list = badge_list)
+    return render_template('main/progress.html', progress=progress, gita=gita, thegita=json.dumps(thegita), badge_list = badge_list)
 
 
 @main.route('/thegita/', methods=['GET'])

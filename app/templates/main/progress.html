@@ -28,33 +28,54 @@
  {% if gita %}
   <div class="row" style="margin-bottom: 2rem">
     <div class="col-md-12" align="center">
-      <h4 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Overall Bhagavad Gita') }}</u></strong></h4>
-      <div class="bhagavad gita">
-        <strong></strong>
+      <div class="card text-center z-depth-2 h-100">
+        <div class="card-body">
+          <h4 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Overall Bhagavad Gita') }}</u></strong></h4>
+          <div class="bhagavad gita">
+            <strong></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% endif %}
+  <div class="row" style="margin-bottom: 2rem">
+    <div class="col-md-12">
+      {% if current_user.is_authenticated %}
+        {% if verses != None %}
+        <div class="card text-center z-depth-2 h-100">
+          <div class="card-body">
+            <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Chapterwise Progress') }}</u></strong></h5>
+            <br>
+            <div class="row">
+              {% for chapter, percent in progress.items() %}
+              <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: {{progress[chapter]}}%" aria-valuenow="{{progress[chapter]}}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <p class="font-up font-bold mt-2 mb-3" style="text-align: center;"><strong>{{ _('Chapter') }} {{chapter}}</strong></p>
+              </div>
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 2rem">
+    <div class="col-md-12">
+      <div class="card text-center z-depth-2 h-100">
+        <div class="card-body">
+          <div class="col-lg-10">
+            <div id="radhakrishna"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <hr>
-  <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Chapterwise Progress') }}</u></strong></h5>
-  <br>
-  {% endif %}
-
-  {% endif %}
-  <div class="row">
-    <div class="col-md-12">
-      {% if current_user.is_authenticated %}
-        {% if verses != None %}
-          <div class="row">
-            {% for chapter, percent in progress.items() %}
-            <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
-              <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: {{progress[chapter]}}%" aria-valuenow="{{progress[chapter]}}" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <p class="font-up font-bold mt-2 mb-3" style="text-align: center;"><strong>{{ _('Chapter') }} {{chapter}}</strong></p>
-            </div>
-          {% endfor %}
-          </div>
         {% else %}
         <div class="card warning-color text-center z-depth-2 h-100">
           <div class="card-body">
@@ -78,6 +99,10 @@
 </div>
 
 <style>
+body {
+  background-color: #eee;
+}
+
 .jumbotron {
   background-image: url("/static/images/gita.jpg");
   background-size: cover;
@@ -117,7 +142,7 @@ h1 {
   text-shadow: -2px -2px 0 #FFBB33, 2px -2px 0 #FFBB33, -2px 2px 0 #FFBB33, 2px 2px 0 #FFBB33;
 }
 </style>
-
+<script src="https://code.highcharts.com/highcharts.js"></script>
 {% if gita %}
 <script>
 $('.bhagavad.gita').circleProgress({
@@ -130,4 +155,52 @@ $('.bhagavad.gita').circleProgress({
   });
 </script>
 {% endif %}
+<script>
+  var thegita = {{thegita|safe}}
+  var gita = []
+  for (var i in thegita) {
+    verses = []
+    verses.push(thegita[i].x*1000, thegita[i].y)
+    gita.push(verses)
+  }
+</script>
+<script>
+  Highcharts.chart('radhakrishna', {
+    chart: {
+        type: 'spline'
+    },
+    title: false,
+    tooltip: false,
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { // don't display the dummy year
+            month: '%e. %b',
+            year: '%b'
+        },
+        title: {
+            text: 'Date'
+        }
+    },
+    yAxis: {
+        title: {
+            text: 'Number of verses read'
+        },
+        min: 0
+    },
+    plotOptions: {
+        spline: {
+            marker: {
+                enabled: true
+            }
+        }
+    },
+
+    colors: ['#F57C00'],
+    series: [{
+        showInLegend: false,
+        name: "RadhaKrishna",
+        data: gita
+    }]
+});
+</script>
 {% endblock %}
