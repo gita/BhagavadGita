@@ -1,4 +1,4 @@
-{% import 'macros/page_macros.html' as page %} {% extends 'layouts/base.html' %} {% block title %}Favourite Shlokas - Bhagavad
+{% import 'macros/page_macros.html' as page %} {% extends 'layouts/base.html' %} {% block title %}Reading Plan - Bhagavad
 Gita{% endblock %} {% block meta_tags %}
 <meta name="robots" content="noindex"> {% endblock %} {% block content %}
 <nav class="breadcrumb">
@@ -22,7 +22,7 @@ Gita{% endblock %} {% block meta_tags %}
     <div class="row">
         <div class="col-md-12" align="center">
             <div class="btn-group">
-                {% if batch_id != '1' %}
+                {% if batch_id != 1 %}
                 {% set previous_url = request.path[:-1] + ((request.path[-1]|int)-1)|string %}
                 <a class="btn btn-warning" href="{{previous_url}}"><i class="fa fa-arrow-left"></i></a>
                 {% endif %}

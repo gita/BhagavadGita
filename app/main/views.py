@@ -31,109 +31,49 @@ if sys.version_info[0] < 3:
 LANGUAGES = {'en': 'English', 'hi': 'हिंदी'}
 
 verse_dict = {
-    1: {
-        '16': "16-18",
-        '17': "16-18",
-        '18': "16-18",
-        '21': "21-22",
-        '22': "21-22",
-        '32': "32-35",
-        '33': "32-35",
-        '34': "32-35",
-        '35': "32-35",
-        '37': "37-38",
-        '38': "37-38",
-    },
+    1: {},
     2: {
         '42': "42-43",
-        '43': "42-43",
+        '43': "42-43"
     },
     3: {},
-    4: {},
+    4: {
+        '29': "29-30",
+        '30': "29-30"
+    },
     5: {
         '8': "8-9",
         '9': "8-9",
         '27': "27-28",
-        '28': "27-28",
+        '28': "27-28"
     },
-    6: {
-        '11': "11-12",
-        '12': "11-12",
-        '13': "13-14",
-        '14': "13-14",
-        '20': "20-23",
-        '21': "20-23",
-        '22': "20-23",
-        '23': "20-23",
-    },
+    6: {},
     7: {},
     8: {},
     9: {},
     10: {
         '4': "4-5",
-        '5': "4-5",
-        '12': "12-13",
-        '13': "12-13",
+        '5': "4-5"
     },
     11: {
-        '10': "10-11",
-        '11': "10-11",
         '26': "26-27",
-        '27': "26-27",
-        '41': "41-42",
-        '42': "41-42",
+        '27': "26-27"
     },
     12: {
         '3': "3-4",
-        '4': "3-4",
-        '6': "6-7",
-        '7': "6-7",
-        '13': "13-14",
-        '14': "13-14",
-        '18': "18-19",
-        '19': "18-19",
+        '4': "3-4"
     },
-    13: {
-        '1': "1-2",
-        '2': "1-2",
-        '6': "6-7",
-        '7': "6-7",
-        '8': "8-12",
-        '9': "8-12",
-        '10': "8-12",
-        '11': "8-12",
-        '12': "8-12",
-    },
-    14: {
-        '22': "22-25",
-        '23': "22-25",
-        '24': "22-25",
-        '25': "22-25",
-    },
-    15: {
-        '3': "3-4",
-        '4': "3-4",
-    },
+    13: {},
+    14: {},
+    15: {},
     16: {
-        '1': "1-3",
-        '2': "1-3",
-        '3': "1-3",
-        '11': "11-12",
-        '12': "11-12",
-        '13': "13-15",
-        '14': "13-15",
-        '15': "13-15",
+        '15': "15-16",
+        '16': "15-16"
     },
-    17: {
-        '5': "5-6",
-        '6': "5-6",
-        '26': "26-27",
-        '27': "26-27",
-    },
+    17: {},
     18: {
-        '51': "51-53",
-        '52': "51-53",
-        '53': "51-53",
+        '36': "36-37",
+        '37': "36-37"
     },
 }
 
@@ -475,7 +415,7 @@ def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan
         abort(404)
     chapter = ChapterModel.find_by_chapter_number(chapter_number)
 
-    verses_table = "verses_" + language
+    verses_table = "verses_hi"
     sql = """
             SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order, vt.meaning_large
             FROM %s vt
@@ -914,34 +854,19 @@ def create_reading_plan(reading_plan_id):
             result = db.session.execute(sql)
             verses = [OrderedDict(d) for d in result]
 
-            # def grouped(iterable, n):
-            #     return zip(*[iter(iterable)]*n)
-
             count = 0
             batch_id = 1
             verse_list = []
 
-            # for radha, krishna in grouped(verses, 2):
-            #     verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-            #         days=count), radha['chapter_number'], radha['verse_number'], 0, batch_id)
-            #     verse_two = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-            #         days=count), krishna['chapter_number'], krishna['verse_number'], 0, batch_id)
-            #     verse_list.append(verse_one)
-            #     verse_list.append(verse_two)
-            #     count+=1
-            #     batch_id += 1
-            # verse_one = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(
-            #         days=count), verses[-1]['chapter_number'], verses[-1]['verse_number'], 0, batch_id)
-            # verse_list.append(verse_one)
-
-            # db.session.bulk_save_objects(verse_list)
-            # db.session.commit()
+            gita_times = {"gita_in_a_year": 365, "gita_in_a_month": 30}
 
             def split(a, n):
                 k, m = divmod(len(a), n)
                 return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
 
-            for verse_day in list(split(verses, 365)):
+            gita_time = gita_times[reading_plan_id]
+
+            for verse_day in list(split(verses, gita_time)):
                 for verse in verse_day:
                     verse_obj = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(days=count), verse['chapter_number'], verse['verse_number'], 0, batch_id)
                     verse_list.append(verse_obj)
@@ -1246,8 +1171,8 @@ def progress():
                 if chapter['chapter_number'] == chapter_number['chapter']:
                     progress[chapter['chapter_number']] = float("%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
 
-    if total_shlokas:
-        gita = float("%.2f" % (total_shlokas/700))
+        if total_shlokas:
+            gita = float("%.2f" % (total_shlokas/692))
     return render_template('main/progress.html', progress=progress, gita=gita, thegita=thegita, badge_list = badge_list)
 
 

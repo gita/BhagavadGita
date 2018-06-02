@@ -166,7 +166,7 @@
               <div class="meaning" align="center" style="margin-top: -2rem;">
                 <p style="font-size: 1.2rem;" class="verse-meaning">{{verse.meaning  | replace('"', "")}}</p>
               </div>
-              {% if verse.meaning_large != "" and verse.meaning_large != "null" %}
+              {% if verse.meaning_large != "" and verse.meaning_large != "null" and verse.meaning_large != "RadhaKrishna" %}
                 <h5 class="heading" style="margin-bottom: -16px;"><b><u>{{ _('Purport') }}</u></b></h5>
                 <br>
                 {% set meaning = verse.meaning_large | replace('"', "") %}
