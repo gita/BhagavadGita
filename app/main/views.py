@@ -701,6 +701,12 @@ def about():
     return render_template('main/about.html', badge_list=badge_list)
 
 
+@main.route('/app/', methods=['GET'])
+def app():
+    badge_list = []
+    return render_template('main/app.html', badge_list=badge_list)
+
+
 @main.route('/api/', methods=['GET'])
 def api():
 
