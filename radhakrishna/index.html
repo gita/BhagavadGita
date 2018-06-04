@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="author" content="Samanyou Garg">
+	<meta name=description content="I’m a 3rd year Computer Science Student at the University of Manchester having an in-depth knowledge of various technologies and a stong background in management and leadership.">
+	<link href="https://plus.google.com/b/108952947437010576278/+SamanyouGarg" rel="publisher" />
+	<meta name=keywords content="samanyou garg, cv, resume, samanyou, garg, radha, krishna, hanuman, computer science, software engineer, sita">
+	<title>Samanyou Garg</title>
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+	<link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
+	<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+	<link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
+	<meta name="application-name" content="&nbsp;" />
+	<meta name="msapplication-TileColor" content="#FFFFFF" />
+	<meta name="msapplication-TileImage" content="mstile-144x144.png" />
+	<meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+	<meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+	<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+	<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet">
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/extension.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+
+	<script>
+
+	document.addEventListener('DOMContentLoaded', function () {
+
+	  var hasClass = function(el, className) {
+			if (el.classList) {
+				return el.classList.contains(className);
+			} else {
+				return new RegExp("\\b" + className + "\\b").test(el.className);
+	    }
+		}
+	  var addClass = function(el, className) {
+			if (el.classList) {
+				return el.classList.add(className);
+			} else if (!hasClass(el, className)) {
+				return (el.className += " " + className);
+			}
+		};
+		var removeClass = function(el, className) {
+			if (el.classList) {
+				return el.classList.remove(className);
+			} else {
+				return (el.className = el.className.replace(
+					new RegExp("\\b" + className + "\\b", "g"),
+					""
+				));
+			}
+		};
+	  var hide = function(el) {
+	  	el.style.display = "none";
+		};
+	  var show = function(el) {
+			el.style.display = "block";
+		};
+	  var click = function(el, handler) {
+			if (!el.eventListener) {
+				el.eventListener = true;
+				return el.addEventListener("click", handler);
+			}
+		};
+	  var toggleTab = function(el) {
+	  	let links = el.target.parentNode.parentNode;
+	  	let linksEl = links.querySelectorAll("li");
+	  	for (let i = 0; i < linksEl.length; i++) {
+	  		let l = linksEl[i];
+	  		removeClass(l, "is-active");
+	  		hide(document.querySelector(l.firstChild.getAttribute("data-tab")));
+	  	}
+	  	addClass(el.target.parentNode, "is-active");
+	  	show(document.querySelector(el.target.getAttribute("data-tab")));
+	  };
+	  var toggleTabMenu = function(el) {
+	  	let links = el.target.parentNode.parentNode;
+	  	let linksEl = links.querySelectorAll("a");
+	  	for (let i = 0; i < linksEl.length; i++) {
+	  		let l = linksEl[i];
+	  		removeClass(l, "is-active");
+	  		hide(document.querySelector(l.getAttribute("data-tab")));
+	  	}
+	  	addClass(el.target, "is-active");
+	  	show(document.querySelector(el.target.getAttribute("data-tab")));
+	  };
+
+
+	  var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+	  if ($navbarBurgers.length > 0) {
+	    $navbarBurgers.forEach(function ($el) {
+	      $el.addEventListener('click', function () {
+	        var target = $el.dataset.target;
+	        var $target = document.getElementById(target);
+	        $el.classList.toggle('is-active');
+	        $target.classList.toggle('is-active');
+
+	      });
+	    });
+	  }
+
+
+	  var $tabs = Array.prototype.slice.call(document.querySelectorAll('.tabs'), 0);
+	  if ($tabs && $tabs.length > 0) {
+	    $tabs.forEach(function ($el) {
+	      targets = $el.querySelectorAll('[data-tab]');
+	      // console.log('targets', targets);
+	      for (j = 0, len1 = targets.length; j < len1; j++) {
+	        target = targets[j];
+	        tab = document.querySelector(target.getAttribute('data-tab'));
+	        // console.log('tab', tab)
+	        if (hasClass(target.parentNode, 'is-active') === false) {
+	          hide(tab);
+	        }
+	        click(target, toggleTab);
+	      }
+	    });
+	  }
+
+	  // these are side menus that act like tabs
+	  var $tabMenus = Array.prototype.slice.call(document.querySelectorAll('.tab-menu'), 0);
+	  if ($tabMenus && $tabMenus.length > 0) {
+	    $tabMenus.forEach(function ($el) {
+	      targets = $el.querySelectorAll('[data-tab]');
+	      // console.log('targets', targets);
+	      for (j = 0, len1 = targets.length; j < len1; j++) {
+	        target = targets[j];
+	        tabs = document.querySelector(target.getAttribute('data-tab'));
+	        if (tabs.length) { // selector is a class, it has many
+	          tabs.forEach(function (tab) {
+	            if (hasClass(target.parentNode, 'is-active') === false) {
+	              hide(tab);
+	            }
+	          })
+	        } else { // selector is an ID, it has one
+	          if (hasClass(target.parentNode, 'is-active') === false) {
+	            hide(tab);
+	          }
+	        }
+
+	        click(target, toggleTabMenu);
+	      }
+	    });
+	  }
+
+	});
+
+	</script>
+
+</head>
+
+<body data-gr-c-s-loaded="true">
+
+<div class="spinner-wrapper">
+	<div class="spinner"></div>
+</div>
+
+	<main>
+		<nav class="MainMenu navbar is-transparent">
+		  <div class="navbar-brand">
+		    <a class="navbar-item" href="/">
+		      <img src="images/gita.png" alt="Bhagavad Gita">
+		    </a>
+		    <div class="navbar-burger burger" data-target="main-menu">
+		      <span></span>
+		      <span></span>
+		      <span></span>
+		    </div>
+		  </div>
+
+		  <div class="navbar-menu" id="main-menu">
+		    <div class="navbar-start">
+		    </div>
+
+		    <div class="navbar-end">
+		      <div class="navbar-item">
+		        <div class="field is-grouped">
+		          <p class="control">
+		            <a class="button sam-Button" href="https://bhagavadgita.io">
+		              <span>Browse the Web App</span>
+								</a>
+								<a class="button sam-Button" href="https://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita">
+									<span>Download From Play Store</span>
+								</a>
+		          </p>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</nav>
+
+		<div class="MainHero">
+		  <div id="angles" class="">
+		    <div class="animals"></div>
+		    <span></span>
+		    <span></span>
+		    <span></span>
+		    <span></span>
+		    <span></span>
+		  </div>
+		  <section class="hero is-medium">
+		    <div class="hero-body">
+		      <div class="container">
+		  			<div class="columns">
+		  				<div class="column is-6">
+		    	      <h2 class="title">
+									<span>The Bhagavad Gita in a simple, beautiful and easy to use interface.</span>
+		    	      </h2>
+		    	      <p class="">
+ 									Bhagavad Gita - The Song of The Lord is a practical guide to one's life that guides you to re-organise your life, achieve inner peace and approach the Supreme Lord (the Ultimate Reality).
+		    	      </p>
+		            <p>
+		              <br>
+									<a class="button round-button webapp download sam-Button" style="margin: 2rem" href="https://bhagavadgita.io">
+										Browse the <br> <strong>Web App</strong>
+									</a>
+									<a class="button round-button android download sam-Button" style="margin: 2rem; margin-top: -1rem" href="https://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita">
+										Get It On <br> <strong>Google Play</strong>
+									</a>
+		            </p>
+		  				</div>
+
+		  			</div>
+		      </div>
+
+		    </div>
+		  </section>
+		</div>
+
+		<div class="Mockups">
+		  <img src="images/devices.png" alt="Bhagavad Gita">
+		</div>
+
+		<div class="Bundle hero">
+
+		  <div class="hero-body">
+
+		  <div class="container">
+
+				<div class="columns">
+					<div class="column">
+						<div class="card equal-height">
+							<div class="card-image is-flex" style="justify-content: center;">
+								<figure class="image is-128x128" style="margin-top: 1rem;">
+									<img src="images/code.svg" alt="Placeholder image">
+								</figure>
+							</div>
+							<div class="card-content">
+								<div class="content has-text-centered">
+									<p class="title is-4">Beautiful User Interface</p>
+									<p></p>
+									<p class="subtitle is-6">Read, study and recite the Bhagavad Gita in a simple, beautiful and easy to use interface, helping you focus on reading.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="card equal-height">
+							<div class="card-image is-flex" style="justify-content: center;">
+								<figure class="image is-128x128" style="margin-top: 1rem;">
+									<img src="images/code.svg" alt="Placeholder image">
+								</figure>
+							</div>
+							<div class="card-content">
+								<div class="content has-text-centered">
+									<p class="title is-4">Fast Search</p>
+									<p></p>
+									<p class="subtitle is-6">Search by chapter, verse, phrase or person to quickly find what you are looking for.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="card equal-height">
+							<div class="card-image is-flex" style="justify-content: center;">
+								<figure class="image is-128x128" style="margin-top: 1rem;">
+									<img src="images/code.svg" alt="Placeholder image">
+								</figure>
+							</div>
+							<div class="card-content">
+								<div class="content has-text-centered">
+									<p class="title is-4">Reliable</p>
+									<p></p>
+									<p class="subtitle is-6">Loads quickly and never shows the dinosaur, even in uncertain network conditions.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="Projects section">
+		    <div class="container">
+		      <div class="section-header columns has-text-centered is-centered is-hidden-tablet">
+		        <div class="column is-6">
+		          <h3 class="title">Projects</h3>
+		        </div>
+					</div>
+				</div>
+				
+				<div class="container">
+					<div class="columns">
+						<div class="column feature-box">
+								<div class="title" style="color: #F57C00">
+										 Explore Each Verse
+								</div>
+								<div class="text">
+										 Dive deep into each verse through a library of translations, transliterations and word meanings.
+								</div>
+						</div>
+						<div class="column">
+								<img class="image-box border-shadow " src="images/hanumanchalisa.png"
+											alt="">
+						</div>
+					</div>
+				</div>
+
+				<div class="container">
+					<div class="section">
+							<div class="columns reverse-in-mobile">
+									<div class="column">
+											<img class="image-box border-shadow " src="images/hanumanchalisa.png"
+													alt="">
+									</div>
+									<div class="column feature-box">
+											<div class="title" style="color: #F57C00">
+													Progress Tracking
+											</div>
+											<div class="text">
+													 Keep track of your Chapterwise, Overall and Monthly Progress using detailed graphs and statistics and Get Rewarded for your Progress with BADGES.
+											</div>
+									</div>
+							</div>
+					</div>
+				</div>
+
+				<div class="container">
+					<div class="columns">
+						<div class="column feature-box">
+								<div class="title" style="color: #F57C00">
+										Reading Plans
+								</div>
+								<div class="text">
+										Join Reading Plans to easily read Gita at your own paceand improve your Gita reading habits.
+								</div>
+						</div>
+						<div class="column">
+								<img class="image-box border-shadow " src="images/hanumanchalisa.png"
+											alt="">
+						</div>
+					</div>
+				</div>
+
+		</div>
+
+	<div class="Education section">
+		<div class="container">
+			<div class="owl-carousel owl-theme">
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">Really Fast</h4>
+							<p>Everybody hates slow apps. We are committed to making performance our number one feature.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<br>
+							<h4 class="title">Open Source</h4>
+							<p>MAKE IT YOUR GITA. Help make your favourite Gita app even better by adding new features, translations etc.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">REST API</h4>
+							<p>Integrate the Bhagavad Gita text in your web or mobile application.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">Share</h4>
+							<p>Encourage your community by sharing verses.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">100% FREE</h4>
+							<p>Bhagavad Gita is 100% free to use.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">No Ads</h4>
+							<p>There are no ads that would take your attention away from the word of God.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">Ability to Copy Verses</h4>
+							<p>Like a verse? Press the copy button and save it wherever you want.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+						<div class="feature-icon">
+							<img src="images/code.svg" alt="">
+						</div>
+						<h4 class="title">Favourites</h4>
+						<p>Share, memorize and find your favorite verses.</p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="single-feature">
+							<div class="feature-icon">
+									<img src="images/code.svg" alt="">
+							</div>
+							<h4 class="title">Available Offline</h4>
+							<p>Bhagavad Gita there for you, whenever you want, wherever you want.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="owl-carousel owl-theme">
+				<div class="item">
+						<img src="lunatic/images/apps-screen-1.jpg" alt="">
+				</div>
+				<div class="item">
+						<img src="lunatic/images/apps-screen-2.jpg" alt="">
+				</div>
+				<div class="item">
+						<img src="lunatic/images/apps-screen-3.jpg" alt="">
+				</div>
+				<div class="item">
+						<img src="lunatic/images/apps-screen-4.jpg" alt="">
+				</div>
+				<div class="item">
+						<img src="lunatic/images/apps-screen-2.jpg" alt="">
+				</div>
+				<div class="item">
+						<img src="lunatic/images/apps-screen-1.jpg" alt="">
+				</div>
+				<div class="item">
+						<img src="lunatic/images/apps-screen-3.jpg" alt="">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+		<div class="Download section">
+		    <div class="container">
+		      <div class="section-header columns has-text-centered is-centered">
+						<div class="container footer-section">
+							<div class="has-text-centered">
+								<div class="columns">
+									<div class="column" style="margin-top: 2rem">
+										<p class="title is-spaced has-text-white">EXPERIENCE THE GITA ANYWHERE!</p>
+										<p class="text is-size-5 has-text-white">Take it wherever you go with our apps.</p>
+									</div>
+									<div class="column">
+										<a class="button round-button webapp download sam-Button" style="margin: 2rem" href="https://bhagavadgita.io">
+											Browse the
+											<br>
+											<strong>Web App</strong>
+										</a>
+										<a class="button round-button android download sam-Button" style="margin: 2rem; margin-top: -1rem" href="https://play.google.com/store/apps/details?id=com.hanuman.bhagavadgita">
+											Get It On
+											<br>
+											<strong>Google Play</strong>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<div class="Contact section" id="contact">
+		    <div class="container has-text-centered">
+					<h3 class="title">Contact</h3>
+		      <div class="columns is-centered ">
+		        <div class="column is-4">
+							<form method="post" action="https://formspree.io/contact@bhagavadgita.io">
+		            <div class="field">
+		              <div class="control">
+		                <input class="input" placeholder="Full Name *" type="text" name="name" id="name" required>
+		              </div>
+		            </div>
+		            <div class="field">
+		              <div class="control">
+		                <input class="input" placeholder="Subject *" name="subject" id="subject" required>
+		              </div>
+		            </div>
+		            <div class="field">
+		              <div class="control">
+		                <input class="input required email" placeholder="Email *" type="email" value="" name="email" id="email" required>
+		              </div>
+								</div>
+								<div class="field">
+									<div class="control">
+										<textarea class="input" placeholder="Message *" name="message" id="message" required></textarea>
+									</div>
+								</div>
+		            <div class="field">
+		              <div class="control has-text-right">
+		                <button class="sam-Button button" type="submit" value="Submit">Send</button>
+		              </div>
+		            </div>
+		          </form>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+
+		<footer class="MainFooter footer">
+		  <div class="container">
+		  <div class="has-text-centered">
+				<small>Copyright © 2018 BhagavadGita.io | All rights reserved by BhagavadGita.io</small>
+		  </div>
+
+		  </div>
+		</footer>
+
+	</main>
+
+<style>
+	.column .card {
+		height: 100%
+	}
+.feature-box{
+    margin:4rem;
+    align-self:center
+}
+.border-shadow{
+    box-shadow:0 8px 33px 0 rgba(0,0,0,.07);
+    border-radius:8px;
+    background:#fff
+}
+.image-box{
+    border:none;
+    padding:4rem;
+    text-align:center;
+    margin:auto
+}
+@media screen and (max-width:768px){
+    .reverse-in-mobile{
+        display:flex;
+        flex-direction:column-reverse
+    }
+    .feature-box{
+        margin:2rem;
+        align-self:center
+    }
+    .footer-section,.shortcut-stats-group{
+        display:flex;
+        justify-content:center;
+        align-items:center
+    }
+    .footer-section{
+        flex-direction:column
+    }
+}
+.single-feature {
+    width: 100%;
+    text-align: center;
+    padding: 50px 30px;
+    -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+
+.single-feature:hover {
+    -webkit-box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.1);
+    -webkit-transform: translateY(-5px);
+    -ms-transform: translateY(-5px);
+    transform: translateY(-5px);
+}
+
+
+.single-feature .feature-icon {
+    height: 120px;
+    width: 120px;
+    text-align: center;
+    margin: auto;
+}
+
+.single-feature .feature-icon img {
+    width: auto;
+    margin: auto;
+}
+
+.single-feature .title {
+    font-size: 22px;
+}
+
+body > main > div.Bundle.hero > div.Education.section > div > div > div.owl-stage-outer > div > div.owl-item:nth-child(even) .single-feature {
+    margin-top: 60px;
+}
+
+.round-button{
+	cursor:pointer;
+	padding:0 30px;
+	border-radius:100px;
+	background-clip:padding-box;
+	font-weight:400;
+	font-size:16px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-transform:capitalize;
+	}
+
+.download{
+	height: 57px;
+	width: 280px;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: 40px 40px;
+	background-position: 30px;
+	padding-left: 80px;
+	color: #F57C00;
+}
+		
+.android{background-image:url(images/play-store.svg)}
+
+.webapp{background-image:url(images/webapp.svg)}
+
+.button:hover { border-color: #b5b5b5; color: #FF9800; }
+
+.primary-background{background-color:#507ce8;color:#fff}
+</style>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script>
+	$(document).ready(function () {
+		//Preloader
+		$(window).on("load", function () {
+			preloaderFadeOutTime = 500;
+
+			function hidePreloader() {
+				var preloader = $('.spinner-wrapper');
+				preloader.fadeOut(preloaderFadeOutTime);
+			}
+			hidePreloader();
+		});
+		$(document).ready(function(){
+			$(".owl-carousel").owlCarousel({
+				loop: true,
+        margin: 30,
+        responsiveClass: true,
+        nav: false,
+        autoplay: true,
+        autoplayTimeout: 4000,
+        smartSpeed: 1000,
+        navText: ['<img src="images/arrow-right.png" alt="">', '<img src="images/arrow-left.png" alt="">'],
+        responsive: {
+            0: {
+                items: 1,
+            },
+            480: {
+                items: 2
+            },
+            600: {
+                items: 3
+            },
+            1200: {
+                items: 4
+            },
+            1500: {
+                items: 5
+            },
+            1900: {
+                items: 6
+            }
+				}
+			});
+
+			$('.gallery').owlCarousel({
+        loop: true,
+        margin: 0,
+        responsiveClass: true,
+        nav: true,
+        autoplay: true,
+        autoplayTimeout: 4000,
+        smartSpeed: 1000,
+        navText: ['<img src="images/arrow-right.png" alt="">', '<img src="images/arrow-left.png" alt="">'],
+        responsive: {
+            0: {
+                items: 1,
+            },
+            480: {
+                items: 2
+            },
+            600: {
+                items: 3
+            },
+            1200: {
+                items: 4
+            },
+            1500: {
+                items: 6
+            }
+        }
+    	});
+		});
+	});
+</script>
+
+</body>
+
+</html>
