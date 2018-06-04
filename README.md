@@ -1,6 +1,6 @@
 # Bhagavad Gita
 
-<img src="radhakrishna/images/gita.png" width="500">
+<img src="app/static/images/app/gita.png" width="500">
 
 [![Build Status](https://travis-ci.org/gita/BhagavadGita.svg?branch=master)](https://travis-ci.org/gita/BhagavadGita) ![Python](https://camo.githubusercontent.com/c589348df8bb82948f724198f52725d3d36ce738/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f707974686f6e2d332e782d627269676874677265656e2e737667)
 
