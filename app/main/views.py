@@ -1147,9 +1147,9 @@ def progress():
     sql = """
             SELECT EXTRACT(EPOCH FROM timestamp::date), count(*)
             FROM user_progress
-            WHERE user_id = 67
+            WHERE user_id = %s
             GROUP BY timestamp::date
-        """
+        """ % (current_user.get_id())
     result = db.session.execute(sql)
     thegita = []
     for r in result:
