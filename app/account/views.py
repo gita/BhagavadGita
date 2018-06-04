@@ -264,8 +264,8 @@ from .. import mail
 
 google = oauthclient.remote_app(
     'google',
-    consumer_key=os.environ.get('GOOGLE_KEY'),
-    consumer_secret=os.environ.get('GOOGLE_SECRET'),
+    consumer_key=os.environ.get('GOOGLE_KEY') or 'Google Key',
+    consumer_secret=os.environ.get('GOOGLE_SECRET') or 'Google Secret',
     request_token_params={
         'scope': 'email'
     },
@@ -278,8 +278,8 @@ google = oauthclient.remote_app(
 
 github = oauthclient.remote_app(
     'github',
-    consumer_key=os.environ.get('GITHUB_KEY'),
-    consumer_secret=os.environ.get('GITHUB_SECRET'),
+    consumer_key=os.environ.get('GITHUB_KEY') or 'Github Key',
+    consumer_secret=os.environ.get('GITHUB_SECRET') or 'Github Secret',
     request_token_params={'scope': 'user:email'},
     base_url='https://api.github.com/',
     request_token_url=None,
@@ -289,8 +289,8 @@ github = oauthclient.remote_app(
 
 facebook = oauthclient.remote_app(
     'facebook',
-    consumer_key=os.environ.get('FACEBOOK_KEY'),
-    consumer_secret=os.environ.get('FACEBOOK_SECRET'),
+    consumer_key=os.environ.get('FACEBOOK_KEY') or 'Facebook Key',
+    consumer_secret=os.environ.get('FACEBOOK_SECRET') or 'Facebook Secret',
     request_token_params={'scope': 'email'},
     base_url='https://graph.facebook.com',
     request_token_url=None,
