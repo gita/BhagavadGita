@@ -30,7 +30,7 @@
     <div class="col-md-12" align="center">
       <div class="card text-center z-depth-2 h-100">
         <div class="card-body">
-          <h4 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Overall Bhagavad Gita') }}</u></strong></h4>
+          <h4 class="font-up font-bold" style="text-align: center;"><strong>{{ _('Overall Bhagavad Gita') }}</strong></h4>
           <div class="bhagavad gita">
             <strong></strong>
           </div>
@@ -47,7 +47,7 @@
         {% if verses != None %}
         <div class="card text-center z-depth-2 h-100">
           <div class="card-body">
-            <h5 class="font-up font-bold" style="text-align: center;"><strong><u>{{ _('Chapterwise Progress') }}</u></strong></h5>
+            <h5 class="font-up font-bold" style="text-align: center;"><strong>{{ _('Chapterwise Progress') }}</strong></h5>
             <br>
             <div class="row">
               {% for chapter, percent in progress.items() %}
@@ -178,12 +178,12 @@ $('.bhagavad.gita').circleProgress({
             year: '%b'
         },
         title: {
-            text: 'Date'
+            text: null
         }
     },
     yAxis: {
         title: {
-            text: 'Number of verses read'
+            text: null
         },
         min: 0
     },
@@ -200,7 +200,10 @@ $('.bhagavad.gita').circleProgress({
         showInLegend: false,
         name: "RadhaKrishna",
         data: gita
-    }]
+    }],
+    credits: {
+      enabled: false
+    }
 });
 </script>
 {% endblock %}
