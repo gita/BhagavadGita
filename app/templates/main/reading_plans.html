@@ -166,7 +166,10 @@ Gita{% endblock %} {% block meta_tags %}
     function delete_plan(user_reading_plan_id) {
       axios.get("/delete-plan/" + user_reading_plan_id + '/')
       .then(function (response) {
-          window.location.href = "/reading-plans/delete"
+          console.log(response)
+          if (response.data == "RadhaKrishna") {
+            window.location.href = "/reading-plans/delete"
+          }
         })
     }
 </script>

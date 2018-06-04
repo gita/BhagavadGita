@@ -1089,7 +1089,7 @@ def delete_plan(user_reading_plan_id):
         db.session.execute(sql)
         db.session.commit()
 
-        return redirect(url_for('main.reading_plans'))
+        return "RadhaKrishna"
     else:
         abort(401)
 
