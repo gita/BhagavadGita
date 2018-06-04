@@ -1,5 +1,7 @@
 # Bhagavad Gita
 
+<img src="radhakrishna/images/gita.png" width="500">
+
 Frontend and REST API for BhagavadGita.io
 
 **Backend** - Flask
