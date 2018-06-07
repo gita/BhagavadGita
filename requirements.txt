@@ -81,5 +81,5 @@ URLObject==2.4.3
 webassets==0.12.1
 Werkzeug==0.14.1
 wrapt==1.10.11
-WTForms==2.2
+WTForms==2.2.1
 yapf==0.22.0
