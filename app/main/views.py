@@ -1148,33 +1148,32 @@ def progress():
     gita = None
     total_shlokas = 0
     badge_list = []
+    thegita = []
     progress = {key:None for key in range(1, 19)}
 
-    sql = """
-            SELECT radhakrishna.date, count(up.user_progress_id) FROM (
-                select to_char(date_trunc('day', (current_date - offs)), 'YYYY-MM-DD')
-                AS date
-                FROM generate_series(0, 6, 1)
-                AS offs
-                ) radhakrishna
-            LEFT OUTER JOIN (
-                SELECT * FROM user_progress
-                WHERE user_id=%s
-            ) up
-            ON (radhakrishna.date=to_char(date_trunc('day', up.timestamp), 'YYYY-MM-DD'))
-            GROUP BY radhakrishna.date
-            ORDER BY radhakrishna.date desc
-        """ % (current_user.get_id())
-    result = db.session.execute(sql)
-    thegita = []
-    for r in result:
-        d = {}
-        d['x'] = time.mktime(datetime.strptime(r['date'], "%Y-%m-%d").timetuple())
-        d['y'] = r['count']
-        thegita.append(d)
-    current_app.logger.info(thegita)
-
     if current_user.is_authenticated:
+        sql = """
+                SELECT radhakrishna.date, count(up.user_progress_id) FROM (
+                    select to_char(date_trunc('day', (current_date - offs)), 'YYYY-MM-DD')
+                    AS date
+                    FROM generate_series(0, 6, 1)
+                    AS offs
+                    ) radhakrishna
+                LEFT OUTER JOIN (
+                    SELECT * FROM user_progress
+                    WHERE user_id=%s
+                ) up
+                ON (radhakrishna.date=to_char(date_trunc('day', up.timestamp), 'YYYY-MM-DD'))
+                GROUP BY radhakrishna.date
+                ORDER BY radhakrishna.date desc
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        for r in result:
+            d = {}
+            d['x'] = time.mktime(datetime.strptime(r['date'], "%Y-%m-%d").timetuple())
+            d['y'] = r['count']
+            thegita.append(d)
+
         sql = """
                 SELECT chapter, COUNT(verse)
                 FROM user_progress

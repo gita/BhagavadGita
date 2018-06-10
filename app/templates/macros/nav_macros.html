@@ -23,9 +23,9 @@
     {% endif %}
 
     {% set user = [] %}
-    {% if current_user.is_authenticated %}
+    <!-- {% if current_user.is_authenticated %}
       {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
-    {% endif %}
+    {% endif %} -->
     {{ render_menu_items( endpoints +  user ) }}
 {% endmacro %}
 
@@ -68,12 +68,12 @@
         type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
-      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/', '/account/register', '/account/login', '/account/manage/info', '/account/manage/apps', '/account/reset-password', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps/new'] %}
+      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/', '/account/register', '/account/login', '/account/manage/info', '/account/manage/apps', '/account/reset-password', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps/new', '/reading-plans/', '/verse-of-the-day/', '/badges/'] %}
         <a class="navbar-brand center mx-auto" href="/"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
       {% else %}
         <a class="navbar-brand center mx-auto" href="/" style="padding-right: 2rem;"><strong>{{ _('BHAGAVAD GITA') }}</strong></a>
       {% endif %}
-      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/', '/account/register', '/account/login', '/account/manage/info', '/account/manage/apps', '/account/reset-password', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps/new'] %}
+      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/', '/reading-plans/', '/account/register', '/account/login', '/account/manage/info', '/account/manage/apps', '/account/reset-password', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps/new', '/verse-of-the-day/', '/badges/'] %}
       <div class="btn-group">
         <a class="btn-rounded navbar-toggler waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" id="android">
           <i class="material-icons">more_vert</i>
@@ -167,7 +167,7 @@
          {{ create_dropdown(dropdown) }}
       </li>
 
-      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/', '/account/register', '/account/login', '/account/manage/info', '/account/manage/apps', '/account/reset-password', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps/new'] %}
+      {% if request.path not in ['/api/', '/contact/', '/privacy-policy/', '/terms-of-service/', '/about/', '/bhagavad-gita-quotes/', '/favourite-shlokas/', '/progress/', '/reading-plans/', '/account/register', '/account/login', '/account/manage/info', '/account/manage/apps', '/account/reset-password', '/account/manage/change-email', '/account/manage/change-password', '/account/manage/apps/new', '/verse-of-the-day/', '/badges/'] %}
       <li>
         <a class="dropdown-item waves-effect waves-light" data-toggle="modal" data-target="#radhakrishna">{{ _('Choose Language') }}</a>
       </li>
