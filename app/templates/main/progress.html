@@ -69,6 +69,8 @@
       <div class="card text-center z-depth-2 h-100">
         <div class="card-body">
           <div class="col-lg-12">
+            <h5 class="font-up font-bold" style="text-align: center;"><strong>{{ _('Weekly Progress') }}</strong></h5>
+            <p>(Number of verses per day)</p>
             <div id="radhakrishna"></div>
           </div>
         </div>
@@ -185,6 +187,7 @@ $('.bhagavad.gita').circleProgress({
         title: {
             text: null
         },
+        allowDecimals: false,
         min: 0
     },
     plotOptions: {

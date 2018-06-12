@@ -57,6 +57,8 @@ Gita{% endblock %} {% block meta_tags %}
                                 <br>
                                 <h5 style="color: #F57C00">Reading Plan Complete</h5>
                             {% endif %}
+                            {% else %}
+                                <a class="btn btn-success waves-effect waves-light" href="/create-reading-plan/{{plan.reading_plan_id}}">Start Reading</a>
                             {% endif %}
                             {% endfor %}
                             {% else %}
