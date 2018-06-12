@@ -197,6 +197,7 @@ def get_all_verse_numbers(chapter_number):
 @main.route('/chapter/<int:chapter_number>/', methods=['GET'])
 def chapter(chapter_number):
     badge_list = []
+    read_verses = []
     if chapter_number not in range(1, 19):
         abort(404)
     language = "en"
@@ -233,6 +234,7 @@ def chapter(chapter_number):
     '/chapter/<int:chapter_number>/<string:language>/', methods=['GET'])
 def chapter_radhakrishna(chapter_number, language):
     badge_list = []
+    read_verses = []
     if chapter_number not in range(1, 19):
         abort(404)
     if language not in LANGUAGES.keys():
