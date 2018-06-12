@@ -210,10 +210,20 @@ def chapter(chapter_number):
         page_number = 1
 
     if language == "en":
+        if current_user.is_authenticated:
+            sql = """
+                    SELECT verse
+                    FROM user_progress
+                    WHERE user_id = %s
+                    AND chapter = %s
+                """ % (current_user.get_id(), chapter_number)
+            result = db.session.execute(sql)
+            read_verses = [r['verse'] for r in result]
+
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
         verses = VerseModel.query.filter_by(chapter_number = chapter_number).order_by(VerseModel.verse_order).paginate(per_page=6, page=page_number, error_out=True)
         return render_template(
-            'main/chapter.html', chapter=chapter, verses=verses, badge_list=badge_list)
+            'main/chapter.html', chapter=chapter, verses=verses, badge_list=badge_list, read_verses=read_verses)
     else:
         return redirect(
             '/chapter/' + str(chapter_number) + '/' + language + '/')
@@ -231,9 +241,18 @@ def chapter_radhakrishna(chapter_number, language):
         page_number = int(request.args.get('page'))
     else:
         page_number = 1
+    if current_user.is_authenticated:
+        sql = """
+                SELECT verse
+                FROM user_progress
+                WHERE user_id = %s
+                AND chapter = %s
+            """ % (current_user.get_id(), chapter_number)
+        result = db.session.execute(sql)
+        read_verses = [r['verse'] for r in result]
     chapter = ChapterModel.query.join(ChapterModelHindi, ChapterModel.chapter_number==ChapterModelHindi.chapter_number).add_columns(ChapterModelHindi.name_translation, ChapterModelHindi.name_meaning, ChapterModelHindi.chapter_summary, ChapterModel.image_name, ChapterModel.chapter_number).filter(ChapterModel.chapter_number == chapter_number).order_by(ChapterModel.chapter_number).first()
     verses = VerseModelHindi.query.filter_by(chapter_number = chapter_number).order_by(VerseModelHindi.verse_order).paginate(per_page=6, page=page_number, error_out=True)
-    return render_template('main/chapter.html', chapter=chapter, verses=verses, badge_list = badge_list)
+    return render_template('main/chapter.html', chapter=chapter, verses=verses, badge_list = badge_list, read_verses=read_verses)
 
 
 @main.route(
