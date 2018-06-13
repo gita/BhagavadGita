@@ -26,7 +26,7 @@ Flask-Dance==0.14.0
 Flask-JWT==0.3.2
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
-Flask-Migrate==2.1.1
+Flask-Migrate==2.2.0
 flask-msearch==0.1.6
 Flask-OAuthlib==0.9.5
 Flask-RESTful==0.3.6
