@@ -487,7 +487,9 @@ def register():
     badge_list = []
     form = RegistrationForm()
     if form.validate_on_submit():
+        max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
+            id=max_id+1,
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             email=form.email.data,
