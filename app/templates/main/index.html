@@ -117,8 +117,8 @@
             <div class="mask waves-effect waves-light"></div>
           </a>
         <div class="view view-cascade gradient-card-header h-100" style="margin-bottom: auto; margin-top: auto">
-          <h2 class="card-header-title" style="color: white; font-weight: 500; font-family: samarkan; padding-left: 1rem; padding-right: 1rem; padding-top: 1rem;">{{chapter.chapter_number}}. {{chapter.name_translation | replace('"', "")}}</h2>
-          <p style="color: white; font-family: cursive; padding-left: 1rem; padding-right: 1rem; font-size: 1.2rem;">{{chapter.name_meaning | replace('"', "")}}</p>
+          <h2 class="card-header-title chapter-name" style="color: white; font-weight: 500; font-family: samarkan; padding-left: 1rem; padding-right: 1rem; padding-top: 1rem;">{{chapter.chapter_number}}. {{chapter.name_translation | replace('"', "")}}</h2>
+          <p class="chapter-meaning" style="color: white; font-family: cursive; padding-left: 1rem; padding-right: 1rem; font-size: 1.2rem;">{{chapter.name_meaning | replace('"', "")}}</p>
           {% if current_user.is_authenticated %}
             {% for ch, percent in progress.items() %}
               {% if chapter.chapter_number == ch %}
@@ -454,7 +454,7 @@ body > div:nth-child(4) {
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));
         if (settings['font']) {
-          $('.card-text').css("font-size", settings['font'] + "rem");
+          $('.chapter-meaning').css("font-size", settings['font'] + "rem");
           $('#myRange').val(settings['font']);
         }
         if (settings['theme']) {
@@ -527,7 +527,7 @@ body > div:nth-child(4) {
           var theme = settings['theme'];
           setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
         } else {
-          setCookie('settings',JSON.stringify({font: 1, language: language, theme: "Light"}),30);
+          setCookie('settings',JSON.stringify({font: 1.2, language: language, theme: "Light"}),30);
         }
       })
 
@@ -546,7 +546,7 @@ body > div:nth-child(4) {
           var lang = settings['language'];
           setCookie('settings',JSON.stringify({font: size, language: lang, theme: theme}),30);
         } else {
-          setCookie('settings',JSON.stringify({font: 1, language: "en", theme: theme}),30);
+          setCookie('settings',JSON.stringify({font: 1.2, language: "en", theme: theme}),30);
         }
       })
 
@@ -628,7 +628,7 @@ body > div:nth-child(4) {
 
   slider.oninput = function() {
     var size = this.value;
-    $('.card-text').css("font-size", size + "rem");
+    $('.chapter-meaning').css("font-size", size + "rem");
     if (document.cookie.indexOf("settings=") >= 0) {
       var settings = JSON.parse(getCookie('settings'));
       var language = settings['language'];
