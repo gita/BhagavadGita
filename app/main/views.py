@@ -18,7 +18,7 @@ from ..email import send_email
 from .forms import ContactForm
 
 from flask_login import current_user, login_user
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import time
 from werkzeug.security import gen_salt
 
@@ -1315,13 +1315,34 @@ def thegita():
 def verse_of_the_day():
     current_app.logger.info("RadhaKrishna")
     badge_list = []
+    ts = time.time()
+    today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
     sql = """
-            SELECT *
-            FROM verses
-            ORDER BY random()
+            SELECT v.*
+            FROM verses v
+            JOIN verse_of_day vod
+            ON v.chapter_number = vod.chapter_number
+            AND v.verse_number = vod.verse_number
+            WHERE vod.timestamp::date = date '%s'
             LIMIT 1
-        """
+        """ % (today)
     verse = db.session.execute(sql).first()
+
+    if verse is None:
+        yesterday = date.today() - timedelta(1)
+        yesterday = yesterday.strftime('%Y-%m-%d')
+        current_app.logger.info(yesterday)
+        sql = """
+            SELECT v.*
+            FROM verses v
+            JOIN verse_of_day vod
+            ON v.chapter_number = vod.chapter_number
+            AND v.verse_number = vod.verse_number
+            WHERE vod.timestamp::date = date '%s'
+            LIMIT 1
+        """ % (yesterday)
+        verse = db.session.execute(sql).first()
+
     return render_template('main/verse_of_the_day.html', verse=verse, badge_list = badge_list)
 
 
@@ -1329,11 +1350,6 @@ def verse_of_the_day():
 def privacy_policy():
     badge_list = []
     return render_template('main/privacy-policy.html', badge_list=badge_list)
-
-
-# @main.route("/radhakrishna")
-# def helloWorld():
-#   return "Hello, cross-origin-world!"
 
 
 @main.route('/bhagavad-gita-quotes/', methods=['GET'])
