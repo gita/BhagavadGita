@@ -41,7 +41,15 @@ Gita{% endblock %} {% block meta_tags %}
 <div class="container" style="margin-bottom: 10vh;">
     <div class="row">
         <div class="col-md-12">
+            
             <h5 align="center"><u><strong>Day ({{batch_id}}/{{total_batches}})</strong></u></h5>
+
+            {% if next_batch_verse %}
+            <div align="center">
+              <a class="btn btn-success" href="/chapter/{{next_batch_verse['chapter_number']}}/verse/{{next_batch_verse['verse_number']}}/{{user_reading_plan_id}}/batch/{{batch_id}}/batch_total/{{plans|length}}/batch_no/1/"><i class="fa fa-book"></i></a>
+            </div>
+            {% endif %}
+            
             {% if is_done == 'True' %}
             <div align="center">
                 <i class="material-icons" style="font-size: 10rem; color: #F57C00">check_circle</i>
@@ -60,9 +68,11 @@ Gita{% endblock %} {% block meta_tags %}
             </div>
             <br>
             {% endfor %}
+            {% if next_batch_verse %}
             <div align="center">
-              <a class="btn btn-success" href="/chapter/{{plans[0]['chapter_number']}}/verse/{{plans[0]['verse_number']}}/{{user_reading_plan_id}}/batch/{{batch_id}}/batch_total/{{plans|length}}/batch_no/1/"><i class="fa fa-book"></i></a>
+              <a class="btn btn-success" href="/chapter/{{next_batch_verse['chapter_number']}}/verse/{{next_batch_verse['verse_number']}}/{{user_reading_plan_id}}/batch/{{batch_id}}/batch_total/{{plans|length}}/batch_no/1/"><i class="fa fa-book"></i></a>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

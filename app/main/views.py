@@ -1049,7 +1049,17 @@ def reading_plan(user_reading_plan_id, batch_id):
         """ % (user_reading_plan_id, batch_id)
         result = db.session.execute(sql)
         is_done = [dict(d) for d in result][0]['count']
-        if is_done == 2: is_done = 'True'
+
+        sql = """
+            SELECT COUNT(*) as count
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+        """ % (user_reading_plan_id, batch_id)
+        result = db.session.execute(sql)
+        total_batch_verses = [dict(d) for d in result][0]['count']
+        if is_done == total_batch_verses:
+            is_done = 'True'
 
         sql = """
             SELECT status
@@ -1069,9 +1079,18 @@ def reading_plan(user_reading_plan_id, batch_id):
         result = db.session.execute(sql)
         reading_plan = [dict(r) for r in result][0]
 
+        sql = """
+            SELECT chapter_number, verse_number
+            FROM user_reading_plan_items
+            WHERE user_reading_plan_id = '%s'
+            AND batch_id = %s
+            AND status = 0
+        """ % (user_reading_plan_id, batch_id)
+        next_batch_verse = db.session.execute(sql).first()
+
         if status == 1: return redirect(url_for('main.reading_plans'))
 
-        return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list, reading_plan=reading_plan)
+        return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list, reading_plan=reading_plan, next_batch_verse=next_batch_verse)
     else:
         abort(401)
 
