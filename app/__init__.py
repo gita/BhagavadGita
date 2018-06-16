@@ -12,6 +12,7 @@ from flask_restful import Api
 from flask_babel import Babel
 from app.lib.flask_oauthlib.client import OAuth
 from elasticsearch import Elasticsearch
+from flask_cors import CORS
 
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
@@ -56,6 +57,7 @@ def create_app(config_name):
     oauth.init_app(app)
     oauthclient.init_app(app)
     RQ(app)
+    cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
     api = Api(app)
     babel.init_app(app)
 
