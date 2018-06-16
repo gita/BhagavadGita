@@ -95,10 +95,10 @@
     <hr>
     <div class="row">
       {% for chapter in chapters %}
-      <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
-        <div class="card h-100" id="bg-{{chapter.chapter_number}}">
+      <div class="col-lg- col-md-6 col-sm-6 col-12 mb-3">
+        <!-- <div class="card h-100" id="bg-{{chapter.chapter_number}}">
           <div class="view overlay hm-white-slight">
-              <img data-src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_meaning | replace('"', "")}}">
+              <img data-src="/static/images/{{chapter.image_name}}.jpg" class="img-fluid" alt="{{chapter.name_meaning}}">
               <a href="/chapter/{{chapter.chapter_number}}/?page=1">
                   <div class="mask waves-effect waves-light"></div>
               </a>
@@ -109,9 +109,33 @@
               <hr>
               <p class="card-text">{{chapter.name_meaning | replace('"', "")}}</p>
           </div>
+        </div> -->
+        <div class="card card-cascade h-100" id="bg-{{chapter.chapter_number}}" style="margin-bottom: auto; margin-top: auto">
+          <div class="view overlay hm-white-slight h-100">
+          <a href="/chapter/{{chapter.chapter_number}}/?page=1">
+            <div class="mask waves-effect waves-light"></div>
+          </a>
+          <div class="view view-cascade gradient-card-header blue-gradient h-100" style="margin-bottom: auto; margin-top: auto">
+            <h2 class="card-header-title" style="color: white; font-weight: 500;">{{chapter.chapter_number}}. {{chapter.name_translation | replace('"', "")}}</h2>
+            <p style="color: white; margin: 1rem;">{{chapter.name_meaning  | replace('"', "")}}</p>
+          </div>
+          </div>
         </div>
       </div>
     {% endfor %}
+
+<!-- <div class="col-lg-4 col-md-6 mb-4">
+  <div class="card card-cascade">
+    <div class="view view-cascade gradient-card-header blue-gradient">
+      <h2 class="card-header-title mb-3" style="color: white; font-weight: 500;">BHAKTI YOGA</h2>
+    </div>
+    <div class="card-body card-body-cascade text-center">
+      <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus, ex, recusandae. </p>
+      <hr>
+    </div>
+  </div>
+</div> -->
+
     </div>
   </div>
 
@@ -368,6 +392,38 @@ body > div:nth-child(4) {
     display: none;
   }
 }
+
+.card.card-cascade .view.view-cascade {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+    -webkit-border-radius: .25rem;
+    border-radius: .25rem;
+}
+
+.blue-gradient {
+ background: #ffa000; background: -moz-linear-gradient(-45deg, #ffb300 0%, #f57c00 100%);
+ background: -webkit-linear-gradient(-45deg,#ffb300 0%, #f57c00 100%);
+ background: linear-gradient(135deg, #ffb300 0%, #f57c00 100%);
+}
+
+.view {
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+
+.card.card-cascade .view.view-cascade.gradient-card-header {
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.card.card-cascade .view.view-cascade.gradient-card-header .card-header-title {
+    font-weight: 500;
+    font-family: samarkan!important;
+    font-size: 2rem!important;
+}
+
+
 </style>
 
 <script>
