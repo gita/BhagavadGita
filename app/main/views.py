@@ -1331,9 +1331,9 @@ def privacy_policy():
     return render_template('main/privacy-policy.html', badge_list=badge_list)
 
 
-@main.route("/radhakrishna")
-def helloWorld():
-  return "Hello, cross-origin-world!"
+# @main.route("/radhakrishna")
+# def helloWorld():
+#   return "Hello, cross-origin-world!"
 
 
 @main.route('/bhagavad-gita-quotes/', methods=['GET'])
