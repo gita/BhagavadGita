@@ -89,6 +89,7 @@ def get_locale():
 @main.route('/', methods=['GET'])
 def index():
     badge_list = []
+    progress = {key: None for key in range(1, 19)}
     language = "en"
     if "settings" in request.cookies:
         if json.loads(request.cookies.get('settings'))["language"]:
@@ -97,8 +98,40 @@ def index():
     if language == "en":
         chapters = ChapterModel.query.order_by(
             ChapterModel.chapter_number).all()
+        
+        if current_user.is_authenticated:
+            sql = """
+                    SELECT chapter, COUNT(verse)
+                    FROM user_progress
+                    WHERE user_id = %s
+                    GROUP BY chapter
+                """ % (current_user.get_id())
+            result = db.session.execute(sql)
+            user_verses = [dict(r) for r in result]
+
+            sql = """
+                    SELECT chapter_number, verses_count
+                    FROM chapters
+                """
+            result = db.session.execute(sql)
+            verses = [dict(r) for r in result]
+
+            sql = """
+                    SELECT COUNT(verse)
+                    FROM user_progress
+                    WHERE user_id = %s
+                """ % (current_user.get_id())
+            result = db.session.execute(sql)
+            total_shlokas = [dict(r) for r in result][0]['count']
+
+            for chapter in verses:
+                for chapter_number in user_verses:
+                    if chapter['chapter_number'] == chapter_number['chapter']:
+                        progress[chapter['chapter_number']] = float(
+                            "%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
+
         return render_template(
-            'main/index.html', chapters=chapters, language=language, badge_list=badge_list)
+            'main/index.html', chapters=chapters, language=language, badge_list=badge_list, progress=progress)
     else:
         return redirect('/' + language + '/')
 
@@ -106,6 +139,7 @@ def index():
 @main.route('/<string:language>/', methods=['GET'])
 def index_radhakrishna(language):
     badge_list = []
+    progress = {key: None for key in range(1, 19)}
     if language not in LANGUAGES.keys():
         abort(404)
     chapter_table = "chapters_" + language
@@ -120,8 +154,39 @@ def index_radhakrishna(language):
     """ % (chapter_table)
     chapters = db.session.execute(sql)
 
+    if current_user.is_authenticated:
+        sql = """
+                SELECT chapter, COUNT(verse)
+                FROM user_progress
+                WHERE user_id = %s
+                GROUP BY chapter
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        user_verses = [dict(r) for r in result]
+
+        sql = """
+                SELECT chapter_number, verses_count
+                FROM chapters
+            """
+        result = db.session.execute(sql)
+        verses = [dict(r) for r in result]
+
+        sql = """
+                SELECT COUNT(verse)
+                FROM user_progress
+                WHERE user_id = %s
+            """ % (current_user.get_id())
+        result = db.session.execute(sql)
+        total_shlokas = [dict(r) for r in result][0]['count']
+
+        for chapter in verses:
+            for chapter_number in user_verses:
+                if chapter['chapter_number'] == chapter_number['chapter']:
+                    progress[chapter['chapter_number']] = float(
+                        "%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
+
     return render_template(
-        'main/index.html', chapters=chapters, language=language, badge_list=badge_list)
+        'main/index.html', chapters=chapters, language=language, badge_list=badge_list, progress=progress)
 
 
 @main.route('/search', methods=['GET', 'POST'])
