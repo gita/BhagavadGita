@@ -65,10 +65,10 @@
       <br>
       <h3>{{chapter.name_meaning | replace('"', "")}}</h3>
     </div>
-    <br>
+    <br class="sharebr">
     <div class="text-center" id="sharebtn">
     </div>
-    <br>
+    <br class="sharebr">
     <p>{{chapter.chapter_summary | replace('"', "")}}</p>
     <br>
     <div data-direction="horizontal" align="center" style="color: #757575;">
@@ -443,6 +443,8 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
 
       var facebook = `https://www.facebook.com/dialog/share?app_id=153654658590446&display=popup&href=https://bhagavadgita.io/chapter/{{chapter.chapter_number}}/&redirect_uri=https://bhagavadgita.io`
       document.getElementById("facebookbtn").href = facebook;
+
+      $('.sharebr').remove()
 
     } else {
       console.log("RadhaKrishnaHanuman")
