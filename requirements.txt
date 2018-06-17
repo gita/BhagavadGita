@@ -1,5 +1,5 @@
 alembic==0.8.10
-aniso8601==3.0.0
+aniso8601==3.0.2
 apispec==0.31.0
 appdirs==1.4.3
 appnope==0.1.0
