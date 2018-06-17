@@ -38,7 +38,7 @@ Flask-JWT==0.3.2
 Flask-Login==0.4.0
 Flask-Mail==0.9.1
 Flask-Migrate==2.1.1
-flask-msearch==0.1.5
+flask-msearch==0.1.7
 Flask-OAuthlib==0.9.4
 Flask-RESTful==0.3.6
 Flask-RQ==0.2
