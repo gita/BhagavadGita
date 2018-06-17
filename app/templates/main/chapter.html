@@ -55,11 +55,11 @@
 {% endblock %}
 
 {% block content %}
-  <nav class="breadcrumb">
+  <!-- <nav class="breadcrumb">
     <a class="breadcrumb-item" href="/">{{ _('Home') }}</a>
     <span class="breadcrumb-item active">{{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}</span>
-  </nav>
-  <div class="container" style="margin-top: 2rem;">
+  </nav> -->
+  <div class="container" style="margin-top: 5rem;">
     <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
       <h2><b>{{ _('Chapter') }} {{chapter.chapter_number}} - {{chapter.name_translation | replace('"', "")}}</b></h2>
       <br>
@@ -140,10 +140,11 @@
             {% endfor %}
           </div>
       </div>
-
+      {% if current_user.is_authenticated %}
       <div class="text-center">
           <p>Verses with green buttons indicate that they have been read.</p>
       </div>
+      {% endif %}
   </div>
 
   <div class="modal fade" id="radhakrishna" tabindex="-1" role="dialog" aria-labelledby="radhakrishnaTitle" aria-hidden="true">
