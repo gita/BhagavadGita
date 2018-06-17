@@ -107,7 +107,7 @@ pyzmq==17.0.0
 qtconsole==4.3.1
 raygun4py==3.1.4
 redis==2.10.5
-requests==2.18.4
+requests==2.19.1
 requests-oauthlib==0.8.0
 rq==0.10.0
 Send2Trash==1.5.0
