@@ -57,7 +57,8 @@ def create_app(config_name):
     oauth.init_app(app)
     oauthclient.init_app(app)
     RQ(app)
-    cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    cors = CORS(app, resources={
+                r"/api/v1/*": {"origins": "*"}, r"/oauth/*": {"origins": "*"}})
     api = Api(app)
     babel.init_app(app)
 
