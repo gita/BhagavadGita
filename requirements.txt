@@ -89,7 +89,7 @@ parso==0.2.1
 pexpect==4.6.0
 pickleshare==0.7.4
 prompt-toolkit==1.0.15
-psycopg2==2.7
+psycopg2==2.7.5
 ptyprocess==0.5.2
 pyaml==17.12.1
 pycodestyle==2.4.0
