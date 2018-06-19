@@ -83,7 +83,7 @@ notebook==5.5.0
 numpy==1.14.3
 oauthlib==2.0.7
 packaging==16.8
-pandas==0.23.0
+pandas==0.23.1
 pandocfilters==1.4.2
 parso==0.2.1
 pexpect==4.6.0
