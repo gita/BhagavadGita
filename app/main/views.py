@@ -1399,8 +1399,8 @@ def verse_of_the_day_notification():
                         headers=header, data=json.dumps(payload))
 
 
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=6, minute=28)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=6, minute=28)
+scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=38)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=38)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
