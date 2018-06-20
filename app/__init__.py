@@ -59,7 +59,7 @@ def create_app(config_name):
     RQ(app)
 
     db.app = app
-    
+
     cors = CORS(app, resources={
                 r"/api/v1/*": {"origins": "*"}, r"/auth/oauth/*": {"origins": "*"}})
     api = Api(app)
@@ -82,7 +82,7 @@ def create_app(config_name):
     assets_env.register('vendor_js', vendor_js)
 
     # Configure SSL if platform supports it
-    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
+    if not app.debug and not app.testing and not os.environ.get('SSL_DISABLE'):
         from flask_sslify import SSLify
         SSLify(app)
 

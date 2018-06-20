@@ -1409,11 +1409,15 @@ def verse_of_the_day_notification():
                         headers=header, data=json.dumps(payload))
 
 
-if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=50)
-    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=50)
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+def radhakrishna():
+    print("RadhaKrishnaHanuman")
+
+radhakrishna()
+
+scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=50)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=50)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
