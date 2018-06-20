@@ -57,6 +57,9 @@ def create_app(config_name):
     oauth.init_app(app)
     oauthclient.init_app(app)
     RQ(app)
+
+    db.app = app
+    
     cors = CORS(app, resources={
                 r"/api/v1/*": {"origins": "*"}, r"/auth/oauth/*": {"origins": "*"}})
     api = Api(app)

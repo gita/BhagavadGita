@@ -21,8 +21,9 @@ from flask_login import current_user, login_user
 from datetime import datetime, timedelta, date
 import time
 from werkzeug.security import gen_salt
-
+import atexit
 import requests
+import os
 
 from collections import OrderedDict
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -1399,8 +1400,9 @@ def verse_of_the_day_notification():
 
 
 scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=0, minute=00)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=30)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=4, minute=30)
 scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
