@@ -1402,7 +1402,7 @@ def verse_of_the_day_notification():
 
     payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
                "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
-               "included_segments": ["Test"],
+               "included_segments": ["All"],
                "contents": {"en": verse.text}}
 
     req = requests.post("https://onesignal.com/api/v1/notifications",
