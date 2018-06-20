@@ -28,10 +28,16 @@
           <div class="sanskrit-text" align="center">
             <p style="font-size: 1.4rem;" class="verse-sanskrit"><b>{{verse.text  | replace('"', "")}}</b></p>
           </div>
+          <h5 class="heading" style="margin-bottom: -1rem"><b><u>{{ _('Word Meanings') }}</u></b></h5>
+          <div class="word-meanings" align="center" style="font-family: Noto Serif;">
+            <p style="font-size: 1.2rem;" class="verse-word"><i>{{verse.word_meanings  | replace('"', "")}}</i></p>
+          </div>
+          {% if language == "en" %}
           <h5 class="heading" style="margin-bottom: -1rem"><b><u>{{ _('Transliteration') }}</u></b></h5>
           <div class="transliteration" align="center" style="font-family: Noto Serif;">
-            <p style="font-size: 1.4rem;" class="verse-transliteration"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
+            <p style="font-size: 1.2rem;" class="verse-transliteration"><i>{{verse.transliteration  | replace('"', "")}}</i></p>
           </div>
+          {% endif %}
           <h5 class="heading" style="margin-bottom: -2rem"><b><u>{{ _('Translation') }}</u></b></h5>
           <br>
           <div class="meaning" align="center">

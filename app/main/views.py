@@ -104,7 +104,7 @@ def index():
     if language == "en":
         chapters = ChapterModel.query.order_by(
             ChapterModel.chapter_number).all()
-        
+
         if current_user.is_authenticated:
             sql = """
                     SELECT chapter, COUNT(verse)
@@ -1359,39 +1359,82 @@ def shloka_of_the_day_radhakrishna():
 def shloka_of_the_day():
     ts = time.time()
     today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
-    sql = """
-            SELECT v.*
-            FROM verses v
-            JOIN verse_of_day vod
-            ON v.chapter_number = vod.chapter_number
-            AND v.verse_number = vod.verse_number
-            WHERE vod.timestamp::date = date '%s'
-            LIMIT 1
-        """ % (today)
-    verse = db.session.execute(sql).first()
+    language = "en"
+    if "settings" in request.cookies:
+        if json.loads(request.cookies.get('settings'))["language"]:
+            language = json.loads(request.cookies.get('settings'))["language"]
 
-    if verse is None:
-        yesterday = date.today() - timedelta(1)
-        yesterday = yesterday.strftime('%Y-%m-%d')
-        current_app.logger.info(yesterday)
+    if language == "en":
         sql = """
-            SELECT v.*
-            FROM verses v
-            JOIN verse_of_day vod
-            ON v.chapter_number = vod.chapter_number
-            AND v.verse_number = vod.verse_number
-            WHERE vod.timestamp::date = date '%s'
-            LIMIT 1
-        """ % (yesterday)
+                SELECT v.*
+                FROM verses v
+                JOIN verse_of_day vod
+                ON v.chapter_number = vod.chapter_number
+                AND v.verse_number = vod.verse_number
+                WHERE vod.timestamp::date = date '%s'
+                LIMIT 1
+            """ % (today)
         verse = db.session.execute(sql).first()
+
+        if verse is None:
+            yesterday = date.today() - timedelta(1)
+            yesterday = yesterday.strftime('%Y-%m-%d')
+            current_app.logger.info(yesterday)
+            sql = """
+                SELECT v.*
+                FROM verses v
+                JOIN verse_of_day vod
+                ON v.chapter_number = vod.chapter_number
+                AND v.verse_number = vod.verse_number
+                WHERE vod.timestamp::date = date '%s'
+                LIMIT 1
+            """ % (yesterday)
+            verse = db.session.execute(sql).first()
+    else:
+        verses_table = "verses_hi"
+        sql = """
+                SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+                FROM %s vt
+                JOIN verses v
+                ON
+                vt.chapter_number = v.chapter_number
+                AND vt.verse_number = v.verse_number
+                JOIN verse_of_day vod
+                ON v.chapter_number = vod.chapter_number
+                WHERE vod.timestamp::date = date '%s'
+                LIMIT 1
+            """ % (verses_table, today)
+        verse = db.session.execute(sql).first()
+
+        if verse is None:
+            yesterday = date.today() - timedelta(1)
+            yesterday = yesterday.strftime('%Y-%m-%d')
+            current_app.logger.info(yesterday)
+            sql = """
+                SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
+                FROM %s vt
+                JOIN verses v
+                ON
+                vt.chapter_number = v.chapter_number
+                AND vt.verse_number = v.verse_number
+                JOIN verse_of_day vod
+                ON v.chapter_number = vod.chapter_number
+                WHERE vod.timestamp::date = date '%s'
+                LIMIT 1
+            """ % (verses_table, yesterday)
+            verse = db.session.execute(sql).first()
     return verse
 
 @main.route('/verse-of-the-day/', methods=['GET'])
 def verse_of_the_day():
+    language = "en"
+    if "settings" in request.cookies:
+        if json.loads(request.cookies.get('settings'))["language"]:
+            language = json.loads(request.cookies.get('settings'))["language"]
     current_app.logger.info("RadhaKrishna")
     badge_list = []
     verse = shloka_of_the_day()
-    return render_template('main/verse_of_the_day.html', verse=verse, badge_list = badge_list)
+    return render_template('main/verse_of_the_day.html', verse=verse, badge_list=badge_list, language=language)
 
 
 def verse_of_the_day_notification():
@@ -1402,7 +1445,7 @@ def verse_of_the_day_notification():
 
     payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
                "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
-               "included_segments": ["Test"],
+               "included_segments": ["All"],
                "contents": {"en": verse.text}}
 
     req = requests.post("https://onesignal.com/api/v1/notifications",
@@ -1413,6 +1456,22 @@ def radhakrishna():
     print("RadhaKrishnaHanuman")
 
 radhakrishna()
+
+
+@main.route('/radhakrishnahanuman', methods=['GET'])
+def radhakrishnahanuman():
+    verse = shloka_of_the_day()
+
+    # send_email(
+    #     recipient="contact@bhagavadgita.io",
+    #     subject="Bhagavad Gita - Shloka of the day",
+    #     template='main/email/shloka',
+    #     shloka_english=verse.text,
+    #     shloka_hindi=verse.text)
+
+    return render_template(
+            'main/email/shloka.html')
+
 
 scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
 scheduler.add_job(verse_of_the_day_notification, 'cron', hour=6, minute=00)
