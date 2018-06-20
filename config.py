@@ -51,7 +51,7 @@ class Config:
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)
 
-    REDIS_URL = 'Redis'
+    REDIS_URL = os.environ.get('REDIS')
 
     RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
 
