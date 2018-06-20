@@ -1414,8 +1414,8 @@ def radhakrishna():
 
 radhakrishna()
 
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=50)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=50)
+scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=7, minute=57)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=7, minute=57)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
