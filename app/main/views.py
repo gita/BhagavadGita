@@ -1337,13 +1337,23 @@ def thegita():
 
 
 def shloka_of_the_day_radhakrishna():
+    ts = time.time()
+    today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
     sql = """
-            INSERT INTO verse_of_day (chapter_number, verse_number)
-            SELECT chapter_number, verses.verse_number
-            FROM verses ORDER BY random() LIMIT 1
-    """
-    db.session.execute(sql)
-    db.session.commit()
+        SELECT *
+        FROM verse_of_day
+        WHERE timestamp::date = date '%s'
+    """ % (today)
+    verse = db.session.execute(sql).first()
+
+    if verse is None:
+        sql = """
+                INSERT INTO verse_of_day (chapter_number, verse_number)
+                SELECT chapter_number, verses.verse_number
+                FROM verses ORDER BY random() LIMIT 1
+        """
+        db.session.execute(sql)
+        db.session.commit()
 
 
 def shloka_of_the_day():
@@ -1399,8 +1409,8 @@ def verse_of_the_day_notification():
                         headers=header, data=json.dumps(payload))
 
 
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=40)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=40)
+scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=47)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=47)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
