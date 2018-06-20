@@ -22,7 +22,12 @@ from datetime import datetime, timedelta, date
 import time
 from werkzeug.security import gen_salt
 
+import requests
+
 from collections import OrderedDict
+from apscheduler.schedulers.background import BackgroundScheduler
+
+scheduler = BackgroundScheduler()
 
 if sys.version_info[0] < 3:
     reload(sys)
@@ -1330,10 +1335,17 @@ def thegita():
     return jsonify(thegita)
 
 
-@main.route('/verse-of-the-day/', methods=['GET'])
-def verse_of_the_day():
-    current_app.logger.info("RadhaKrishna")
-    badge_list = []
+def shloka_of_the_day_radhakrishna():
+    sql = """
+            INSERT INTO verse_of_day (chapter_number, verse_number)
+            SELECT chapter_number, verses.verse_number
+            FROM verses ORDER BY random() LIMIT 1
+    """
+    db.session.execute(sql)
+    db.session.commit()
+
+
+def shloka_of_the_day():
     ts = time.time()
     today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
     sql = """
@@ -1361,9 +1373,34 @@ def verse_of_the_day():
             LIMIT 1
         """ % (yesterday)
         verse = db.session.execute(sql).first()
+    return verse
 
+@main.route('/verse-of-the-day/', methods=['GET'])
+def verse_of_the_day():
+    current_app.logger.info("RadhaKrishna")
+    badge_list = []
+    verse = shloka_of_the_day()
     return render_template('main/verse_of_the_day.html', verse=verse, badge_list = badge_list)
 
+
+def verse_of_the_day_notification():
+    verse = shloka_of_the_day()
+    auth = "Basic " + os.environ.get('ONESIGNAL') or 'Onesignal'
+    header = {"Content-Type": "application/json; charset=utf-8",
+              "Authorization": auth}
+
+    payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
+               "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
+               "included_segments": ["Test"],
+               "contents": {"en": verse.text}}
+
+    req = requests.post("https://onesignal.com/api/v1/notifications",
+                        headers=header, data=json.dumps(payload))
+
+
+scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=0, minute=00)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=30)
+scheduler.start()
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
