@@ -223,6 +223,32 @@
           </div>
         </div>
       </div>
+      <div class="col-md-12 mt-3">
+        <div class="card orange lighten-3 text-center z-depth-2 h-100" id="subscribe-card">
+          <div class="card-body">
+            <p style="font-family: roboto;">
+              <strong>{{ _('Have the Shloka of the Day delivered to your inbox each morning.') }}</strong>
+            </p>
+            <hr>
+            <form action="/shloka-subscribe" method="POST" id="shloka-form">
+              <div class="md-form">
+                <div class="row">
+                  <div class="col-md-6">
+                    <input autofocus class="form-control first-input" id="fullname" name="fullname" placeholder="Full Name" type="text" required>
+                  </div>
+                  <div class="col-md-6">
+                    <input autofocus class="form-control first-input" id="email" name="email" placeholder="Your Email" type="email" required>
+                  </div>
+                </div>
+                <div align="center">
+                  <button type="submit" class="btn btn-grey btn-rounded z-depth-1a" value="Subscribe" style="border-radius: 10em;">Subscribe</button>
+                </div>
+                <p>By submitting your email address, you understand that you will receive email communications from BhagavadGita.io. You may unsubscribe from BhagavadGita.io’s emails at any time. If you have any questions, please review our <a href="/privacy-policy">Privacy Policy</a> or email us at contact@bhagavadgita.io.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -542,6 +568,15 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
     background-color: #4CAF50!important;
     color: #fff!important;
 }
+
+a {
+  color: #FF9800;
+}
+
+a:hover {
+  color: #FF9800;
+}
+
   </style>
 
 <script>
@@ -752,7 +787,25 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
           }
         })
     }
+
+  $(document).ready(function () {
+    $('#shloka-form').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url : $(this).attr('action') || window.location.pathname,
+            type: "GET",
+            data: $(this).serialize(),
+            success: function (data) {
+                $("#form_output").html(data);
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    });
+  });
   </script>
+
   <script>
 if (navigator.serviceWorker.controller) {
 } else {

@@ -14,7 +14,7 @@ from app.models.verse import VerseModel, VerseModelHindi, UserReadingPlanItems
 from app.models.user import UserFavourite, User
 
 from . import main
-from ..email import send_email
+from ..email import send_email, send_shloka
 from .forms import ContactForm
 
 from flask_login import current_user, login_user
@@ -1356,6 +1356,37 @@ def shloka_of_the_day_radhakrishna():
         db.session.commit()
 
 
+def select_shloka(lang, day):
+    if lang == "en":
+        sql = """
+                SELECT v.*
+                FROM verses v
+                JOIN verse_of_day vod
+                ON v.chapter_number = vod.chapter_number
+                AND v.verse_number = vod.verse_number
+                WHERE vod.timestamp::date = date '%s'
+                LIMIT 1
+            """ % (day)
+    else:
+        verses_table = "verses_hi"
+        sql = """
+                SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order, v.meaning as meaning_english
+                FROM %s vt
+                JOIN verses v
+                ON
+                vt.chapter_number = v.chapter_number
+                AND vt.verse_number = v.verse_number
+                JOIN verse_of_day vod
+                ON v.chapter_number = vod.chapter_number
+                WHERE vod.timestamp::date = date '%s'
+                LIMIT 1
+            """ % (verses_table, day)
+
+    verse = db.session.execute(sql).first()
+
+    return verse
+
+
 def shloka_of_the_day():
     ts = time.time()
     today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
@@ -1365,64 +1396,19 @@ def shloka_of_the_day():
             language = json.loads(request.cookies.get('settings'))["language"]
 
     if language == "en":
-        sql = """
-                SELECT v.*
-                FROM verses v
-                JOIN verse_of_day vod
-                ON v.chapter_number = vod.chapter_number
-                AND v.verse_number = vod.verse_number
-                WHERE vod.timestamp::date = date '%s'
-                LIMIT 1
-            """ % (today)
-        verse = db.session.execute(sql).first()
+        verse = select_shloka("en", today)
 
         if verse is None:
             yesterday = date.today() - timedelta(1)
             yesterday = yesterday.strftime('%Y-%m-%d')
-            current_app.logger.info(yesterday)
-            sql = """
-                SELECT v.*
-                FROM verses v
-                JOIN verse_of_day vod
-                ON v.chapter_number = vod.chapter_number
-                AND v.verse_number = vod.verse_number
-                WHERE vod.timestamp::date = date '%s'
-                LIMIT 1
-            """ % (yesterday)
-            verse = db.session.execute(sql).first()
+            verse = select_shloka("en", yesterday)
     else:
-        verses_table = "verses_hi"
-        sql = """
-                SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
-                FROM %s vt
-                JOIN verses v
-                ON
-                vt.chapter_number = v.chapter_number
-                AND vt.verse_number = v.verse_number
-                JOIN verse_of_day vod
-                ON v.chapter_number = vod.chapter_number
-                WHERE vod.timestamp::date = date '%s'
-                LIMIT 1
-            """ % (verses_table, today)
-        verse = db.session.execute(sql).first()
+        verse = select_shloka("hi", today)
 
         if verse is None:
             yesterday = date.today() - timedelta(1)
             yesterday = yesterday.strftime('%Y-%m-%d')
-            current_app.logger.info(yesterday)
-            sql = """
-                SELECT vt.meaning, vt.word_meanings, v.text, v.transliteration, v.chapter_number, v.verse_number, v.verse_order
-                FROM %s vt
-                JOIN verses v
-                ON
-                vt.chapter_number = v.chapter_number
-                AND vt.verse_number = v.verse_number
-                JOIN verse_of_day vod
-                ON v.chapter_number = vod.chapter_number
-                WHERE vod.timestamp::date = date '%s'
-                LIMIT 1
-            """ % (verses_table, yesterday)
-            verse = db.session.execute(sql).first()
+            verse = select_shloka("hi", yesterday)
     return verse
 
 @main.route('/verse-of-the-day/', methods=['GET'])
@@ -1438,18 +1424,22 @@ def verse_of_the_day():
 
 
 def verse_of_the_day_notification():
-    verse = shloka_of_the_day()
-    auth = "Basic " + os.environ.get('ONESIGNAL') or 'Onesignal'
-    header = {"Content-Type": "application/json; charset=utf-8",
-              "Authorization": auth}
+    ts = time.time()
+    today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
+    verse = select_shloka("en", today)
 
-    payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
-               "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
-               "included_segments": ["All"],
-               "contents": {"en": verse.text}}
+    if verse:
+        auth = "Basic " + os.environ.get('ONESIGNAL') or 'Onesignal'
+        header = {"Content-Type": "application/json; charset=utf-8",
+                "Authorization": auth}
 
-    req = requests.post("https://onesignal.com/api/v1/notifications",
-                        headers=header, data=json.dumps(payload))
+        payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
+                "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
+                "included_segments": ["All"],
+                "contents": {"en": verse.text}}
+
+        req = requests.post("https://onesignal.com/api/v1/notifications",
+                            headers=header, data=json.dumps(payload))
 
 
 def radhakrishna():
@@ -1460,23 +1450,26 @@ radhakrishna()
 
 @main.route('/radhakrishnahanuman', methods=['GET'])
 def radhakrishnahanuman():
-    verse = shloka_of_the_day()
+    ts = time.time()
+    today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
+    verse = select_shloka("hi", today)
 
-    # send_email(
-    #     recipient="contact@bhagavadgita.io",
-    #     subject="Bhagavad Gita - Shloka of the day",
-    #     template='main/email/shloka',
-    #     shloka_english=verse.text,
-    #     shloka_hindi=verse.text)
+    if verse:
+        send_shloka(
+            recipient="samanyugarg@gmail.com",
+            subject="Shloka of the day",
+            template='main/email/shloka',
+            shloka_english=verse.meaning_english,
+            shloka_hindi=verse.meaning)
 
     return render_template(
             'main/email/shloka.html')
 
-
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=6, minute=00)
-scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+if not os.environ.get('DEBUG'):
+    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=6, minute=00)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():

@@ -12,3 +12,13 @@ def send_email(recipient, subject, template, **kwargs):
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)    
     mail.send(msg)
+
+
+def send_shloka(recipient, subject, template, **kwargs):
+    msg = Message(
+        current_app.config['EMAIL_SUBJECT_PREFIX'] + ' ' + subject,
+        sender="Bhagavad Gita Daily",
+        recipients=[recipient])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)    
+    mail.send(msg)
