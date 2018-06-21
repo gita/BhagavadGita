@@ -1,5 +1,5 @@
 from flask import url_for
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import ValidationError
 from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField, TextAreaField)
@@ -9,7 +9,7 @@ from wtforms.validators import Email, EqualTo, InputRequired, Length
 from ..models import User
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     email = EmailField(
         'Email', validators=[InputRequired(),
                              Length(1, 64),
@@ -19,7 +19,7 @@ class LoginForm(Form):
     submit = SubmitField('Log in')
 
 
-class RegistrationForm(Form):
+class RegistrationForm(FlaskForm):
     first_name = StringField(
         'First name', validators=[InputRequired(),
                                   Length(1, 64)])
@@ -41,12 +41,10 @@ class RegistrationForm(Form):
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered. (Did you mean to '
-                                  '<a href="{}">log in</a> instead?)'.format(
-                                      url_for('account.login')))
+            raise ValidationError('Email already registered. (Did you mean to log in instead?)')
 
 
-class RequestResetPasswordForm(Form):
+class RequestResetPasswordForm(FlaskForm):
     email = EmailField(
         'Email', validators=[InputRequired(),
                              Length(1, 64),
@@ -57,7 +55,7 @@ class RequestResetPasswordForm(Form):
     # that an account with the given email exists.
 
 
-class ResetPasswordForm(Form):
+class ResetPasswordForm(FlaskForm):
     email = EmailField(
         'Email', validators=[InputRequired(),
                              Length(1, 64),
@@ -77,7 +75,7 @@ class ResetPasswordForm(Form):
             raise ValidationError('Unknown email address.')
 
 
-class CreatePasswordForm(Form):
+class CreatePasswordForm(FlaskForm):
     password = PasswordField(
         'Password',
         validators=[
@@ -89,7 +87,7 @@ class CreatePasswordForm(Form):
     submit = SubmitField('Set password')
 
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
     old_password = PasswordField('Old password', validators=[InputRequired()])
     new_password = PasswordField(
         'New password',
@@ -102,7 +100,7 @@ class ChangePasswordForm(Form):
     submit = SubmitField('Update password')
 
 
-class ChangeEmailForm(Form):
+class ChangeEmailForm(FlaskForm):
     email = EmailField(
         'New email', validators=[InputRequired(),
                                  Length(1, 64),
@@ -115,7 +113,7 @@ class ChangeEmailForm(Form):
             raise ValidationError('Email already registered.')
 
 
-class CreateAppForm(Form):
+class CreateAppForm(FlaskForm):
     application_name = StringField(
         'Name', validators=[InputRequired(), Length(1, 32)])
     application_description = TextAreaField(
@@ -129,7 +127,7 @@ class CreateAppForm(Form):
     submit = SubmitField('Create your Application')
 
 
-class UpdateAppForm(Form):
+class UpdateAppForm(FlaskForm):
     application_name = StringField(
         'Name', validators=[InputRequired(), Length(1, 32)])
     application_description = TextAreaField(

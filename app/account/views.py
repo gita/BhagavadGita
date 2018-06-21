@@ -486,7 +486,9 @@ def register():
     """Register a new user, and send them a confirmation email."""
     badge_list = []
     form = RegistrationForm()
+
     if form.validate_on_submit():
+        validate_email(form.email.data)
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
             id=max_id+1,
