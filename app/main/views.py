@@ -1423,6 +1423,44 @@ def verse_of_the_day():
     return render_template('main/verse_of_the_day.html', verse=verse, badge_list=badge_list, language=language)
 
 
+@main.route('/shloka-subscribe/<string:fullname>/<string:email>', methods=['GET', 'POST'])
+def shloka_subscribe(fullname, email):
+    sql = """
+        SELECT email
+        FROM vrindavan
+    """
+    result = db.session.execute(sql)
+    email_list = [d['email'] for d in result]
+
+    if email not in email_list:
+        sql = """
+            INSERT INTO vrindavan (fullname, email)
+            VALUES ('%s', '%s')
+        """ % (fullname, email)
+        db.session.execute(sql)
+        db.session.commit()
+    return "RadhaKrishna"
+
+
+@main.route('/shloka-unsubscribe/<string:email>', methods=['GET', 'POST'])
+def shloka_unsubscribe(email):
+    sql = """
+        SELECT email
+        FROM vrindavan
+    """
+    result = db.session.execute(sql)
+    email_list = [d['email'] for d in result]
+
+    if email in email_list:
+        sql = """
+            DELETE FROM vrindavan
+            WHERE email = '%s'
+        """ % (email)
+        db.session.execute(sql)
+        db.session.commit()
+    return "RadhaKrishna"
+
+
 def verse_of_the_day_notification():
     ts = time.time()
     today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
@@ -1435,7 +1473,7 @@ def verse_of_the_day_notification():
 
         payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
                 "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
-                "included_segments": ["All"],
+                "included_segments": ["Test"],
                 "contents": {"en": verse.text}}
 
         req = requests.post("https://onesignal.com/api/v1/notifications",
@@ -1448,15 +1486,21 @@ def radhakrishna():
 radhakrishna()
 
 
-@main.route('/radhakrishnahanuman', methods=['GET'])
-def radhakrishnahanuman():
+def shloka_of_the_day_email():
     ts = time.time()
     today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
     verse = select_shloka("hi", today)
 
+    sql = """
+        SELECT email
+        FROM vrindavan
+    """
+    result = db.session.execute(sql)
+    email_list = [d['email'] for d in result]
+
     if verse:
         send_shloka(
-            recipient="samanyugarg@gmail.com",
+            email_list=email_list,
             subject="Shloka of the day",
             template='main/email/shloka',
             shloka_english=verse.meaning_english,
@@ -1466,8 +1510,9 @@ def radhakrishnahanuman():
             'main/email/shloka.html')
 
 if not os.environ.get('DEBUG'):
-    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=6, minute=00)
+    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=04, minute=30)
+    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=06, minute=00)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=07, minute=30)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 

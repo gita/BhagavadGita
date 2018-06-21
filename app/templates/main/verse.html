@@ -223,15 +223,18 @@
           </div>
         </div>
       </div>
-      <div class="col-md-12 mt-3">
+      <div class="col-md-12 mt-3" id="bhagavadgita-shloka">
         <div class="card orange lighten-3 text-center z-depth-2 h-100" id="subscribe-card">
           <div class="card-body">
-            <p style="font-family: roboto;">
-              <strong>{{ _('Have the Shloka of the Day delivered to your inbox each morning.') }}</strong>
-            </p>
+            <div>
+              <span class="pull-right clickable close-icon" data-effect="fadeOut"><i class="fa fa-times"></i></span>
+              <p style="font-family: roboto;">
+                <strong>{{ _('Have the Shloka of the Day delivered to your inbox each morning.') }}</strong>
+              </p>
+            </div>
             <hr>
-            <form action="/shloka-subscribe" method="POST" id="shloka-form">
-              <div class="md-form">
+            <form action="/shloka-subscribe/" method="POST" id="shloka-form">
+              <div class="md-form" id="shloka-subscribe">
                 <div class="row">
                   <div class="col-md-6">
                     <input autofocus class="form-control first-input" id="fullname" name="fullname" placeholder="Full Name" type="text" required>
@@ -577,6 +580,9 @@ a:hover {
   color: #FF9800;
 }
 
+.close-icon {
+  cursor: pointer;
+}
   </style>
 
 <script>
@@ -595,12 +601,24 @@ a:hover {
         $('.verse-word').css("font-size", settings['font']*1.2 + "rem");
         $('.heading').css("font-size", settings['font']*1.17 + "rem");
         $('#myRange').val(settings['font']);
+        }
+        if (settings['theme']) {
+          $('#theme').val(settings['theme']);
+          $('#theme').trigger('change.select2');
+        }
       }
-      if (settings['theme']) {
-        $('#theme').val(settings['theme']);
-        $('#theme').trigger('change.select2');
+
+      if (document.cookie.indexOf("subscribe=") >= 0) {
+        var subscribe = JSON.parse(getCookie('subscribe'));
+        if (subscribe['done'] === "Yes" || subscribe['hide'] === "Yes") {
+          $('#bhagavadgita-shloka').remove()
+        }
       }
-    }
+
+      $('.close-icon').on('click',function() {
+        $(this).closest('.card').fadeOut();
+        setCookie('subscribe',JSON.stringify({done: 'No', hide: 'Yes'}), 7);
+      })
 
       var ua = navigator.userAgent.toLowerCase();
       var isAndroid = ua.indexOf("bhagavadgita") > -1;
@@ -792,11 +810,20 @@ a:hover {
     $('#shloka-form').on('submit', function(e) {
         e.preventDefault();
         $.ajax({
-            url : $(this).attr('action') || window.location.pathname,
+            url : "/shloka-subscribe/" + $('#fullname').val() + '/' + $('#email').val(),
             type: "GET",
             data: $(this).serialize(),
             success: function (data) {
-                $("#form_output").html(data);
+                if(data === "RadhaKrishna") {
+                  $('#shloka-subscribe').html(`<p>Thanks for subscribing!
+                    <br>
+                    We hope that Gita directs you towards the right path.
+                    <br>
+                    If at any point you wish to stop receiving the shlokas, follow the link at the bottom of the email to unsubscribe. If you have any problems or questions, please email us at contact@bhagavadgita.io.
+                    <br>
+                    🙏 Jai Shri Radha Krishna! 🙏</p>`)
+                  setCookie('subscribe',JSON.stringify({done: 'Yes', hide: 'No'}),30);
+                }
             },
             error: function (jXHR, textStatus, errorThrown) {
                 alert(errorThrown);
