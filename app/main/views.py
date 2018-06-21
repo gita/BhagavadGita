@@ -1483,7 +1483,7 @@ def verse_of_the_day_notification():
 def radhakrishna():
     print("RadhaKrishnaHanuman")
 
-radhakrishna()
+# radhakrishna()
 
 
 def shloka_of_the_day_email():
@@ -1509,12 +1509,13 @@ def shloka_of_the_day_email():
     return render_template(
             'main/email/shloka.html')
 
-if not os.environ.get('DEBUG'):
-    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=16, minute=15)
-    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=7, minute=30)
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+# if not os.environ.get('DEBUG'):
+scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+scheduler.add_job(verse_of_the_day_notification, 'cron', hour=16, minute=20)
+scheduler.add_job(shloka_of_the_day_email, 'cron', hour=7, minute=30)
+scheduler.add_job(radhakrishna, 'cron', hour=16, minute=20)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
