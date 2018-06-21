@@ -1510,9 +1510,9 @@ def shloka_of_the_day_email():
             'main/email/shloka.html')
 
 if not os.environ.get('DEBUG'):
-    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=04, minute=30)
-    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=06, minute=00)
-    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=07, minute=30)
+    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=6, minute=00)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=7, minute=30)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
