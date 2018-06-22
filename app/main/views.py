@@ -26,9 +26,9 @@ import requests
 import os
 
 from collections import OrderedDict
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 
-scheduler = BackgroundScheduler()
+# scheduler = BackgroundScheduler()
 
 if sys.version_info[0] < 3:
     reload(sys)
@@ -1506,11 +1506,11 @@ def shloka_of_the_day_email():
             shloka_hindi=verse.meaning)
 
 # if not os.environ.get('DEBUG'):
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=18, minute=29)
-scheduler.add_job(shloka_of_the_day_email, 'cron', hour=18, minute=29)
-scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+# scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+# scheduler.add_job(verse_of_the_day_notification, 'cron', hour=18, minute=29)
+# scheduler.add_job(shloka_of_the_day_email, 'cron', hour=5, minute=40)
+# scheduler.start()
+# atexit.register(lambda: scheduler.shutdown())
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
