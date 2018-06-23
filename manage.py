@@ -110,4 +110,4 @@ def format():
 
 
 if __name__ == '__main__':
-    manager.run()
+    app.run(debug=False, use_reloader=False)
