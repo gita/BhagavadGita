@@ -1559,7 +1559,7 @@ def shloka_of_the_day_email():
     """
     result = db.session.execute(sql)
     # email_list = [d['email'] for d in result]
-    email_list = ['samanyugarg@gmail.com']
+    email_list = ['contact@bhagavadgita.io']
 
     if verse:
         send_shloka(
@@ -1572,8 +1572,8 @@ def shloka_of_the_day_email():
 
 if not os.environ.get('DEBUG'):
     scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=7, minute=00)
-    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=15, minute=2)
+    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=15, minute=4)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=15, minute=4)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
