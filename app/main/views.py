@@ -1569,12 +1569,11 @@ def shloka_of_the_day_email():
             shloka_english=verse.meaning_english,
             shloka_hindi=verse.meaning)
 
-shloka_of_the_day_email()
 
 if os.environ.get('RADHA') == "KRISHNA":
     scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
     scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=30)
-    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=15, minute=57)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=16, minute=12)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
