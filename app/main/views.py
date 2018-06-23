@@ -24,6 +24,8 @@ from werkzeug.security import gen_salt
 import atexit
 import requests
 import os
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import BadSignature, SignatureExpired
 
 from collections import OrderedDict
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -1424,6 +1426,49 @@ def verse_of_the_day():
     return render_template('main/verse_of_the_day.html', verse=verse, badge_list=badge_list, language=language)
 
 
+def generate_confirmation_token(id, expiration=604800):
+        """Generate a confirmation token to email a new subscriber."""
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': id})
+
+
+@main.route('/confirm-shloka/<int:id>/<token>')
+def confirm_shloka(id, token):
+    """Confirm new subscription with provided token."""
+    vrindavan_id = id
+    current_app.logger.info(vrindavan_id)
+    sql = """
+        SELECT confirmed
+        FROM vrindavan
+        WHERE vrindavan_id = %s
+    """ % (vrindavan_id)
+    result = db.session.execute(sql)
+    confirmed = [d['confirmed'] for d in result][0]
+    current_app.logger.info(confirmed)
+
+    if confirmed:
+        return redirect(url_for('main.index'))
+    if not confirmed:
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except (BadSignature, SignatureExpired):
+            return False
+        if data.get('confirm') != vrindavan_id:
+            return False
+        sql = """
+            UPDATE vrindavan
+            SET confirmed = 'true'
+            WHERE vrindavan_id = %s
+        """ % (vrindavan_id)
+        db.session.execute(sql)
+        db.session.commit()
+        flash('Your subscription has been confirmed.', 'success')
+    else:
+        flash('The confirmation link is invalid or has expired.', 'error')
+    return redirect(url_for('main.index'))
+
+
 @main.route('/shloka-subscribe/<string:fullname>/<string:email>', methods=['GET', 'POST'])
 def shloka_subscribe(fullname, email):
     sql = """
@@ -1435,11 +1480,24 @@ def shloka_subscribe(fullname, email):
 
     if email not in email_list:
         sql = """
-            INSERT INTO vrindavan (fullname, email)
-            VALUES ('%s', '%s')
+            INSERT INTO vrindavan (fullname, email, confirmed)
+            VALUES ('%s', '%s', 'false')
+            RETURNING vrindavan_id
         """ % (fullname, email)
-        db.session.execute(sql)
+        result = db.session.execute(sql)
         db.session.commit()
+        id = [d['vrindavan_id'] for d in result][0]
+
+        token = generate_confirmation_token(id)
+        confirm_link = url_for('main.confirm_shloka', id=id, token=token, _external=True)
+
+        send_email(
+            recipient=email,
+            subject='Confirm Your Subscription',
+            template='account/email/confirm_shloka',
+            full_name=fullname,
+            confirm_link=confirm_link)
+
     return "RadhaKrishna"
 
 
@@ -1459,7 +1517,10 @@ def shloka_unsubscribe(email):
         """ % (email)
         db.session.execute(sql)
         db.session.commit()
-    return "RadhaKrishna"
+        flash('Your subscription has been cancelled.', 'success')
+    else:
+        flash('You are not subscribed to the "Shloka of the day".', 'warning')
+    return redirect(url_for('main.index'))
 
 
 def verse_of_the_day_notification():
@@ -1494,6 +1555,7 @@ def shloka_of_the_day_email():
     sql = """
         SELECT email
         FROM vrindavan
+        WHERE confirmed = 'true'
     """
     result = db.session.execute(sql)
     # email_list = [d['email'] for d in result]
@@ -1507,12 +1569,13 @@ def shloka_of_the_day_email():
             shloka_english=verse.meaning_english,
             shloka_hindi=verse.meaning)
 
-# if not os.environ.get('DEBUG'):
-#     scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=47)
-#     scheduler.add_job(verse_of_the_day_notification, 'cron', hour=18, minute=29)
-#     scheduler.add_job(shloka_of_the_day_email, 'cron', hour=5, minute=47)
-#     scheduler.start()
-#     atexit.register(lambda: scheduler.shutdown())
+
+if not os.environ.get('DEBUG'):
+    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=7, minute=00)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=15, minute=2)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 
 @main.route('/privacy-policy/', methods=['GET'])

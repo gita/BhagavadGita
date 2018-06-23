@@ -1,0 +1,13 @@
+Dear {{ full_name }},
+
+A "Shloka of the day" subscription request for this email address was received. 
+Please confirm it by clicking on the following link:
+
+{{ confirm_link }}
+
+Sincerely,
+
+The {{ config.APP_NAME }} Team
+
+Note: replies to this email address are not monitored.
+
