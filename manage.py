@@ -12,8 +12,6 @@ from app.models import Role, User
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-app.debug = False
-app.auto_reload = False
 manager = Manager(app)
 migrate = Migrate(app, db)
 
@@ -110,4 +108,4 @@ def format():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, use_reloader=False)
+    manager.run()
