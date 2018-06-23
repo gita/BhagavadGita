@@ -12,8 +12,8 @@ from app.models import Role, User
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-if os.environ.get('RADHA') == "KRISHNA":
-    app.debug = False
+app.debug = False
+app.auto_reload = False
 manager = Manager(app)
 migrate = Migrate(app, db)
 
