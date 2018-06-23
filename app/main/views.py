@@ -1570,12 +1570,12 @@ def shloka_of_the_day_email():
             shloka_hindi=verse.meaning)
 
 
-# if not os.environ.get('DEBUG'):
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=15, minute=6)
-scheduler.add_job(shloka_of_the_day_email, 'cron', hour=15, minute=6)
-scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+if os.environ.get('RADHA') == "KRISHNA":
+    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+    scheduler.add_job(verse_of_the_day_notification, 'cron', hour=16, minute=6)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=15, minute=20)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 
 @main.route('/privacy-policy/', methods=['GET'])
