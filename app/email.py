@@ -23,7 +23,7 @@ def render_without_context(template_name, **context):
     return template.render(**context)
 
 
-from manage import app
+#from manage import app
 def send_shloka(email_list, subject, template, **kwargs):
     for email in email_list:
         msg = Message(
