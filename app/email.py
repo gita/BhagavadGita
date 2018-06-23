@@ -3,6 +3,8 @@ from flask_mail import Message
 from . import mail
 from flask import current_app, render_template
 import jinja2
+import boto3
+from botocore.exceptions import ClientError
 
 
 def send_email(recipient, subject, template, **kwargs):
@@ -23,16 +25,52 @@ def render_without_context(template_name, **context):
     return template.render(**context)
 
 
-#from manage import app
 def send_shloka(email_list, subject, template, **kwargs):
     for email in email_list:
-        msg = Message(
-            "Bhagavad Gita -" + ' ' + subject,
-            sender='Bhagavad Gita Daily <{email}>'.format(email="contact@bhagavadgita.io"),
-            recipients=[email])
-        msg.body = render_without_context(
+        SENDER = "Bhagavad Gita Daily <shloka@bhagavadgita.io>"
+        RECIPIENT = email
+        AWS_REGION = "us-east-1"
+
+        SUBJECT = "Bhagavad Gita - " + subject
+
+        BODY_TEXT = render_without_context(
             template + '.txt', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email, **kwargs)
-        msg.html = render_without_context(
+
+        BODY_HTML = render_without_context(
             template + '.html', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email, **kwargs)
-        with app.app_context():
-            mail.send(msg)
+
+        CHARSET = "UTF-8"
+
+        client = boto3.client('ses', region_name=AWS_REGION)
+
+        try:
+            response = client.send_email(
+                Destination={
+                    'ToAddresses': [
+                        RECIPIENT,
+                    ],
+                },
+                Message={
+                    'Body': {
+                        'Html': {
+                            'Charset': CHARSET,
+                            'Data': BODY_HTML,
+                        },
+                        'Text': {
+                            'Charset': CHARSET,
+                            'Data': BODY_TEXT,
+                        },
+                    },
+                    'Subject': {
+                        'Charset': CHARSET,
+                        'Data': SUBJECT,
+                    },
+                },
+                Source=SENDER,
+            )
+
+        except ClientError as e:
+            print(e.response['Error']['Message'])
+        else:
+            print("Email sent! Message ID:"),
+            print(response['MessageId'])

@@ -1378,6 +1378,7 @@ def select_shloka(lang, day):
                 AND vt.verse_number = v.verse_number
                 JOIN verse_of_day vod
                 ON v.chapter_number = vod.chapter_number
+                AND v.verse_number = vod.verse_number
                 WHERE vod.timestamp::date = date '%s'
                 LIMIT 1
             """ % (verses_table, day)
@@ -1507,11 +1508,12 @@ def shloka_of_the_day_email():
             shloka_hindi=verse.meaning)
 
 # if not os.environ.get('DEBUG'):
-scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
-scheduler.add_job(verse_of_the_day_notification, 'cron', hour=18, minute=29)
-scheduler.add_job(shloka_of_the_day_email, 'cron', hour=7, minute=9)
-scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+#     scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=5, minute=47)
+#     scheduler.add_job(verse_of_the_day_notification, 'cron', hour=18, minute=29)
+#     scheduler.add_job(shloka_of_the_day_email, 'cron', hour=5, minute=47)
+#     scheduler.start()
+#     atexit.register(lambda: scheduler.shutdown())
+
 
 @main.route('/privacy-policy/', methods=['GET'])
 def privacy_policy():
