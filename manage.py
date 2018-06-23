@@ -12,6 +12,7 @@ from app.models import Role, User
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app.debug=False
 manager = Manager(app)
 migrate = Migrate(app, db)
 
@@ -35,6 +36,8 @@ def test():
 
 @manager.option(
     '-n',
+    '-R',
+    '-D',
     '--number-users',
     default=10,
     type=int,
