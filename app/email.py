@@ -26,51 +26,51 @@ def render_without_context(template_name, **context):
 
 
 def send_shloka(email_list, subject, template, **kwargs):
-    # for email in email_list:
-    SENDER = "Bhagavad Gita Daily <shloka@bhagavadgita.io>"
-    RECIPIENT = email_list[0]
-    AWS_REGION = "us-east-1"
+    for email in email_list:
+        SENDER = "Bhagavad Gita Daily <shloka@bhagavadgita.io>"
+        RECIPIENT = email
+        AWS_REGION = "us-east-1"
 
-    SUBJECT = "Bhagavad Gita - " + subject
+        SUBJECT = "Bhagavad Gita - " + subject
 
-    BODY_TEXT = render_without_context(
-        template + '.txt', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email_list[0], **kwargs)
+        BODY_TEXT = render_without_context(
+            template + '.txt', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email, **kwargs)
 
-    BODY_HTML = render_without_context(
-        template + '.html', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email_list[0], **kwargs)
+        BODY_HTML = render_without_context(
+            template + '.html', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email, **kwargs)
 
-    CHARSET = "UTF-8"
+        CHARSET = "UTF-8"
 
-    client = boto3.client('ses', region_name=AWS_REGION)
+        client = boto3.client('ses', region_name=AWS_REGION)
 
-    try:
-        response = client.send_email(
-            Destination={
-                'ToAddresses': [
-                    RECIPIENT,
-                ],
-            },
-            Message={
-                'Body': {
-                    'Html': {
-                        'Charset': CHARSET,
-                        'Data': BODY_HTML,
+        try:
+            response = client.send_email(
+                Destination={
+                    'ToAddresses': [
+                        RECIPIENT,
+                    ],
+                },
+                Message={
+                    'Body': {
+                        'Html': {
+                            'Charset': CHARSET,
+                            'Data': BODY_HTML,
+                        },
+                        'Text': {
+                            'Charset': CHARSET,
+                            'Data': BODY_TEXT,
+                        },
                     },
-                    'Text': {
+                    'Subject': {
                         'Charset': CHARSET,
-                        'Data': BODY_TEXT,
+                        'Data': SUBJECT,
                     },
                 },
-                'Subject': {
-                    'Charset': CHARSET,
-                    'Data': SUBJECT,
-                },
-            },
-            Source=SENDER,
-        )
+                Source=SENDER,
+            )
 
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        print("Email sent! Message ID:"),
-        print(response['MessageId'])
+        except ClientError as e:
+            print(e.response['Error']['Message'])
+        else:
+            print("Email sent! Message ID:"),
+            print(response['MessageId'])
