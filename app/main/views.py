@@ -1535,7 +1535,7 @@ def verse_of_the_day_notification():
 
         payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
                 "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
-                "included_segments": ["Test"],
+                "included_segments": ["All"],
                 "contents": {"en": verse.text}}
 
         req = requests.post("https://onesignal.com/api/v1/notifications",
@@ -1558,8 +1558,8 @@ def shloka_of_the_day_email():
         WHERE confirmed = 'true'
     """
     result = db.session.execute(sql)
-    # email_list = [d['email'] for d in result]
-    email_list = ['contact@bhagavadgita.io']
+    email_list = [d['email'] for d in result]
+    # email_list = ['contact@bhagavadgita.io']
 
     if verse:
         send_shloka(
@@ -1573,7 +1573,7 @@ def shloka_of_the_day_email():
 if os.environ.get('RADHA') == "KRISHNA":
     scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
     scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=30)
-    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=6, minute=00)
+    # scheduler.add_job(shloka_of_the_day_email, 'cron', hour=6, minute=00)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
