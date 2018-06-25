@@ -15,7 +15,7 @@ from app.models.user import UserFavourite, User
 
 from . import main
 from ..email import send_email, send_shloka
-from .forms import ContactForm
+from .forms import ContactForm, ShlokaForm
 
 from flask_login import current_user, login_user
 from datetime import datetime, timedelta, date
@@ -1547,6 +1547,36 @@ def radhakrishna():
 
 radhakrishna()
 
+
+# @main.route('/radhakrishnahanuman/<int:chapter_number>/<string:verse_number>', methods=['GET', 'POST'])
+# def radhakrishnahanuman(chapter_number, verse_number):
+#     print("RadhaKrishnaHanuman")
+#     sql = """
+#         SELECT chapter_number, verse_number, meaning
+#         FROM verses_kanha
+#         WHERE chapter_number = %s
+#         AND verse_number = '%s'
+#     """ % (chapter_number, verse_number)
+#     verse = db.session.execute(sql).first()
+#     form = ShlokaForm(csrf_enabled=False)
+
+#     if form.validate_on_submit():
+#         args_dict = {}
+#         args_dict['meaning'] = form.meaning.data
+#         sql = """
+#             UPDATE verses_kanha
+#             SET meaning = '%s'
+#             WHERE chapter_number = %s
+#             AND verse_number = '%s'
+#         """ % (args_dict['meaning'], chapter_number, verse_number)
+#         db.session.execute(sql)
+#         db.session.commit()
+
+#         return redirect("/radhakrishnahanuman/" + str(chapter_number) + "/" + str(verse_number))
+
+#     return render_template('main/radhakrishnahanuman.html', verse=verse, form=form)
+
+
 def shloka_of_the_day_email():
     ts = time.time()
     today = datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
@@ -1573,7 +1603,7 @@ def shloka_of_the_day_email():
 if os.environ.get('RADHA') == "KRISHNA":
     scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
     scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=30)
-    # scheduler.add_job(shloka_of_the_day_email, 'cron', hour=6, minute=00)
+    scheduler.add_job(shloka_of_the_day_email, 'cron', hour=6, minute=00)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 

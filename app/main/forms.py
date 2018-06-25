@@ -19,3 +19,9 @@ class ContactForm(Form):
         'Message', validators=[InputRequired(),
                                Length(1, 200)])
     submit = SubmitField('Send')
+
+
+class ShlokaForm(Form):
+    meaning = TextAreaField(
+        'Meaning')
+    submit = SubmitField('Send')

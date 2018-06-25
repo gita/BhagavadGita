@@ -1,0 +1,46 @@
+{% import 'macros/page_macros.html' as page %} {% extends 'layouts/base.html' %} {% block title %}Badges - Bhagavad Gita{%
+endblock %} {% block meta_tags %}
+
+
+<div class="container" style="margin-bottom: 10vh; margin-top: 5rem;">
+    <div class="row">
+        <div class="col-md-12 mt-3" id="bhagavadgita-shloka">
+        <div class="card orange lighten-3 text-center z-depth-2 h-100" id="subscribe-card">
+          <div class="card-body">
+            <div>
+              <p style="font-family: roboto;">
+                <strong>{{ _('RadhaKrishna') }}</strong>
+              </p>
+            </div>
+            <hr>
+            <form action="/radhakrishnahanuman/{{verse.chapter_number}}/{{verse.verse_number}}" method="POST" id="shloka-form" id="form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <textarea autofocus class="form-control first-input" rows="5" id="meaning" name="meaning" required>{{verse.meaning}}</textarea>
+                  </div>
+                </div>
+                <div align="center">
+                  <button type="submit" class="btn btn-grey btn-rounded z-depth-1a" value="Submit" style="border-radius: 10em;">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<style>
+ #meaning {
+     height: 8rem;
+ }
+</style>
+
+<script>
+ $(document).ready(function() {
+    $('#bhagavadgitafooter').remove()
+})
+</script>
+{% endblock %}
