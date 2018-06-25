@@ -1548,33 +1548,33 @@ def radhakrishna():
 radhakrishna()
 
 
-@main.route('/radhakrishnahanuman/<int:chapter_number>/<string:verse_number>', methods=['GET', 'POST'])
-def radhakrishnahanuman(chapter_number, verse_number):
-    print("RadhaKrishnaHanuman")
-    sql = """
-        SELECT chapter_number, verse_number, meaning
-        FROM verses_kanha
-        WHERE chapter_number = %s
-        AND verse_number = '%s'
-    """ % (chapter_number, verse_number)
-    verse = db.session.execute(sql).first()
-    form = ShlokaForm(csrf_enabled=False)
-
-    if form.validate_on_submit():
-        args_dict = {}
-        args_dict['meaning'] = form.meaning.data
-        sql = """
-            UPDATE verses_kanha
-            SET meaning = '%s'
-            WHERE chapter_number = %s
-            AND verse_number = '%s'
-        """ % (args_dict['meaning'], chapter_number, verse_number)
-        db.session.execute(sql)
-        db.session.commit()
-
-        return redirect("/radhakrishnahanuman/" + str(chapter_number) + "/" + str(verse_number))
-
-    return render_template('main/radhakrishnahanuman.html', verse=verse, form=form)
+# @main.route('/radhakrishnahanuman/<int:chapter_number>/<string:verse_number>', methods=['GET', 'POST'])
+# def radhakrishnahanuman(chapter_number, verse_number):
+#     print("RadhaKrishnaHanuman")
+#     sql = """
+#         SELECT chapter_number, verse_number, meaning
+#         FROM verses_kanha
+#         WHERE chapter_number = %s
+#         AND verse_number = '%s'
+#     """ % (chapter_number, verse_number)
+#     verse = db.session.execute(sql).first()
+#     form = ShlokaForm(csrf_enabled=False)
+#
+#     if form.validate_on_submit():
+#         args_dict = {}
+#         args_dict['meaning'] = form.meaning.data
+#         sql = """
+#             UPDATE verses_kanha
+#             SET meaning = '%s'
+#             WHERE chapter_number = %s
+#             AND verse_number = '%s'
+#         """ % (args_dict['meaning'], chapter_number, verse_number)
+#         db.session.execute(sql)
+#         db.session.commit()
+#
+#         return redirect("/radhakrishnahanuman/" + str(chapter_number) + "/" + str(verse_number))
+#
+#     return render_template('main/radhakrishnahanuman.html', verse=verse, form=form)
 
 
 def shloka_of_the_day_email():
