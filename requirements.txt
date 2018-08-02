@@ -1,6 +1,6 @@
 alembic==0.9.10
 aniso8601==3.0.2
-apispec==0.31.0
+apispec==0.39.0
 appdirs==1.4.3
 appnope==0.1.0
 APScheduler==3.5.1
