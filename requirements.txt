@@ -94,7 +94,7 @@ pexpect==4.6.0
 pickleshare==0.7.4
 prompt-toolkit==2.0.3
 psycopg2==2.7.5
-ptyprocess==0.5.2
+ptyprocess==0.6.0
 pyaml==17.12.1
 pycodestyle==2.4.0
 pycparser==2.18
