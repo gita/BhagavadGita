@@ -29,7 +29,7 @@ docutils==0.14
 elasticsearch==6.2.0
 elasticsearch-loader==0.2.2
 entrypoints==0.2.3
-Faker==0.8.16
+Faker==0.8.17
 flake8==3.5.0
 flasgger==0.8.0
 Flask==1.0
