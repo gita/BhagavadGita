@@ -105,7 +105,7 @@ pylint==1.9.1
 pyparsing==2.2.0
 python-dateutil==2.6.0
 python-editor==1.0.3
-pytz==2017.3
+pytz==2018.5
 PyYAML==3.12
 pyzmq==17.0.0
 qtconsole==4.3.1
