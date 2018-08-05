@@ -33,7 +33,7 @@ Faker==0.8.16
 flake8==3.5.0
 flasgger==0.9.0
 Flask==1.0.2
-Flask-APScheduler==1.8.0
+Flask-APScheduler==1.10.1
 Flask-Assets==0.12
 Flask-Babel==0.11.2
 Flask-Compress==1.4.0
