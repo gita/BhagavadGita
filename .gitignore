@@ -5,11 +5,10 @@ venv
 .cache
 .sqlite
 config.env
-*.rdb
-*.rdb
 radhakrishna.env
 es.txt
 bhagavad_gita.json
 bhagavadgita.py
 radhakrishna.py
 scheduleCron.py
+.vscode
