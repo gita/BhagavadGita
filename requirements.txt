@@ -83,8 +83,8 @@ mccabe==0.6.1
 mistune==0.8.3
 nbconvert==5.3.1
 nbformat==4.4.0
+numpy==1.15.0
 notebook==5.6.0
-numpy==1.14.5
 oauthlib==2.0.7
 packaging==16.8
 pandas==0.23.4
