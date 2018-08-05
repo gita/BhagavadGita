@@ -3,25 +3,24 @@ import os
 from flask import (current_app, flash, jsonify, redirect, render_template,
                    request, session, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
+from flask_mail import Mail, Message
 from flask_rq import get_queue
 from werkzeug.security import gen_salt
 
 from . import account
-from .. import db, oauthclient
+from .. import db, mail, oauthclient
 # from .. import github_blueprint, google_blueprint, facebook_blueprint
 from ..email import send_email
-from ..models import App, Client, User, Token
+from ..models import App, Client, Token, User
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreateAppForm,
                     CreatePasswordForm, LoginForm, RegistrationForm,
                     RequestResetPasswordForm, ResetPasswordForm, UpdateAppForm)
-from flask_mail import Mail, Message
-from .. import mail
+
 # from flask_dance.consumer import oauth_authorized, oauth_error
 # from sqlalchemy.orm.exc import NoResultFound
 # from flask_dance.contrib.github import github
 # from flask_dance.contrib.google import google
 # from flask_dance.contrib.facebook import facebook
-
 
 # create/login local user on successful OAuth login
 # @oauth_authorized.connect_via(github_blueprint)
@@ -89,7 +88,6 @@ from .. import mail
 #     # Disable Flask-Dance's default behavior for saving the OAuth token
 #     return False
 
-
 # @oauth_error.connect_via(github_blueprint)
 # def github_error(blueprint, error, error_description=None, error_uri=None):
 #     msg = (
@@ -102,7 +100,6 @@ from .. import mail
 #         uri=error_uri,
 #     )
 #     flash(msg, category="error")
-
 
 # @oauth_authorized.connect_via(google_blueprint)
 # def google_logged_in(blueprint, token):
@@ -168,7 +165,6 @@ from .. import mail
 #     # Disable Flask-Dance's default behavior for saving the OAuth token
 #     return False
 
-
 # @oauth_error.connect_via(google_blueprint)
 # def google_error(blueprint, error, error_description=None, error_uri=None):
 #     msg = (
@@ -181,7 +177,6 @@ from .. import mail
 #         uri=error_uri,
 #     )
 #     flash(msg, category="error")
-
 
 # @oauth_authorized.connect_via(facebook_blueprint)
 # def facebook_logged_in(blueprint, token):
@@ -247,7 +242,6 @@ from .. import mail
 #     # Disable Flask-Dance's default behavior for saving the OAuth token
 #     return False
 
-
 # @oauth_error.connect_via(facebook_blueprint)
 # def facebook_error(blueprint, error, error_description=None, error_uri=None):
 #     msg = (
@@ -261,14 +255,11 @@ from .. import mail
 #     )
 #     flash(msg, category="error")
 
-
 google = oauthclient.remote_app(
     'google',
     consumer_key=os.environ.get('GOOGLE_KEY') or 'Google Key',
     consumer_secret=os.environ.get('GOOGLE_SECRET') or 'Google Secret',
-    request_token_params={
-        'scope': 'email'
-    },
+    request_token_params={'scope': 'email'},
     base_url='https://www.googleapis.com/oauth2/v1/',
     request_token_url=None,
     access_token_method='POST',
@@ -304,15 +295,14 @@ def google_login():
     return google.authorize(
         callback=url_for('account.google_authorized', _external=True))
 
+
 @account.route('/google/authorized')
 def google_authorized():
     resp = google.authorized_response()
     if resp is None:
         flash("Failed to log in with Google.", category="error")
         return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
+            request.args['error_reason'], request.args['error_description'])
     session['google_token'] = (resp['access_token'], '')
     user_google = google.get('userinfo').data
 
@@ -334,7 +324,7 @@ def google_authorized():
         # Create a new local user account for this user
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
-            id=max_id+1,
+            id=max_id + 1,
             email=user_google["email"],
             social_id=user_google["id"],
             social_provider="google",
@@ -360,10 +350,12 @@ def get_google_oauth_token():
 
 # Radha Krishna
 
+
 @account.route('/github-login-krishna')
 def github_login():
     return github.authorize(
         callback=url_for('account.github_authorized', _external=True))
+
 
 @account.route('/github/authorized')
 def github_authorized():
@@ -371,9 +363,7 @@ def github_authorized():
     if resp is None or resp.get('access_token') is None:
         flash("Failed to log in with github.", category="error")
         return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
+            request.args['error_reason'], request.args['error_description'])
     current_app.logger.info(resp)
     session['github_token'] = (resp['access_token'], '')
     user_github = github.get('user').data
@@ -390,7 +380,7 @@ def github_authorized():
         # Create a new local user account for this user
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
-            id=max_id+1,
+            id=max_id + 1,
             email=user_github["email"],
             social_id=user_github["id"],
             social_provider="github",
@@ -412,10 +402,12 @@ def github_authorized():
 def get_github_oauth_token():
     return session.get('github_token')
 
+
 @account.route('/facebook-login-krishna')
 def facebook_login():
     return facebook.authorize(
         callback=url_for('account.facebook_authorized', _external=True))
+
 
 @account.route('/facebook/authorized')
 def facebook_authorized():
@@ -423,9 +415,7 @@ def facebook_authorized():
     if resp is None:
         flash("Failed to log in with facebook.", category="error")
         return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
+            request.args['error_reason'], request.args['error_description'])
     session['facebook_token'] = (resp['access_token'], '')
     user_facebook = facebook.get('/me?fields=name,email,id').data
 
@@ -441,7 +431,7 @@ def facebook_authorized():
         # Create a new local user account for this user
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
-            id=max_id+1,
+            id=max_id + 1,
             email=user_facebook["email"],
             social_id=user_facebook["id"],
             social_provider="facebook",
@@ -459,6 +449,7 @@ def facebook_authorized():
 
     return False
 
+
 @facebook.tokengetter
 def get_facebook_oauth_token():
     return session.get('facebook_token')
@@ -467,7 +458,7 @@ def get_facebook_oauth_token():
 @account.route('/login', methods=['GET', 'POST'])
 def login():
     """Log in an existing user."""
-    badge_list=[]
+    badge_list = []
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -478,7 +469,8 @@ def login():
             return redirect(request.args.get('next') or url_for('main.index'))
         else:
             flash('Invalid email or password.', 'form-error')
-    return render_template('account/login.html', form=form, badge_list=badge_list)
+    return render_template(
+        'account/login.html', form=form, badge_list=badge_list)
 
 
 @account.route('/register', methods=['GET', 'POST'])
@@ -490,7 +482,7 @@ def register():
     if form.validate_on_submit():
         max_id = db.session.query(db.func.max(User.id)).scalar()
         user = User(
-            id=max_id+1,
+            id=max_id + 1,
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             email=form.email.data,
@@ -508,7 +500,8 @@ def register():
         flash('A confirmation link has been sent to {}.'.format(user.email),
               'warning')
         return redirect(url_for('main.index'))
-    return render_template('account/register.html', form=form, badge_list=badge_list)
+    return render_template(
+        'account/register.html', form=form, badge_list=badge_list)
 
 
 @account.route('/logout')
@@ -528,14 +521,18 @@ def logout():
 @login_required
 def manage():
     """Display a user's account information."""
-    badge_list=[]
-    return render_template('account/manage.html', user=current_user, form=None, badge_list=badge_list)
+    badge_list = []
+    return render_template(
+        'account/manage.html',
+        user=current_user,
+        form=None,
+        badge_list=badge_list)
 
 
 @account.route('/reset-password', methods=['GET', 'POST'])
 def reset_password_request():
     """Respond to existing user's request to reset their password."""
-    badge_list=[]
+    badge_list = []
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = RequestResetPasswordForm()
@@ -552,16 +549,18 @@ def reset_password_request():
                 user=user,
                 reset_link=reset_link,
                 next=request.args.get('next'))
-        flash('A password reset link has been sent to {}.'.format(
-            form.email.data), 'warning')
+        flash(
+            'A password reset link has been sent to {}.'.format(
+                form.email.data), 'warning')
         return redirect(url_for('account.login'))
-    return render_template('account/reset_password.html', form=form, badge_list=badge_list)
+    return render_template(
+        'account/reset_password.html', form=form, badge_list=badge_list)
 
 
 @account.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     """Reset an existing user's password."""
-    badge_list=[]
+    badge_list = []
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = ResetPasswordForm()
@@ -577,14 +576,15 @@ def reset_password(token):
             flash('The password reset link is invalid or has expired.',
                   'form-error')
             return redirect(url_for('main.index'))
-    return render_template('account/reset_password.html', form=form, badge_list=badge_list)
+    return render_template(
+        'account/reset_password.html', form=form, badge_list=badge_list)
 
 
 @account.route('/manage/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     """Change an existing user's password."""
-    badge_list=[]
+    badge_list = []
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
@@ -595,14 +595,18 @@ def change_password():
             return redirect(url_for('main.index'))
         else:
             flash('Original password is invalid.', 'form-error')
-    return render_template('account/manage.html', form=form, user=current_user, badge_list=badge_list)
+    return render_template(
+        'account/manage.html',
+        form=form,
+        user=current_user,
+        badge_list=badge_list)
 
 
 @account.route('/manage/change-email', methods=['GET', 'POST'])
 @login_required
 def change_email_request():
     """Respond to existing user's request to change their email."""
-    badge_list=[]
+    badge_list = []
     form = ChangeEmailForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.password.data):
@@ -623,7 +627,11 @@ def change_email_request():
             return redirect(url_for('main.index'))
         else:
             flash('Invalid email or password.', 'form-error')
-    return render_template('account/manage.html', form=form, user=current_user, badge_list=badge_list)
+    return render_template(
+        'account/manage.html',
+        form=form,
+        user=current_user,
+        badge_list=badge_list)
 
 
 @account.route('/manage/change-email/<token>', methods=['GET', 'POST'])
@@ -650,8 +658,9 @@ def confirm_request():
         # current_user is a LocalProxy, we want the underlying user object
         user=current_user._get_current_object(),
         confirm_link=confirm_link)
-    flash('A new confirmation link has been sent to {}.'.format(
-        current_user.email), 'warning')
+    flash(
+        'A new confirmation link has been sent to {}.'.format(
+            current_user.email), 'warning')
     return redirect(url_for('main.index'))
 
 
@@ -693,14 +702,16 @@ def join_from_invite(user_id, token):
             new_user.password = form.password.data
             db.session.add(new_user)
             db.session.commit()
-            flash('Your password has been set. After you log in, you can '
-                  'go to the "Your Account" page to review your account '
-                  'information and settings.', 'success')
+            flash(
+                'Your password has been set. After you log in, you can '
+                'go to the "Your Account" page to review your account '
+                'information and settings.', 'success')
             return redirect(url_for('account.login'))
         return render_template('account/join_invite.html', form=form)
     else:
-        flash('The confirmation link is invalid or has expired. Another '
-              'invite email with a new link has been sent to you.', 'error')
+        flash(
+            'The confirmation link is invalid or has expired. Another '
+            'invite email with a new link has been sent to you.', 'error')
         token = new_user.generate_confirmation_token()
         invite_link = url_for(
             'account.join_from_invite',
@@ -737,7 +748,7 @@ def unconfirmed():
 @account.route('/manage/apps/new', methods=['GET', 'POST'])
 @login_required
 def create_app():
-    badge_list=[]
+    badge_list = []
     form = CreateAppForm()
     if form.validate_on_submit():
         app = App(
@@ -769,13 +780,16 @@ def create_app():
         return redirect(
             url_for('account.update_app', application_id=app.application_id))
     return render_template(
-        'account/create_app.html', user=current_user._get_current_object(), form=form, badge_list=badge_list)
+        'account/create_app.html',
+        user=current_user._get_current_object(),
+        form=form,
+        badge_list=badge_list)
 
 
 @account.route('/manage/apps/<string:application_id>', methods=['GET', 'POST'])
 @login_required
 def update_app(application_id):
-    badge_list=[]
+    badge_list = []
     app = App.query.filter_by(application_id=application_id).first()
     client = Client.query.filter_by(app_id=application_id).first()
     client_id = client.client_id
@@ -806,12 +820,15 @@ def update_app(application_id):
 @account.route('/manage/apps', methods=['GET', 'POST'])
 @login_required
 def all_apps():
-    badge_list=[]
+    badge_list = []
     if current_user.is_anonymous or current_user.confirmed:
         apps_list = App.query.filter_by(user_id=current_user.id).all()
         current_app.logger.info(apps_list)
         return render_template(
-            'account/all_apps.html', user=current_user, apps_list=apps_list, badge_list=badge_list)
+            'account/all_apps.html',
+            user=current_user,
+            apps_list=apps_list,
+            badge_list=badge_list)
     return redirect(url_for('account.unconfirmed'))
 
 

@@ -1,6 +1,5 @@
 from flask import current_app, session
 
-
 __all__ = ['OAuthProperty', 'WebSessionData']
 
 

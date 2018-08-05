@@ -53,7 +53,8 @@ class ChapterModelHindi(db.Model):
     name_meaning = db.Column(db.String)
     chapter_summary = db.Column(db.String)
 
-    def __init__(self, name_translation, chapter_number, name_meaning, chapter_summary):
+    def __init__(self, name_translation, chapter_number, name_meaning,
+                 chapter_summary):
         self.name_translation = name_translation
         self.chapter_number = chapter_number
         self.name_meaning = name_meaning

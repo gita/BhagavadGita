@@ -5,7 +5,6 @@ from werkzeug.local import LocalProxy
 
 from .application import OAuth1Application, OAuth2Application
 
-
 __all__ = ['OAuth', 'OAuth1Application', 'OAuth2Application']
 
 
@@ -88,7 +87,6 @@ class OAuth(object):
 
 
 class OAuthState(object):
-
     def __init__(self):
         self.cached_clients = {}
 

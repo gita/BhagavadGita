@@ -1,4 +1,5 @@
 from marshmallow_sqlalchemy import ModelSchema
+
 from ..models.verse import VerseModel
 
 

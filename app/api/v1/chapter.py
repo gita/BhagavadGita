@@ -3,7 +3,8 @@
 
 from flasgger import SwaggerView
 from flask import jsonify, request
-from ... import csrf, oauth, db
+
+from ... import csrf, db, oauth
 from ...models.chapter import ChapterModel
 from ...schemas.chapter import ChapterSchema
 
@@ -87,7 +88,7 @@ class Chapter(SwaggerView):
         else:
             if language not in LANGUAGES.keys():
                 return (jsonify({'message': 'Invalid Language.'}), 404)
-                
+
             chapter_table = "chapters_" + language
             sql = """
                 SELECT ct.name_translation, ct.name_meaning, ct.chapter_summary, c.chapter_number, c.verses_count, c.name

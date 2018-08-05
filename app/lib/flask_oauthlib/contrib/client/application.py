@@ -5,25 +5,25 @@
     An experiment client with requests-oauthlib as backend.
 """
 
-import os
 import contextlib
+import os
 import warnings
+
+from flask import current_app, redirect, request
+from oauthlib.oauth2.rfc6749.errors import MissingCodeError
+from requests_oauthlib import OAuth1Session, OAuth2Session
+from requests_oauthlib.oauth1_session import TokenMissing
+from werkzeug.utils import import_string
+
+from .descriptor import OAuthProperty, WebSessionData
+from .exceptions import AccessTokenNotFound
+from .signals import request_token_fetched
+from .structure import OAuth1Response, OAuth2Response
+
 try:
     from urllib.parse import urljoin
 except ImportError:
     from urlparse import urljoin
-
-from flask import current_app, redirect, request
-from requests_oauthlib import OAuth1Session, OAuth2Session
-from requests_oauthlib.oauth1_session import TokenMissing
-from oauthlib.oauth2.rfc6749.errors import MissingCodeError
-from werkzeug.utils import import_string
-
-from .descriptor import OAuthProperty, WebSessionData
-from .structure import OAuth1Response, OAuth2Response
-from .exceptions import AccessTokenNotFound
-from .signals import request_token_fetched
-
 
 __all__ = ['OAuth1Application', 'OAuth2Application']
 
@@ -257,15 +257,15 @@ class OAuth2Application(BaseApplication):
 
     def authorized_response(self):
         oauth = self.make_oauth_session(
-            state=self._session_state,
-            redirect_uri=self._session_redirect_url)
+            state=self._session_state, redirect_uri=self._session_redirect_url)
         del self._session_state
         del self._session_redirect_url
 
         with self.insecure_transport():
             try:
                 token = oauth.fetch_token(
-                    self.access_token_url, client_secret=self.client_secret,
+                    self.access_token_url,
+                    client_secret=self.client_secret,
                     authorization_response=request.url)
             except MissingCodeError:
                 return

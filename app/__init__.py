@@ -29,9 +29,9 @@ babel = Babel()
 
 es = Elasticsearch(
     [os.environ.get('ES_URL') or 'ES_URL'],
-    http_auth=(os.environ.get('ES_USERNAME') or 'ES_USERNAME', os.environ.get('ES_PASSWORD') or 'ES_PASSWORD'),
-    scheme="https"
-)
+    http_auth=(os.environ.get('ES_USERNAME') or 'ES_USERNAME',
+               os.environ.get('ES_PASSWORD') or 'ES_PASSWORD'),
+    scheme="https")
 
 # Set up Flask-Login
 login_manager = LoginManager()
@@ -60,8 +60,16 @@ def create_app(config_name):
 
     db.app = app
 
-    cors = CORS(app, resources={
-                r"/api/v1/*": {"origins": "*"}, r"/auth/oauth/*": {"origins": "*"}})
+    cors = CORS(
+        app,
+        resources={
+            r"/api/v1/*": {
+                "origins": "*"
+            },
+            r"/auth/oauth/*": {
+                "origins": "*"
+            }
+        })
     api = Api(app)
     babel.init_app(app)
 

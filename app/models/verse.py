@@ -63,7 +63,8 @@ class VerseModelHindi(db.Model):
                                db.ForeignKey('chapters.chapter_number'))
     chapters = db.relationship('ChapterModel')
 
-    def __init__(self, chapter_number, verse_number, word_meanings, meaning, verse_order, meaning_large):
+    def __init__(self, chapter_number, verse_number, word_meanings, meaning,
+                 verse_order, meaning_large):
         self.chapter_number = chapter_number
         self.verse_number = verse_number
         self.word_meanings = word_meanings
@@ -84,7 +85,8 @@ class UserReadingPlanItems(db.Model):
     status = db.Column(db.String)
     batch_id = db.Column(db.String)
 
-    def __init__(self, user_reading_plan_id, timestamp, chapter_number, verse_number, status, batch_id):
+    def __init__(self, user_reading_plan_id, timestamp, chapter_number,
+                 verse_number, status, batch_id):
         self.user_reading_plan_id = user_reading_plan_id
         self.timestamp = timestamp
         self.chapter_number = chapter_number

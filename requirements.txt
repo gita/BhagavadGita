@@ -32,7 +32,7 @@ entrypoints==0.2.3
 Faker==0.8.16
 flake8==3.5.0
 flasgger==0.8.0
-Flask==1.0
+Flask==1.0.2
 Flask-APScheduler==1.8.0
 Flask-Assets==0.12
 Flask-Babel==0.11.2

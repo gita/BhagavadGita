@@ -1,5 +1,6 @@
 from .models import User
 
+
 def handle_authorize(remote, token, user_info):
     if user_info:
         if token:

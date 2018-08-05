@@ -1,8 +1,9 @@
 # coding: utf-8
 
 import base64
-from flask import request, Response
-from oauthlib.common import to_unicode, bytes_type
+
+from flask import Response, request
+from oauthlib.common import bytes_type, to_unicode
 
 
 def _get_uri_from_request(request):

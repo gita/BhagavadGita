@@ -3,9 +3,11 @@ from flask_login import AnonymousUserMixin, UserMixin, current_user
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import check_password_hash, generate_password_hash
-# from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
 
 from .. import db, login_manager
+
+# from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
+
 # from .. import github_blueprint, google_blueprint, facebook_blueprint
 
 

@@ -41,7 +41,8 @@ class RegistrationForm(FlaskForm):
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered. (Did you mean to log in instead?)')
+            raise ValidationError(
+                'Email already registered. (Did you mean to log in instead?)')
 
 
 class RequestResetPasswordForm(FlaskForm):
@@ -119,8 +120,7 @@ class CreateAppForm(FlaskForm):
     application_description = TextAreaField(
         'Description', validators=[InputRequired(),
                                    Length(10, 200)])
-    application_website = URLField(
-        'Website', validators=[InputRequired()])
+    application_website = URLField('Website', validators=[InputRequired()])
     developer_agreement = BooleanField(
         'Yes, I have read and agree to the Bhagavad Gita Developer Agreement.',
         validators=[InputRequired()])
@@ -133,6 +133,5 @@ class UpdateAppForm(FlaskForm):
     application_description = TextAreaField(
         'Description', validators=[InputRequired(),
                                    Length(10, 200)])
-    application_website = URLField(
-        'Website', validators=[InputRequired()])
+    application_website = URLField('Website', validators=[InputRequired()])
     submit = SubmitField('Update your Application')

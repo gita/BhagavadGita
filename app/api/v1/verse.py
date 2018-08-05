@@ -6,7 +6,7 @@ from flask import jsonify, request
 
 from app.models.chapter import ChapterModel
 
-from ... import csrf, oauth, db
+from ... import csrf, db, oauth
 from ...models.verse import VerseModel
 from ...schemas.verse import VerseSchema
 

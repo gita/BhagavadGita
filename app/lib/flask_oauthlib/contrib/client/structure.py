@@ -1,6 +1,5 @@
 import operator
 
-
 __all__ = ['OAuth1Response', 'OAuth2Response']
 
 

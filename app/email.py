@@ -1,10 +1,12 @@
 import os
-from flask_mail import Message
-from . import mail
-from flask import current_app, render_template
-import jinja2
+
 import boto3
+import jinja2
 from botocore.exceptions import ClientError
+from flask import current_app, render_template
+from flask_mail import Message
+
+from . import mail
 
 
 def send_email(recipient, subject, template, **kwargs):
@@ -18,9 +20,7 @@ def send_email(recipient, subject, template, **kwargs):
 
 
 def render_without_context(template_name, **context):
-    env = jinja2.Environment(
-        loader=jinja2.PackageLoader('app')
-    )
+    env = jinja2.Environment(loader=jinja2.PackageLoader('app'))
     template = env.get_template(template_name)
     return template.render(**context)
 
@@ -34,10 +34,14 @@ def send_shloka(email_list, subject, template, **kwargs):
         SUBJECT = "Bhagavad Gita - " + subject
 
         BODY_TEXT = render_without_context(
-            template + '.txt', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email, **kwargs)
+            template + '.txt',
+            unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email,
+            **kwargs)
 
         BODY_HTML = render_without_context(
-            template + '.html', unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email, **kwargs)
+            template + '.html',
+            unsubscribe="https://bhagavadgita.io/shloka-unsubscribe/" + email,
+            **kwargs)
 
         CHARSET = "UTF-8"
 

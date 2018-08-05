@@ -22,6 +22,5 @@ class ContactForm(Form):
 
 
 class ShlokaForm(Form):
-    meaning = TextAreaField(
-        'Meaning')
+    meaning = TextAreaField('Meaning')
     submit = SubmitField('Send')

@@ -1,34 +1,32 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import atexit
 import json
+import os
 import sys
+import time
+from collections import OrderedDict
+from datetime import date, datetime, timedelta
 
+import requests
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import (abort, current_app, flash, jsonify, make_response, redirect,
-                   render_template, request, url_for, send_from_directory)
+                   render_template, request, send_from_directory, url_for)
+from flask_login import current_user, login_user
 from flask_rq import get_queue
+from itsdangerous import BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from werkzeug.security import gen_salt
 
 from app import babel, db, es
 from app.models.chapter import ChapterModel, ChapterModelHindi
-from app.models.verse import VerseModel, VerseModelHindi, UserReadingPlanItems
-from app.models.user import UserFavourite, User
+from app.models.user import User, UserFavourite
+from app.models.verse import UserReadingPlanItems, VerseModel, VerseModelHindi
 
 from . import main
 from ..email import send_email, send_shloka
 from .forms import ContactForm, ShlokaForm
-
-from flask_login import current_user, login_user
-from datetime import datetime, timedelta, date
-import time
-from werkzeug.security import gen_salt
-import atexit
-import requests
-import os
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from itsdangerous import BadSignature, SignatureExpired
-
-from collections import OrderedDict
-from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
 
@@ -85,6 +83,7 @@ verse_dict = {
     },
 }
 
+
 @babel.localeselector
 def get_locale():
     if "settings" in request.cookies:
@@ -135,11 +134,16 @@ def index():
             for chapter in verses:
                 for chapter_number in user_verses:
                     if chapter['chapter_number'] == chapter_number['chapter']:
-                        progress[chapter['chapter_number']] = float(
-                            "%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
+                        progress[chapter['chapter_number']] = float("%.2f" % (
+                            (chapter_number['count'] / chapter['verses_count'])
+                            * 100))
 
         return render_template(
-            'main/index.html', chapters=chapters, language=language, badge_list=badge_list, progress=progress)
+            'main/index.html',
+            chapters=chapters,
+            language=language,
+            badge_list=badge_list,
+            progress=progress)
     else:
         return redirect('/' + language + '/')
 
@@ -190,48 +194,66 @@ def index_radhakrishna(language):
         for chapter in verses:
             for chapter_number in user_verses:
                 if chapter['chapter_number'] == chapter_number['chapter']:
-                    progress[chapter['chapter_number']] = float(
-                        "%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
+                    progress[chapter['chapter_number']] = float("%.2f" % (
+                        (chapter_number['count'] / chapter['verses_count']) *
+                        100))
 
     return render_template(
-        'main/index.html', chapters=chapters, language=language, badge_list=badge_list, progress=progress)
+        'main/index.html',
+        chapters=chapters,
+        language=language,
+        badge_list=badge_list,
+        progress=progress)
 
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
     badge_list = []
     query = request.args.get('query')
-    res = es.search(index="*", body={
-      "from": 0, "size": 1000,
-      "query": {
-        "multi_match": {
-          "query": query,
-          "fields": ["meaning", "meaning_large", "text", "transliteration", "word_meanings"]
-        }
-      }
-    })
+    res = es.search(
+        index="*",
+        body={
+            "from": 0,
+            "size": 1000,
+            "query": {
+                "multi_match": {
+                    "query":
+                    query,
+                    "fields": [
+                        "meaning", "meaning_large", "text", "transliteration",
+                        "word_meanings"
+                    ]
+                }
+            }
+        })
 
     verses = res['hits']['hits']
 
     current_app.logger.info(verses)
     return render_template(
-        'main/search.html', verses=verses, query=request.args.get('query'), badge_list=badge_list)
+        'main/search.html',
+        verses=verses,
+        query=request.args.get('query'),
+        badge_list=badge_list)
 
 
 @main.route('/krishna', methods=['GET', 'POST'])
 def krishna_search():
     query = request.args.get('query')
     current_app.logger.info(query)
-    res = es.search(index="verses_hi", body={
-      "from": 0, "size": 10,
-      "_source": ["meaning"],
-      "query": {
-        "multi_match": {
-          "query": query,
-          "fields": ["meaning"]
-        }
-      }
-    })
+    res = es.search(
+        index="verses_hi",
+        body={
+            "from": 0,
+            "size": 10,
+            "_source": ["meaning"],
+            "query": {
+                "multi_match": {
+                    "query": query,
+                    "fields": ["meaning"]
+                }
+            }
+        })
 
     verses = res['hits']['hits']
 
@@ -295,12 +317,19 @@ def chapter(chapter_number):
             read_verses = [r['verse'] for r in result]
 
         chapter = ChapterModel.find_by_chapter_number(chapter_number)
-        verses = VerseModel.query.filter_by(chapter_number = chapter_number).order_by(VerseModel.verse_order).paginate(per_page=6, page=page_number, error_out=True)
+        verses = VerseModel.query.filter_by(
+            chapter_number=chapter_number).order_by(
+                VerseModel.verse_order).paginate(
+                    per_page=6, page=page_number, error_out=True)
         return render_template(
-            'main/chapter.html', chapter=chapter, verses=verses, badge_list=badge_list, read_verses=read_verses)
+            'main/chapter.html',
+            chapter=chapter,
+            verses=verses,
+            badge_list=badge_list,
+            read_verses=read_verses)
     else:
-        return redirect(
-            '/chapter/' + str(chapter_number) + '/' + language + '/')
+        return redirect('/chapter/' + str(chapter_number) + '/' + language +
+                        '/')
 
 
 @main.route(
@@ -325,18 +354,40 @@ def chapter_radhakrishna(chapter_number, language):
             """ % (current_user.get_id(), chapter_number)
         result = db.session.execute(sql)
         read_verses = [r['verse'] for r in result]
-    chapter = ChapterModel.query.join(ChapterModelHindi, ChapterModel.chapter_number==ChapterModelHindi.chapter_number).add_columns(ChapterModelHindi.name_translation, ChapterModelHindi.name_meaning, ChapterModelHindi.chapter_summary, ChapterModel.image_name, ChapterModel.chapter_number).filter(ChapterModel.chapter_number == chapter_number).order_by(ChapterModel.chapter_number).first()
-    verses = VerseModelHindi.query.filter_by(chapter_number = chapter_number).order_by(VerseModelHindi.verse_order).paginate(per_page=6, page=page_number, error_out=True)
-    return render_template('main/chapter.html', chapter=chapter, verses=verses, badge_list = badge_list, read_verses=read_verses)
+    chapter = ChapterModel.query.join(
+        ChapterModelHindi, ChapterModel.chapter_number ==
+        ChapterModelHindi.chapter_number).add_columns(
+            ChapterModelHindi.name_translation, ChapterModelHindi.name_meaning,
+            ChapterModelHindi.chapter_summary, ChapterModel.image_name,
+            ChapterModel.chapter_number).filter(
+                ChapterModel.chapter_number == chapter_number).order_by(
+                    ChapterModel.chapter_number).first()
+    verses = VerseModelHindi.query.filter_by(
+        chapter_number=chapter_number).order_by(
+            VerseModelHindi.verse_order).paginate(
+                per_page=6, page=page_number, error_out=True)
+    return render_template(
+        'main/chapter.html',
+        chapter=chapter,
+        verses=verses,
+        badge_list=badge_list,
+        read_verses=read_verses)
 
 
 @main.route(
-    '/chapter/<int:chapter_number>/verse/<string:verse_number>/', defaults={'batch_id': None, 'user_reading_plan_id': None, 'batch_total': None, 'batch_no': None},
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/',
+    defaults={
+        'batch_id': None,
+        'user_reading_plan_id': None,
+        'batch_total': None,
+        'batch_no': None
+    },
     methods=['GET'])
 @main.route(
     '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:user_reading_plan_id>/batch/<int:batch_id>/batch_total/<int:batch_total>/batch_no/<int:batch_no>/',
     methods=['GET'])
-def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_total, batch_no):
+def verse(chapter_number, verse_number, user_reading_plan_id, batch_id,
+          batch_total, batch_no):
     badge = {}
     badge_list = []
     read = False
@@ -408,7 +459,8 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                     sql = """
                             INSERT INTO user_progress (user_id, chapter, verse, timestamp)
                             VALUES (%s, %s, '%s', '%s')
-                        """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+                        """ % (current_user.get_id(), chapter_number,
+                               verse_number, timestamp)
 
                     db.session.execute(sql)
                     db.session.commit()
@@ -422,8 +474,9 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                 total = [dict(r) for r in result][0]['count']
 
                 badge_id_list = []
-                verse_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
-                if total in verse_badges.keys(): badge_id_list.append(verse_badges[total])
+                verse_badges = {1: 1, 10: 5, 100: 7, 500: 8, 700: 9}
+                if total in verse_badges.keys():
+                    badge_id_list.append(verse_badges[total])
 
                 sql = """
                         SELECT COUNT(*) as count
@@ -442,9 +495,10 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
                 result = db.session.execute(sql)
                 chapter_count = [dict(r) for r in result][0]['count']
 
-                chapter_badges = {1:1, 10:5, 100:7, 500:8, 700:9}
+                chapter_badges = {1: 1, 10: 5, 100: 7, 500: 8, 700: 9}
 
-                if chapter_count == total_chapter_count: badge_id_list.append(chapter_number+9)
+                if chapter_count == total_chapter_count:
+                    badge_id_list.append(chapter_number + 9)
 
                 if badge_id_list != []:
                     for badge_id in badge_id_list:
@@ -496,12 +550,19 @@ def verse(chapter_number, verse_number, user_reading_plan_id, batch_id, batch_to
 
 
 @main.route(
-    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/', defaults={'batch_id': None, 'user_reading_plan_id': None, 'batch_total': None, 'batch_no': None},
+    '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/',
+    defaults={
+        'batch_id': None,
+        'user_reading_plan_id': None,
+        'batch_total': None,
+        'batch_no': None
+    },
     methods=['GET'])
 @main.route(
     '/chapter/<int:chapter_number>/verse/<string:verse_number>/<string:language>/<string:user_reading_plan_id>/batch/<int:batch_id>/batch_total/<int:batch_total>/batch_no/<int:batch_no>/',
     methods=['GET'])
-def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan_id, batch_id, batch_total, batch_no):
+def verse_radhakrishna(chapter_number, verse_number, language,
+                       user_reading_plan_id, batch_id, batch_total, batch_no):
     badge = {}
     badge_list = []
     read = False
@@ -545,7 +606,8 @@ def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan
             sql = """
                     INSERT INTO user_progress (user_id, chapter, verse, timestamp)
                     VALUES (%s, %s, '%s', '%s')
-                """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+                """ % (current_user.get_id(), chapter_number, verse_number,
+                       timestamp)
 
             db.session.execute(sql)
             db.session.commit()
@@ -583,7 +645,7 @@ def verse_radhakrishna(chapter_number, verse_number, language, user_reading_plan
         chapter_badges = {1: 1, 10: 5, 100: 7, 500: 8, 700: 9}
 
         if chapter_count == total_chapter_count:
-            badge_id_list.append(chapter_number+9)
+            badge_id_list.append(chapter_number + 9)
 
         if badge_id_list != []:
             for badge_id in badge_id_list:
@@ -673,7 +735,8 @@ def favourite(chapter_number, verse_number, value):
                 sql = """
                         INSERT INTO user_favourite (user_id, chapter, verse, timestamp)
                         VALUES (%s, %s, '%s', '%s')
-                    """ % (current_user.get_id(), chapter_number, verse_number, timestamp)
+                    """ % (current_user.get_id(), chapter_number, verse_number,
+                           timestamp)
         elif value == 0:
             sql = """
                     DELETE FROM user_favourite
@@ -693,7 +756,7 @@ def favourite(chapter_number, verse_number, value):
         total = [dict(r) for r in result][0]['count']
 
         badge_id_list = []
-        badge_favorites = {1:28, 10:29, 100:30}
+        badge_favorites = {1: 28, 10: 29, 100: 30}
         if total in badge_favorites.keys():
             badge_id_list.append(badge_favorites[total])
 
@@ -728,9 +791,7 @@ def favourite(chapter_number, verse_number, value):
     return jsonify(badge_list)
 
 
-@main.route(
-    '/share',
-    methods=['GET'])
+@main.route('/share', methods=['GET'])
 def share():
     current_app.logger.info("RadhaKrishna")
     badge_list = []
@@ -813,9 +874,12 @@ def favourite_shlokas():
     current_app.logger.info("RadhaKrishna")
     verses = None
     if current_user.is_authenticated:
-        verses = UserFavourite.query.filter_by(user_id = current_user.get_id()).order_by(UserFavourite.user_favourite_id.desc()).all()
+        verses = UserFavourite.query.filter_by(
+            user_id=current_user.get_id()).order_by(
+                UserFavourite.user_favourite_id.desc()).all()
 
-    return render_template('main/favourite.html', verses=verses, badge_list = badge_list)
+    return render_template(
+        'main/favourite.html', verses=verses, badge_list=badge_list)
 
 
 @main.route('/badges/', methods=['GET'])
@@ -841,7 +905,11 @@ def badges():
         result = db.session.execute(sql)
         user_badges = [d['badge_id'] for d in result]
 
-    return render_template('main/badges.html', badges=badges, user_badges=user_badges, badge_list = badge_list)
+    return render_template(
+        'main/badges.html',
+        badges=badges,
+        user_badges=user_badges,
+        badge_list=badge_list)
 
 
 @main.route('/reading-plans/<string:message>', methods=['GET'])
@@ -920,7 +988,13 @@ def reading_plans(message):
         result = db.session.execute(sql)
         batch_list = [dict(d) for d in result]
 
-    return render_template('main/reading_plans.html', plans=plans, user_plans=user_plans, batch_list=batch_list, message=message, badge_list=badge_list)
+    return render_template(
+        'main/reading_plans.html',
+        plans=plans,
+        user_plans=user_plans,
+        batch_list=batch_list,
+        message=message,
+        badge_list=badge_list)
 
 
 @main.route('/create-reading-plan/<string:reading_plan_id>', methods=['GET'])
@@ -943,7 +1017,8 @@ def create_reading_plan(reading_plan_id):
                 RETURNING user_reading_plan_id
             """ % (gen_salt(10), reading_plan_id, current_user.get_id())
             result = db.session.execute(sql)
-            user_reading_plan_id = [dict(d) for d in result][0]['user_reading_plan_id']
+            user_reading_plan_id = [dict(d)
+                                    for d in result][0]['user_reading_plan_id']
 
             timestamp = datetime.now()
 
@@ -963,24 +1038,35 @@ def create_reading_plan(reading_plan_id):
 
             def split(a, n):
                 k, m = divmod(len(a), n)
-                return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
+                return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)]
+                        for i in range(n))
 
             gita_time = gita_times[reading_plan_id]
 
             for verse_day in list(split(verses, gita_time)):
                 for verse in verse_day:
-                    verse_obj = UserReadingPlanItems(user_reading_plan_id, timestamp+timedelta(days=count), verse['chapter_number'], verse['verse_number'], 0, batch_id)
+                    verse_obj = UserReadingPlanItems(
+                        user_reading_plan_id,
+                        timestamp + timedelta(days=count),
+                        verse['chapter_number'],
+                        verse['verse_number'],
+                        0,
+                        batch_id)
                     verse_list.append(verse_obj)
-                count+=1
-                batch_id+=1
+                count += 1
+                batch_id += 1
             db.session.bulk_save_objects(verse_list)
             db.session.commit()
 
-            return redirect("/reading-plan/" + str(user_reading_plan_id) + '/1')
+            return redirect("/reading-plan/" + str(user_reading_plan_id) +
+                            '/1')
     else:
         abort(401)
 
-@main.route('/reading-plan/<string:user_reading_plan_id>/<int:batch_id>', methods=['GET'])
+
+@main.route(
+    '/reading-plan/<string:user_reading_plan_id>/<int:batch_id>',
+    methods=['GET'])
 def reading_plan(user_reading_plan_id, batch_id):
     current_app.logger.info("RadhaKrishna")
     plans = None
@@ -1098,13 +1184,25 @@ def reading_plan(user_reading_plan_id, batch_id):
 
         if status == 1: return redirect(url_for('main.reading_plans'))
 
-        return render_template('main/reading_plan.html', plans=plans, batch_id=plans[0]['batch_id'], user_reading_plan_id=user_reading_plan_id, is_done=is_done, total_batches=total_batches, badge_list=badge_list, reading_plan=reading_plan, next_batch_verse=next_batch_verse)
+        return render_template(
+            'main/reading_plan.html',
+            plans=plans,
+            batch_id=plans[0]['batch_id'],
+            user_reading_plan_id=user_reading_plan_id,
+            is_done=is_done,
+            total_batches=total_batches,
+            badge_list=badge_list,
+            reading_plan=reading_plan,
+            next_batch_verse=next_batch_verse)
     else:
         abort(401)
 
 
-@main.route('/get-next-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
-def get_next_verse(user_reading_plan_id, batch_id, verse_number, chapter_number):
+@main.route(
+    '/get-next-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/',
+    methods=['GET'])
+def get_next_verse(user_reading_plan_id, batch_id, verse_number,
+                   chapter_number):
     current_app.logger.info("RadhaKrishna")
     if current_user.is_authenticated:
         sql = """
@@ -1162,8 +1260,11 @@ def get_next_verse(user_reading_plan_id, batch_id, verse_number, chapter_number)
         abort(401)
 
 
-@main.route('/get-previous-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/', methods=['GET'])
-def get_previous_verse(user_reading_plan_id, batch_id, verse_number, chapter_number):
+@main.route(
+    '/get-previous-verse/<string:user_reading_plan_id>/<int:batch_id>/<int:chapter_number>/<string:verse_number>/',
+    methods=['GET'])
+def get_previous_verse(user_reading_plan_id, batch_id, verse_number,
+                       chapter_number):
     current_app.logger.info("RadhaKrishna")
     if current_user.is_authenticated:
         sql = """
@@ -1207,8 +1308,11 @@ def delete_plan(user_reading_plan_id):
         abort(401)
 
 
-@main.route('/update-verse-status/<string:user_reading_plan_id>/<int:batch_id>/<int:user_reading_plan_item_id>/<int:status>/', methods=['GET'])
-def update_verse_status(user_reading_plan_id, batch_id, user_reading_plan_item_id, status):
+@main.route(
+    '/update-verse-status/<string:user_reading_plan_id>/<int:batch_id>/<int:user_reading_plan_item_id>/<int:status>/',
+    methods=['GET'])
+def update_verse_status(user_reading_plan_id, batch_id,
+                        user_reading_plan_item_id, status):
     current_app.logger.info("RadhaKrishna")
     if current_user.is_authenticated:
         sql = """
@@ -1217,7 +1321,8 @@ def update_verse_status(user_reading_plan_id, batch_id, user_reading_plan_item_i
             WHERE user_reading_plan_id = '%s'
             AND batch_id = %s
             AND user_reading_plan_item_id = %s
-        """ % (status, user_reading_plan_id, batch_id, user_reading_plan_item_id)
+        """ % (status, user_reading_plan_id, batch_id,
+               user_reading_plan_item_id)
         db.session.execute(sql)
         db.session.commit()
 
@@ -1262,7 +1367,7 @@ def progress():
     total_shlokas = 0
     badge_list = []
     thegita = []
-    progress = {key:None for key in range(1, 19)}
+    progress = {key: None for key in range(1, 19)}
 
     if current_user.is_authenticated:
         sql = """
@@ -1283,7 +1388,8 @@ def progress():
         result = db.session.execute(sql)
         for r in result:
             d = {}
-            d['x'] = time.mktime(datetime.strptime(r['date'], "%Y-%m-%d").timetuple())
+            d['x'] = time.mktime(
+                datetime.strptime(r['date'], "%Y-%m-%d").timetuple())
             d['y'] = r['count']
             thegita.append(d)
 
@@ -1314,11 +1420,18 @@ def progress():
         for chapter in verses:
             for chapter_number in user_verses:
                 if chapter['chapter_number'] == chapter_number['chapter']:
-                    progress[chapter['chapter_number']] = float("%.2f" % ((chapter_number['count']/chapter['verses_count'])*100))
+                    progress[chapter['chapter_number']] = float("%.2f" % (
+                        (chapter_number['count'] / chapter['verses_count']) *
+                        100))
 
         if total_shlokas:
-            gita = float("%.2f" % (total_shlokas/692))
-    return render_template('main/progress.html', progress=progress, gita=gita, thegita=json.dumps(thegita), badge_list = badge_list)
+            gita = float("%.2f" % (total_shlokas / 692))
+    return render_template(
+        'main/progress.html',
+        progress=progress,
+        gita=gita,
+        thegita=json.dumps(thegita),
+        badge_list=badge_list)
 
 
 @main.route('/thegita/', methods=['GET'])
@@ -1333,7 +1446,7 @@ def thegita():
             GROUP BY EXTRACT(EPOCH FROM timestamp)
         """ % (current_user.get_id())
     result = db.session.execute(sql)
-    thegita = {r['date_part']:r['count'] for r in result}
+    thegita = {r['date_part']: r['count'] for r in result}
 
     return jsonify(thegita)
 
@@ -1414,6 +1527,7 @@ def shloka_of_the_day():
             verse = select_shloka("hi", yesterday)
     return verse
 
+
 @main.route('/verse-of-the-day/', methods=['GET'])
 def verse_of_the_day():
     language = "en"
@@ -1423,13 +1537,17 @@ def verse_of_the_day():
     current_app.logger.info("RadhaKrishna")
     badge_list = []
     verse = shloka_of_the_day()
-    return render_template('main/verse_of_the_day.html', verse=verse, badge_list=badge_list, language=language)
+    return render_template(
+        'main/verse_of_the_day.html',
+        verse=verse,
+        badge_list=badge_list,
+        language=language)
 
 
 def generate_confirmation_token(id, expiration=604800):
-        """Generate a confirmation token to email a new subscriber."""
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': id})
+    """Generate a confirmation token to email a new subscriber."""
+    s = Serializer(current_app.config['SECRET_KEY'], expiration)
+    return s.dumps({'confirm': id})
 
 
 @main.route('/confirm-shloka/<int:id>/<token>')
@@ -1469,7 +1587,9 @@ def confirm_shloka(id, token):
     return redirect(url_for('main.index'))
 
 
-@main.route('/shloka-subscribe/<string:fullname>/<string:email>', methods=['GET', 'POST'])
+@main.route(
+    '/shloka-subscribe/<string:fullname>/<string:email>',
+    methods=['GET', 'POST'])
 def shloka_subscribe(fullname, email):
     sql = """
         SELECT email
@@ -1489,7 +1609,8 @@ def shloka_subscribe(fullname, email):
         id = [d['vrindavan_id'] for d in result][0]
 
         token = generate_confirmation_token(id)
-        confirm_link = url_for('main.confirm_shloka', id=id, token=token, _external=True)
+        confirm_link = url_for(
+            'main.confirm_shloka', id=id, token=token, _external=True)
 
         send_email(
             recipient=email,
@@ -1530,25 +1651,36 @@ def verse_of_the_day_notification():
 
     if verse:
         auth = "Basic " + os.environ.get('ONESIGNAL') or 'Onesignal'
-        header = {"Content-Type": "application/json; charset=utf-8",
-                "Authorization": auth}
+        header = {
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": auth
+        }
 
-        payload = {"app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
-                "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
-                "included_segments": ["All"],
-                "contents": {"en": verse.text}}
+        payload = {
+            "app_id": "2713183b-9bcc-418c-a4a6-79f84fc40f2c",
+            "template_id": "565cdba0-c3b3-4510-aac7-4e3571e18ea1",
+            "included_segments": ["All"],
+            "contents": {
+                "en": verse.text
+            }
+        }
 
-        req = requests.post("https://onesignal.com/api/v1/notifications",
-                            headers=header, data=json.dumps(payload))
+        req = requests.post(
+            "https://onesignal.com/api/v1/notifications",
+            headers=header,
+            data=json.dumps(payload))
 
 
 def radhakrishna():
     print("RadhaKrishnaHanuman")
 
+
 radhakrishna()
 
 
-@main.route('/radhakrishnahanuman/<int:chapter_number>/<string:verse_number>', methods=['GET', 'POST'])
+@main.route(
+    '/radhakrishnahanuman/<int:chapter_number>/<string:verse_number>',
+    methods=['GET', 'POST'])
 def radhakrishnahanuman(chapter_number, verse_number):
     print("RadhaKrishnaHanuman")
     sql = """
@@ -1572,9 +1704,11 @@ def radhakrishnahanuman(chapter_number, verse_number):
         db.session.execute(sql)
         db.session.commit()
 
-        return redirect("/radhakrishnahanuman/" + str(chapter_number) + "/" + str(verse_number))
+        return redirect("/radhakrishnahanuman/" + str(chapter_number) + "/" +
+                        str(verse_number))
 
-    return render_template('main/radhakrishnahanuman.html', verse=verse, form=form)
+    return render_template(
+        'main/radhakrishnahanuman.html', verse=verse, form=form)
 
 
 def shloka_of_the_day_email():
@@ -1601,7 +1735,8 @@ def shloka_of_the_day_email():
 
 
 if os.environ.get('RADHA') == "KRISHNA":
-    scheduler.add_job(shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
+    scheduler.add_job(
+        shloka_of_the_day_radhakrishna, 'cron', hour=4, minute=30)
     scheduler.add_job(verse_of_the_day_notification, 'cron', hour=5, minute=30)
     scheduler.add_job(shloka_of_the_day_email, 'cron', hour=6, minute=00)
     scheduler.start()
@@ -1720,13 +1855,14 @@ def bhagavad_gita_quotes():
         "I have shared this profound truth with you, Arjuna. Those who understand it will attain wisdom; they will have done that which has to be done.",
         "I give you these precious words of wisdom; reflect on them and then do as you choose."
     ]
-    return render_template('main/bhagavad-gita-quotes.html', quotes=quotes, badge_list = badge_list)
+    return render_template(
+        'main/bhagavad-gita-quotes.html', quotes=quotes, badge_list=badge_list)
 
 
 @main.route('/terms-of-service/', methods=['GET'])
 def terms_of_service():
     badge_list = []
-    return render_template('main/terms-of-service.html', badge_list = badge_list)
+    return render_template('main/terms-of-service.html', badge_list=badge_list)
 
 
 @main.route('/contact/', methods=['GET', 'POST'])
@@ -1753,7 +1889,8 @@ def contact():
             'Thank you for your message. We will try to reply as soon as possible.'
         )
         return redirect(url_for('main.index'))
-    return render_template('main/contact.html', form=form, badge_list=badge_list)
+    return render_template(
+        'main/contact.html', form=form, badge_list=badge_list)
 
 
 @main.route('/setcookie', methods=['GET'])
