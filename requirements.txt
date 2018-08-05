@@ -1,6 +1,6 @@
 alembic==0.9.10
 aniso8601==3.0.2
-apispec==0.39.0
+apispec==0.38.0
 appdirs==1.4.3
 appnope==0.1.0
 APScheduler==3.5.1
@@ -31,7 +31,7 @@ elasticsearch-loader==0.2.2
 entrypoints==0.2.3
 Faker==0.8.16
 flake8==3.5.0
-flasgger==0.8.0
+flasgger==0.9.0
 Flask==1.0.2
 Flask-APScheduler==1.8.0
 Flask-Assets==0.12
