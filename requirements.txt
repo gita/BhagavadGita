@@ -5,7 +5,7 @@ appdirs==1.4.3
 appnope==0.1.0
 APScheduler==3.5.1
 asn1crypto==0.24.0
-astroid==1.6.3
+astroid==2.0.4
 Authlib==0.8
 autopep8==1.3.5
 Babel==2.5.3
