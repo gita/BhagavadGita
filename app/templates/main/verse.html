@@ -147,7 +147,7 @@
 
               <div id="favouriteverse">
                 <a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" data-value="0" title="Mark as favourite" onclick="favorite()" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -3rem;">
-                  <i class="material-icons" style="font-size: 1.2rem;">favorite_border</i>
+                  <i class="material-icons" style="font-size: 1.2rem;">&#xe87e;</i>
                 </a>
               </div>
 
@@ -763,11 +763,11 @@ a:hover {
         if ($('#favourite').data("value") === 0) {
           favourite({{verse.chapter_number}},"{{verse.verse_number}}", 1)
           $('#favouriteverse').empty()
-          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
+          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">&#xe87d;</i></a>`)
         } else {
           favourite({{verse.chapter_number}},"{{verse.verse_number}}", 0)
           $('#favouriteverse').empty()
-          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
+          $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light" aria-haspopup="true" id="favourite" onclick="favorite()"  title="Mark as favourite" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">&#xe87e;</i></a>`)
           }
       } else {
         $('#radhakrishnahanuman').modal('show'); }
@@ -796,10 +796,10 @@ a:hover {
           console.log(response)
           if (response.data === "True") {
             $('#favouriteverse').empty()
-            $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite</i></a>`)
+            $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="1" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">&#xe87d;</i></a>`)
           } else {
             $('#favouriteverse').empty()
-            $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">favorite_border</i></a>`)
+            $('#favouriteverse').append(`<a class="btn btn-warning btn-rounded waves-effect waves-light"  title="Mark as favourite" aria-haspopup="true" id="favourite" onclick="favorite()" data-value="0" style="font-size: 0.7rem; padding: 0.5rem 0.7rem; margin-top: -4rem;"><i class="material-icons" style="font-size: 1.2rem;">&#xe87e;</i></a>`)
           }
         })
     }
