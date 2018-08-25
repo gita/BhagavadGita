@@ -340,7 +340,9 @@
           }
 
           $(document).ready(function() {
-            $('.sidenav').sidenav();
+            // $('.sidenav').sidenav();
+            var elem = document.querySelector('.sidenav');
+            var instance = new M.Sidenav(elem);
             $('.collapsible').collapsible();
             $('.dropdown-trigger').dropdown();
 
