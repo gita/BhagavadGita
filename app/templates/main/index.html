@@ -451,6 +451,7 @@ body > div:nth-child(4) {
 
 <script>
   $(document).ready(function() {
+      console.log("Ready!")
       if (document.cookie.indexOf("settings=") >= 0) {
         var settings = JSON.parse(getCookie('settings'));
         if (settings['font']) {
@@ -462,6 +463,8 @@ body > div:nth-child(4) {
           $('#theme').trigger('change.select2');
         }
       }
+
+      console.log(settings)
 
       var myLazyLoad = new LazyLoad();
 
@@ -494,6 +497,7 @@ body > div:nth-child(4) {
 
       axios.get('/languages')
       .then(function (response) {
+        console.log(response.data)
         for (const [key, value] of Object.entries(response.data)) {
           var option = $("<option></option>").
                attr('selected', false).
