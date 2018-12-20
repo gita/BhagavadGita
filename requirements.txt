@@ -127,7 +127,7 @@ text-unidecode==1.2
 tornado==5.0.2
 traitlets==4.3.2
 tzlocal==1.5.1
-urllib3==1.22
+urllib3==1.24.1
 URLObject==2.4.3
 wcwidth==0.1.7
 webassets==0.12.1
