@@ -140,4 +140,4 @@ Werkzeug==0.14.1
 widgetsnbextension==3.4.0
 wrapt==1.10.11
 WTForms==2.1
-yapf==0.22.0
+yapf==0.25.0
