@@ -80,7 +80,7 @@ loginpass==0.2.1
 Mako==1.0.6
 MarkupSafe==1.0
 marshmallow==2.15.4
-marshmallow-sqlalchemy==0.13.2
+marshmallow-sqlalchemy==0.15.0
 mccabe==0.6.1
 mistune==0.8.4
 nbconvert==5.4.0
