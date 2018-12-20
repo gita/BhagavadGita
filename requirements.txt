@@ -13,7 +13,7 @@ backcall==0.1.0
 beautifulsoup4==4.6.0
 bleach==2.1.3
 blinker==1.3
-botocore==1.10.75
+botocore==1.12.69
 boto3==1.9.69
 bs4==0.0.1
 certifi==2018.1.18
