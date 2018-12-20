@@ -3,7 +3,7 @@ aniso8601==3.0.2
 apispec==0.38.0
 appdirs==1.4.3
 appnope==0.1.0
-APScheduler==3.5.1
+APScheduler==3.5.2
 asn1crypto==0.24.0
 astroid==1.6.3
 Authlib==0.8
