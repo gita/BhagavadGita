@@ -70,7 +70,7 @@ jmespath==0.9.3
 jsmin==2.2.1
 jsonpickle==0.9.2
 jsonschema==2.6.0
-jupyter-client==5.2.3
+jupyter-client==5.2.4
 jupyter-console==6.0.0
 jupyter-core==4.4.0
 lazy==1.3
