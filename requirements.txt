@@ -80,7 +80,7 @@ MarkupSafe==1.0
 marshmallow==2.15.4
 marshmallow-sqlalchemy==0.13.2
 mccabe==0.6.1
-mistune==0.8.3
+mistune==0.8.4
 nbconvert==5.4.0
 nbformat==4.4.0
 numpy==1.15.0
