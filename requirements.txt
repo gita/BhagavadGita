@@ -137,7 +137,7 @@ wcwidth==0.1.7
 webassets==0.12.1
 webencodings==0.5.1
 Werkzeug==0.14.1
-widgetsnbextension==3.4.0
+widgetsnbextension==3.4.2
 wrapt==1.10.11
 WTForms==2.1
 yapf==0.25.0
