@@ -112,7 +112,7 @@ pytz==2018.5
 PyYAML==3.13
 pyzmq==17.1.2
 qtconsole==4.3.1
-raygun4py==3.1.4
+raygun4py==4.2.1
 redis==2.10.5
 requests==2.21.0
 requests-oauthlib==0.8.0
