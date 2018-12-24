@@ -79,7 +79,7 @@ limits==1.3
 loginpass==0.2.1
 Mako==1.0.6
 MarkupSafe==1.0
-marshmallow==2.15.4
+marshmallow==2.16.3
 marshmallow-sqlalchemy==0.15.0
 mccabe==0.6.1
 mistune==0.8.4
