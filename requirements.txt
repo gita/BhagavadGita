@@ -68,7 +68,7 @@ jedi==0.12.1
 Jinja2==2.10
 jmespath==0.9.3
 jsmin==2.2.1
-jsonpickle==0.9.2
+jsonpickle==1.0
 jsonschema==2.6.0
 jupyter-client==5.2.4
 jupyter-console==6.0.0
