@@ -56,7 +56,7 @@ futures==3.1.1
 gunicorn==19.9.0
 honcho==1.0.1
 html5lib==1.0.1
-idna==2.7
+idna==2.8
 ipaddress==1.0.22
 ipykernel==4.8.2
 ipython==7.2.0
