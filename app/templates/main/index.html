@@ -70,11 +70,18 @@
   </div>
 
   <div class="container">
-    <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
-      <h3>{{ _('Chapters') }}</h3>
-    </div>
 
-    <br>
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-3">
+        <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
+          <h5>{{ _('Your Language (भाषा) :') }}</h5>
+        </div>
+      </div>
+      <div class="col-md-3" style="margin-bottom: 1rem;">
+        <select class="js-example-basic-single" id="languagesmob" name="state" style="width: 100%;">
+        </select>
+      </div>
+    </div>
 
     <div data-direction="horizontal" align="center" style="color: #757575;">
       <h6>{{ _('Go to Verse') }}</h6>
@@ -92,7 +99,15 @@
       </div>
     </div>
 
+    <br>
     <hr>
+
+    <div class="hanuman-gradient-text" data-direction="horizontal" data-color="hanuman-gradient" align="center">
+      <h3>{{ _('Chapters') }}</h3>
+    </div>
+
+    <br>
+
     <div class="row">
       {% for chapter in chapters %}
       <div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-3">
@@ -468,6 +483,7 @@ body > div:nth-child(4) {
       $('.js-example-basic-single').select2();
 
       var languages = $('#languages');
+      var languagesmob = $('#languagesmob');
 
       var hreflang = "{{request.path | replace("/", "")}}"
       if (hreflang == ""){
@@ -501,13 +517,23 @@ body > div:nth-child(4) {
                val(key);
           option.appendTo(languages);
         }
+        for (const [key, value] of Object.entries(response.data)) {
+          var option = $("<option></option>").
+               attr('selected', false).
+               text(value).
+               val(key);
+          option.appendTo(languagesmob);
+        }
         languages.val(hreflang);
+        languagesmob.val(hreflang);
         if (settings) {
           if (settings['language']) {
             languages.val(settings['language']);
+            languagesmob.val(settings['language']);
           }
         }
         languages.trigger('change.select2');
+        languagesmob.trigger('change.select2');
       })
       .catch(function (error) {
         console.log(error);
@@ -515,6 +541,24 @@ body > div:nth-child(4) {
 
       $('#languages').on("change", function (e) {
         language = $( "#languages option:selected" ).val();
+        if (language === "en") {
+          window.location.href = "/"
+        } else {
+          window.location.href = "/" + language;
+        }
+
+        if (document.cookie.indexOf("settings=") >= 0) {
+          var settings = JSON.parse(getCookie('settings'));
+          var size = settings['font'];
+          var theme = settings['theme'];
+          setCookie('settings',JSON.stringify({font: size, language: language, theme: theme}),30);
+        } else {
+          setCookie('settings',JSON.stringify({font: 1.2, language: language, theme: "Light"}),30);
+        }
+      })
+
+      $('#languagesmob').on("change", function (e) {
+        language = $( "#languagesmob option:selected" ).val();
         if (language === "en") {
           window.location.href = "/"
         } else {
