@@ -18,11 +18,16 @@
         </script>
 
         {% assets 'app_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
-        {% assets 'vendor_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
+        <!-- {% assets 'vendor_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %} -->
+
+        {% assets 'vendor_css' %}
+          <link rel='preload' href='{{ ASSET_URL }}' as='style' onload="this.onload=null;this.rel='stylesheet'">
+          <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
+        {% endassets %}
+
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-         {% assets 'app_js' %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
+        {% assets 'app_js' %}<script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
         <script type="text/javascript" src="/static/scripts/scripts/materialize.min.js"></script>
         <script type="text/javascript" src="/static/scripts/scripts/popper.min.js"></script>
         <script type="text/javascript" src="/static/scripts/scripts/bootstrap.min.js"></script>
