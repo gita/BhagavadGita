@@ -397,5 +397,66 @@
             })
           }
         </script>
+
+        <!-- {% assets 'vendor_js' %}
+        <script type="text/javascript">
+          function parseJSAtOnload() {
+            var element = document.createElement("script");
+            element.src = "{{ ASSET_URL }}";
+            document.body.appendChild(element);
+          }
+          if (window.addEventListener)
+            window.addEventListener("load", parseJSAtOnload, false);
+          else if (window.attachEvent)
+            window.attachEvent("onload", parseJSAtOnload);
+          else window.onload = parseJSAtOnload;
+        </script>
+        {% endassets %}
+
+        {% assets 'app_js' %}
+        <script type="text/javascript">
+          function parseJSAtOnload() {
+            var element = document.createElement("script");
+            element.src = "{{ ASSET_URL }}";
+            document.body.appendChild(element);
+          }
+          if (window.addEventListener)
+            window.addEventListener("load", parseJSAtOnload, false);
+          else if (window.attachEvent)
+            window.attachEvent("onload", parseJSAtOnload);
+          else window.onload = parseJSAtOnload;
+        </script>
+        {% endassets %}
+
+        {% assets 'app_css' %}
+        <script type="text/javascript">
+          function parseJSAtOnload() {
+            var element = document.createElement("script");
+            element.src = "{{ ASSET_URL }}";
+            document.body.appendChild(element);
+          }
+          if (window.addEventListener)
+            window.addEventListener("load", parseJSAtOnload, false);
+          else if (window.attachEvent)
+            window.attachEvent("onload", parseJSAtOnload);
+          else window.onload = parseJSAtOnload;
+        </script>
+        {% endassets %}
+
+        {% assets 'vendor_css' %}
+        <script type="text/javascript">
+          function parseJSAtOnload() {
+            var element = document.createElement("script");
+            element.src = "{{ ASSET_URL }}";
+            document.body.appendChild(element);
+          }
+          if (window.addEventListener)
+            window.addEventListener("load", parseJSAtOnload, false);
+          else if (window.attachEvent)
+            window.attachEvent("onload", parseJSAtOnload);
+          else window.onload = parseJSAtOnload;
+        </script>
+        {% endassets %} -->
+
     </body>
 </html>

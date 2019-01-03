@@ -22,8 +22,8 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
          {% assets 'app_js' %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
-        {% assets 'vendor_js' %}<script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
+        <script defer type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
+        {% assets 'vendor_js' %}<script defer type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
         
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
