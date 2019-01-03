@@ -19,7 +19,7 @@ vendor_js = Bundle(
     'vendor/bootstrap.min.js',
     'vendor/zxcvbn.js',
     'vendor/clipboard.min.js',
-    'vendor/select2.min.js',
+    # 'vendor/select2.min.js',
     'vendor/axios.min.js',
     'vendor/lazyload.js',
     'vendor/progress.min.js',
