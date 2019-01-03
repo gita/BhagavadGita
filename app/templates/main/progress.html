@@ -146,7 +146,7 @@ h1 {
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 {% if gita %}
-<script>
+<script defer>
 $('.bhagavad.gita').circleProgress({
     value: {{gita}},
     size: 200,
@@ -157,7 +157,7 @@ $('.bhagavad.gita').circleProgress({
   });
 </script>
 {% endif %}
-<script>
+<script defer>
   var thegita = {{thegita|safe}}
   var gita = []
   for (var i in thegita) {

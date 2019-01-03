@@ -581,7 +581,7 @@ a:hover {
 }
   </style>
 
-<script>
+<script defer>
   if ({{current_user.is_authenticated|tojson}} === true) {
         console.log("RadhaKrishnaHanuman")
         get_favourite({{verse.chapter_number}},"{{verse.verse_number}}")
@@ -856,7 +856,7 @@ a:hover {
   });
   </script>
 
-  <script>
+  <script defer>
 if (navigator.serviceWorker.controller) {
 } else {
   //Register the ServiceWorker
