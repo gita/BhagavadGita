@@ -67,7 +67,7 @@
     <a class="breadcrumb-item" href="/chapter/{{chapter.chapter_number}}/?page=1">{{ _('Chapter') }} {{chapter.chapter_number}}</a>
     <span class="breadcrumb-item active">{{ _('Verse') }} {{verse.verse_number}}</span>
   </nav>
-  <div class="container">
+  <div class="container" style="margin-top:4.5rem">
     <div class="row">
       <div class="col-md-12">
         <div class="card orange lighten-3 text-center z-depth-2 h-100" id="verse-card">
@@ -223,7 +223,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-12 mt-3" id="bhagavadgita-shloka" style="margin-bottom: 3rem;">
+      <div class="col-md-12 mt-3" id="bhagavadgita-shloka">
         <!-- <div class="card orange lighten-3 text-center z-depth-2 h-100" id="subscribe-card">
           <div class="card-body">
             <div>
@@ -563,10 +563,6 @@ input[type=search]:not(.browser-default):focus:not([readonly]) {
   display: none
 }
 
-.container {
-  margin-top: 4.5rem
-}
-
 .btn-success {
     background-color: #4CAF50!important;
     color: #fff!important;
@@ -615,7 +611,7 @@ a:hover {
         } 
       } else {
         $('#bhagavadgita-shloka').append(`
-        <div class="card orange lighten-3 text-center z-depth-2 h-100" id="subscribe-card">
+        <div class="card orange lighten-3 text-center z-depth-2 h-100" id="subscribe-card" style="margin-bottom: 3rem;">
           <div class="card-body">
             <div>
               <span class="pull-right clickable close-icon" data-effect="fadeOut">

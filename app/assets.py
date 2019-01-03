@@ -22,5 +22,5 @@ vendor_js = Bundle(
     # 'vendor/select2.min.js',
     # 'vendor/axios.min.js',
     'vendor/lazyload.js',
-    'vendor/progress.min.js',
+    # 'vendor/progress.min.js',
     output='scripts/vendor.js')
