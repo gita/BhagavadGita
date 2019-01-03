@@ -18,12 +18,12 @@
         </script>
 
         {% assets 'app_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
-        {% assets 'vendor_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
+        <!-- {% assets 'vendor_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %} -->
 
-        <!-- {% assets 'vendor_css' %}
+        {% assets 'vendor_css' %}
           <link rel='preload' href='{{ ASSET_URL }}' as='style' onload="this.rel='stylesheet'">
           <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
-        {% endassets %} -->
+        {% endassets %}
 
         <link rel='preload'href="https://fonts.googleapis.com/icon?family=Material+Icons" as='style' onload="this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></noscript>
