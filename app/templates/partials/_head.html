@@ -29,11 +29,9 @@
         <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></noscript>
 
         {% assets 'app_js' %}<script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
-        <script type="text/javascript" src="/static/scripts/scripts/materialize.min.js"></script>
-        <script type="text/javascript" src="/static/scripts/scripts/popper.min.js"></script>
-        <script type="text/javascript" src="/static/scripts/scripts/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/static/scripts/scripts/clipboard.min.js"></script>
-        <script type="text/javascript" src="/static/scripts/scripts/axios.min.js"></script>
+
+        {% assets 'core_js' %}<script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
+
         {% assets 'vendor_js' %}<script defer type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
         
         <!-- Google Tag Manager -->

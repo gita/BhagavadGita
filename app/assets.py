@@ -13,6 +13,14 @@ vendor_css = Bundle(
     'vendor/materialize.min.css',
     output='styles/vendor.css')
 
+core_js = Bundle(
+    'vendor/materialize.min.js',
+    'vendor/popper.min.js',
+    'vendor/bootstrap.min.js',
+    'vendor/clipboard.min.js',
+    'vendor/axios.min.js',
+    output='scripts/core.js')
+
 vendor_js = Bundle(
     # 'vendor/materialize.min.js',
     # 'vendor/popper.min.js',

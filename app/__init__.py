@@ -15,7 +15,7 @@ from elasticsearch import Elasticsearch
 from flask_cors import CORS
 
 from config import config
-from .assets import app_css, app_js, vendor_css, vendor_js
+from .assets import app_css, app_js, vendor_css, vendor_js, core_js
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -88,6 +88,7 @@ def create_app(config_name):
     assets_env.register('app_js', app_js)
     assets_env.register('vendor_css', vendor_css)
     assets_env.register('vendor_js', vendor_js)
+    assets_env.register('core_js', core_js)
 
     # Configure SSL if platform supports it
     if not app.debug and not app.testing and not os.environ.get('SSL_DISABLE'):
