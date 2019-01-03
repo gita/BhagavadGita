@@ -23,12 +23,7 @@
 
          {% assets 'app_js' %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
-
-        <script type="text/javascript" src="/static/scripts/scripts/select2.min.js"></script>
-        <script type="text/javascript" src="/static/scripts/scripts/axios.min.js"></script>
-        <script type="text/javascript" src="/static/scripts/scripts/progress.min.js"></script>
-
-        {% assets 'vendor_js' %}<script defer type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
+        {% assets 'vendor_js' %}<script type="text/javascript" src="{{ ASSET_URL }}"></script>{% endassets %}
         
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
