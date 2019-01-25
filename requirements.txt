@@ -10,7 +10,7 @@ Babel==2.5.3
 backcall==0.1.0
 bleach==3.0.2
 blinker==1.3
-boto3==1.9.69
+boto3==1.9.84
 botocore==1.12.71
 certifi==2018.11.29
 cffi==1.11.5
