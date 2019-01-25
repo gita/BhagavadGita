@@ -101,7 +101,7 @@ Send2Trash==1.5.0
 simplegeneric==0.8.1
 simplejson==3.16.0
 six==1.12.0
-SQLAlchemy==1.2.9
+SQLAlchemy==1.2.15
 SQLAlchemy-Utils==0.33.9
 terminado==0.8.1
 testpath==0.4.2
