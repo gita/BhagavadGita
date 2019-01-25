@@ -92,7 +92,7 @@ pytz==2018.7
 PyYAML==3.13
 pyzmq==17.1.2
 raygun4py==4.2.1
-redis==2.10.5
+redis==3.0.1
 requests==2.21.0
 requests-oauthlib==0.8.0
 rq==0.13.0
