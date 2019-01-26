@@ -106,7 +106,7 @@ text-unidecode==1.2
 tornado==5.1.1
 traitlets==4.3.2
 tzlocal==1.5.1
-urllib3==1.22
+urllib3>=1.23
 URLObject==2.4.3
 webassets==0.12.1
 Werkzeug==0.14.1
