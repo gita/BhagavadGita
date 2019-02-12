@@ -69,7 +69,7 @@ mistune==0.8.3
 oauthlib==2.0.7
 packaging==16.8
 pandocfilters==1.4.2
-parso==0.3.1
+parso==0.3.3
 pexpect==4.6.0
 pickleshare==0.7.5
 prometheus-client==0.5.0
