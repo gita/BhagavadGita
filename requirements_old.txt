@@ -110,6 +110,6 @@ urllib3>=1.23
 URLObject==2.4.3
 webassets==0.12.1
 Werkzeug==0.14.1
-wrapt==1.10.11
+wrapt==1.11.1
 WTForms==2.1
 yapf==0.22.0
