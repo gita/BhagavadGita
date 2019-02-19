@@ -62,7 +62,7 @@ We have 2 types of documenatations available for this API, both based on the Ope
 1. Fork this repository and clone the forked repository.
 2. Create and activate a Python 3 virtualenv.
 3. Use `pip install -r requirements.txt` to install the requirements.
-4. `foreman start -f local` to start the server.
+4. `python manage.py runserver` to start the server.
 5. API can be accessed at `http://127.0.0.1:5000/api/v1` and frontend can be accessed at `http://127.0.0.1:5000`.
 
 ## Contributing
