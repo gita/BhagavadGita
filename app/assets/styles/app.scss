@@ -173,7 +173,8 @@ a.breadcrumb-item {
 	background-color: rgba(0, 0, 0, 0.3);
 	font-size: 12px;
 	padding: 1em;
-	display: none;
+  display: none;
+  z-index: 100;
 }
 
 .go-top:hover {
