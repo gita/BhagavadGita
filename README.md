@@ -64,7 +64,7 @@ We have 2 types of documenatations available for this API, both based on the Ope
 3. Use `pip install -r requirements.txt` to install the requirements.
 4. `python manage.py runserver` to start the server.
 5. Create an environment file `config.env`. Please open an issue or email contact@bhagavadgita.io for the credentials of the file.
-6. API can be accessed at `http://127.0.0.1:5000/api/v1` and frontend can be accessed at `http://127.0.0.1:5000`.
+6. Frontend can be accessed at `http://127.0.0.1:5000` and API docs can be accessed at `http://127.0.0.1:5000/apidocs/`.
 
 ## Contributing
 
