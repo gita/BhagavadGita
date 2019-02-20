@@ -194,6 +194,7 @@ a.breadcrumb-item {
   font-size: 12px;
   padding: 1em;
   display: none;
+  z-index: 100;
 }
 
 @media -sass-debug-info{filename{}line{font-family:\00003179}}
