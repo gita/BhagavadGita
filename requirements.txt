@@ -44,7 +44,7 @@ marshmallow==2.16.3
 marshmallow-sqlalchemy==0.15.0
 mistune==0.8.4
 oauthlib==2.0.7
-psycopg2==2.7.6.1
+psycopg2==2.7.7
 python-dateutil==2.7.5
 python-editor==1.0.3
 pytz==2018.7
