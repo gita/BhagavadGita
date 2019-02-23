@@ -1058,10 +1058,12 @@ def create_reading_plan(reading_plan_id):
             db.session.bulk_save_objects(verse_list)
             db.session.commit()
 
-            return redirect("/reading-plan/" + str(user_reading_plan_id) +
-                            '/1')
-    else:
-        abort(401)
+            return redirect("/reading-plan/" + str(user_reading_plan_id) +'/1')
+        else:
+            flash('You are already enrolled in a reading plan.', 'warning')
+            return redirect(url_for('main.reading_plans'))
+    abort(401)
+    return redirect(url_for('main.reading_plans'))
 
 
 @main.route(
