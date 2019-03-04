@@ -1,4 +1,4 @@
-alembic==1.0.5
+alembic==1.0.8
 aniso8601==4.0.1
 apispec==0.38.0
 APScheduler==3.5.3
