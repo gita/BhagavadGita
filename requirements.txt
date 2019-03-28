@@ -49,7 +49,7 @@ python-dateutil==2.7.5
 python-editor==1.0.3
 pytz==2018.7
 pyyaml>=4.2b1
-raygun4py==4.2.1
+raygun4py==4.2.3
 redis==2.10.5
 requests==2.21.0
 requests-oauthlib==0.8.0
