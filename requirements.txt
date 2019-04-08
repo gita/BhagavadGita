@@ -1,6 +1,6 @@
 alembic==1.0.5
 aniso8601==4.0.1
-apispec==0.38.0
+apispec==1.2.0
 APScheduler==3.5.3
 Babel==2.5.3
 blinker==1.3
