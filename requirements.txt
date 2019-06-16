@@ -46,7 +46,7 @@ mistune==0.8.4
 oauthlib==2.0.7
 psycopg2-binary==2.8.3
 python-dateutil==2.8.0
-python-editor==1.0.3
+python-editor==1.0.4
 pytz==2019.1
 pyyaml>=4.2b1
 raygun4py==4.3.0
