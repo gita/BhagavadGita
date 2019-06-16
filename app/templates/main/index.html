@@ -162,7 +162,7 @@
             <div class="mask waves-effect waves-light"></div>
           </a>
         <div class="view view-cascade gradient-card-header h-100" style="margin-bottom: auto; margin-top: auto">
-          <h2 class="card-header-title chapter-name" style="color: white; font-weight: 500; font-family: samarkan; padding-left: 1rem; padding-right: 1rem; padding-top: 1rem;">{{chapter.chapter_number}}. {{chapter.name_translation | replace('"', "")}}</h2>
+          <h2 class="card-header-title chapter-name" style="color: white; font-weight: 500; font-family: ananda; padding-left: 1rem; padding-right: 1rem; padding-top: 1rem;">{{chapter.chapter_number}}. {{chapter.name_translation | replace('"', "")}}</h2>
           <p class="chapter-meaning" style="color: white; font-family: cursive; padding-left: 1rem; padding-right: 1rem; font-size: 1.2rem;">{{chapter.name_meaning | replace('"', "")}}</p>
           {% if current_user.is_authenticated %}
             {% for ch, percent in progress.items() %}
@@ -259,12 +259,6 @@
   </div>
 
   <style>
-  /* @font-face {
-  font-family: 'Samarkan';
-  src: url('/static/font/samarkan.woff') format('woff'),
-    url('/static/font/samarkan.woff') format('truetype');
-  } */
-
   @font-face {
   font-family: 'Ananda';
   src: url('/static/font/ananda.woff') format('woff'),
@@ -494,7 +488,7 @@ body > div:nth-child(4) {
 
 .card.card-cascade .view.view-cascade.gradient-card-header .card-header-title {
     font-weight: 500;
-    font-family: samarkan;
+    font-family: ananda;
     font-size: 2rem;
 }
 
