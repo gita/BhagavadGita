@@ -34,7 +34,7 @@ gunicorn==19.9.0
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.1
-jmespath==0.9.3
+jmespath==0.9.4
 jsmin==2.2.1
 jsonpickle==1.2
 jsonschema==2.6.0
