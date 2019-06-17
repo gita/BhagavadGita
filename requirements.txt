@@ -27,7 +27,7 @@ Flask-OAuthlib==0.9.4
 Flask-RESTful==0.3.7
 Flask-RQ==0.2
 Flask-Script==2.0.5
-Flask-SQLAlchemy==2.3.2
+Flask-SQLAlchemy==2.4.0
 Flask-SSLify==0.1.5
 Flask-WTF==0.14.2
 gunicorn==19.9.0
