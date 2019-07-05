@@ -1,14 +1,18 @@
-import psycopg2
 import os
 import time
-from datetime import datetime 
+from datetime import datetime
 
-myFile = open(
-    '/home/radhakrishna/radhakrishna/append.txt', 'a')
-myFile.write('\nAccessed on ' + str(datetime.now()))  
+import psycopg2
 
-conn = psycopg2.connect(database=os.environ.get('DB'), user=os.environ.get('DB_USER'),
-                        password=os.environ.get('DB_PASSWORD'), host=os.environ.get('DB_HOST'), port=os.environ.get('DB_PORT'))
+myFile = open('/home/radhakrishna/radhakrishna/append.txt', 'a')
+myFile.write('\nAccessed on ' + str(datetime.now()))
+
+conn = psycopg2.connect(
+    database=os.environ.get('DB'),
+    user=os.environ.get('DB_USER'),
+    password=os.environ.get('DB_PASSWORD'),
+    host=os.environ.get('DB_HOST'),
+    port=os.environ.get('DB_PORT'))
 
 print("Opened database successfully")
 
