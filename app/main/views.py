@@ -887,6 +887,7 @@ def badges():
     current_app.logger.info("RadhaKrishna")
     badges = None
     badge_list = []
+    user_badges = None
     if current_user.is_authenticated:
         sql = """
             SELECT *
