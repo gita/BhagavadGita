@@ -27,6 +27,10 @@ oauth = OAuth2Provider()
 oauthclient = OAuth()
 babel = Babel()
 
+from authlib.flask.client import OAuth
+from loginpass import create_flask_blueprint, GitHub
+oauth_client = OAuth()
+
 es = Elasticsearch(
     [os.environ.get('ES_URL') or 'ES_URL'],
     http_auth=(os.environ.get('ES_USERNAME') or 'ES_USERNAME',
@@ -56,6 +60,7 @@ def create_app(config_name):
     csrf.init_app(app)
     oauth.init_app(app)
     oauthclient.init_app(app)
+    oauth_client.init_app(app)
     RQ(app)
 
     db.app = app
@@ -156,6 +161,17 @@ def create_app(config_name):
 
     chapter_list_view = ChapterList.as_view('ChapterList')
     app.add_url_rule('/api/v1/chapters', view_func=chapter_list_view)
+
+    def handle_authorize(remote, token, user_info):
+        if token:
+            save_token(remote.name, token)
+        if user_info:
+            save_user(user_info)
+            return user_page
+        raise some_error
+
+    github_bp = create_flask_blueprint(GitHub, oauth_client, handle_authorize)
+    app.register_blueprint(github_bp, url_prefix='/github')
 
     def _force_https():
         if not app.debug:
