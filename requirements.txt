@@ -38,7 +38,7 @@ jmespath==0.9.3
 jsmin==2.2.1
 jsonpickle==1.2
 jsonschema==2.6.0
-Mako==1.0.6
+Mako==1.0.14
 MarkupSafe==1.1.0
 marshmallow==2.16.3
 marshmallow-sqlalchemy==0.13.2
