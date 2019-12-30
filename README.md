@@ -1,8 +1,17 @@
-# Bhagavad Gita
+<p align="center">
+  <a href="https://bhagavadgita.io">
+    <img src="app/static/images/app/gita.png" alt="Bhagavad Gita" width="500">
+  </a>
+</p>
 
-<img src="app/static/images/app/gita.png" width="500">
+<p align="center">
+  A not-for-profit initiative to help spread the transcendental wisdom from the Bhagavad Gita to people around the world. Built for Gita readers by Gita readers.
+</p>
 
-[![Build Status](https://travis-ci.org/gita/BhagavadGita.svg?branch=master)](https://travis-ci.org/gita/BhagavadGita) ![Python](https://camo.githubusercontent.com/c589348df8bb82948f724198f52725d3d36ce738/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f707974686f6e2d332e782d627269676874677265656e2e737667)
+## We are planning to completely redesign the app from scratch for v2 (planned to be released in 2020). If you are an avid Bhagavad Gita reader and would like to contribute, you are welcome to join.
+
+---
+## OLD VERSION (v1)
 
 Frontend and REST API for BhagavadGita.io
 
@@ -66,13 +75,4 @@ We have 2 types of documenatations available for this API, both based on the Ope
 5. Create an environment file `config.env`. Please open an issue or email contact@bhagavadgita.io for the credentials of the file.
 6. Frontend can be accessed at `http://127.0.0.1:5000` and API docs can be accessed at `http://127.0.0.1:5000/apidocs/`.
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/gita/BhagavadGita. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-To submit a pull request -
-
-1. Fork/clone the repository.
-2. Develop.
-3. Create a new branch from the master branch.
-4. Open a pull request on Github describing what was fixed or added.
+---
