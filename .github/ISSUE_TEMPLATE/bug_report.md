@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+**Before opening:**
+
+- [Search for duplicate or closed issues](https://github.com/gita/BhagavadGita/issues?utf8=%E2%9C%93&q=is%3Aissue)
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
