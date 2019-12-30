@@ -8,7 +8,7 @@
   A not-for-profit initiative to help spread the transcendental wisdom from the Bhagavad Gita to people around the world. Built for Gita readers by Gita readers.
 </p>
 
-## We are planning to completely redesign the app from scratch for v2 (planned to be released in 2020). If you are an avid Bhagavad Gita reader and would like to contribute, you are welcome to join.
+## We are planning to completely redesign the app from scratch for v2 (planned to be released in 2020). We are actively looking for contributors who would be interested in helping out. Please read the wiki, specifically the [contributor guide](https://github.com/gita/BhagavadGita/wiki/Contributing) and [roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap) if you are interested.
 
 ---
 ## OLD VERSION (v1)
