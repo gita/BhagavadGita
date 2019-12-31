@@ -24,6 +24,24 @@ please see the documents [Contributing guide](https://github.com/gita/BhagavadGi
 * [Submitting pull requests](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#pull-requests)
 * [Finding an issue to work on](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#where-to-contribute)
 
+## Contributors needed -
+Please fill out this form if you interested in any of the roles listed below or have suggestions for any other roles.
+
+### Developer
+Backend, frontend, full-stack devs to build the web application. Android and iOS devs to build android and iOS apps.
+
+### Designer
+UI and UX designers needed to design the web and mobile apps in order to provide the best possible experience to the user, helping them in reading.
+
+### Product manager
+to manage the cross-functional team.
+
+### SEO expert
+to optimize the apps for search engine and app store discovery.
+
+### Everyone else interested in contributing.
+Suggestions are more than welcome.
+
 ## Feedback
 
 * Ask a question on [Slack](https://join.slack.com/t/thegitainitiative/shared_invite/enQtODc2MzAzNzI5MTIyLTZkMGNlNjM2YWQxMTAzZGEwNjMwMzMyMmMzZmU5ZmUzMjllNWVlODU1MzUwMDgxZTIyOGE5ODM5YzgwZTU4ODI)
