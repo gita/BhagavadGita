@@ -10,6 +10,29 @@
 
 ## We are planning to completely redesign the app from scratch for v2 (planned to be released in 2020). We are actively looking for contributors who would be interested in helping out. Please read the wiki, specifically the [contributor guide](https://github.com/gita/BhagavadGita/wiki/Contributing) and [roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap) if you are interested.
 
+## Contributing
+
+There are many ways in which you can participate in the project, for example:
+
+* [Submit bugs and feature requests](https://github.com/gita/BhagavadGita/issues), and help us verify as they are checked in
+* Review [source code changes](https://github.com/gita/BhagavadGita/pulls)
+
+If you are interested in fixing issues and contributing directly to the code base,
+please see the document [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute), which covers the following:
+
+* [The development workflow](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#debugging)
+* [Coding guidelines](https://github.com/gita/BhagavadGita/wiki/Coding-Guidelines)
+* [Submitting pull requests](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#pull-requests)
+* [Finding an issue to work on](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#where-to-contribute)
+
+## Feedback
+
+* Ask a question on [Slack](https://stackoverflow.com/questions/tagged/vscode)
+* [Request a new feature](CONTRIBUTING.md)
+* Up vote [popular feature requests](https://github.com/gita/BhagavadGita/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
+* [File an issue](https://github.com/gita/BhagavadGita/issues)
+* Follow [@code](https://twitter.com/TheGitaInitiative) and let us know what you think!
+
 ---
 ## OLD VERSION (v1)
 
