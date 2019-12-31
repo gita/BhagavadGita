@@ -27,11 +27,11 @@ please see the document [How to Contribute](https://github.com/gita/BhagavadGita
 
 ## Feedback
 
-* Ask a question on [Slack](https://stackoverflow.com/questions/tagged/vscode)
+* Ask a question on [Slack](https://join.slack.com/t/thegitainitiative/shared_invite/enQtODc2MzAzNzI5MTIyLTZkMGNlNjM2YWQxMTAzZGEwNjMwMzMyMmMzZmU5ZmUzMjllNWVlODU1MzUwMDgxZTIyOGE5ODM5YzgwZTU4ODI)
 * [Request a new feature](CONTRIBUTING.md)
 * Up vote [popular feature requests](https://github.com/gita/BhagavadGita/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
 * [File an issue](https://github.com/gita/BhagavadGita/issues)
-* Follow [@code](https://twitter.com/TheGitaInitiative) and let us know what you think!
+* Follow [@TheGitaInitiative](https://twitter.com/TheGitaInitiative) and let us know what you think!
 
 ---
 ## OLD VERSION (v1)
