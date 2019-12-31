@@ -61,10 +61,6 @@ Please remember to do the following:
 
 Don't feel bad if the developers can't reproduce the issue right away. They will simply ask for more information!
 
-### Follow Your Issue
-
-Once submitted, your report will go into the [issue tracking](https://github.com/gita/BhagavadGita/wiki/Issue-Tracking) workflow. Be sure to understand what will happen next, so you know what to expect, and how to continue to assist throughout the process.
-
 ## Contributing Fixes
 
 If you are interested in writing code to fix issues,
