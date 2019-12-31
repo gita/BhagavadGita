@@ -8,7 +8,7 @@
   A not-for-profit initiative to help spread the transcendental wisdom from the Bhagavad Gita to people around the world. Built for Gita readers by Gita readers.
 </p>
 
-## We are planning to completely redesign the app from scratch for v2 (planned to be released in 2020). We are actively looking for contributors who would be interested in helping out. Please read the wiki, specifically the [contributor guide](https://github.com/gita/BhagavadGita/wiki/Contributing) and [roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap) if you are interested.
+## We are planning to completely redesign the app from scratch for v2 (planned to be released in 2020). We are actively looking for contributors who would be interested in helping out. Please read the Contributing section below if you are interested.
 
 ## Contributing
 
@@ -18,9 +18,8 @@ There are many ways in which you can participate in the project, for example:
 * Review [source code changes](https://github.com/gita/BhagavadGita/pulls)
 
 If you are interested in fixing issues and contributing directly to the code base,
-please see the document [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute), which covers the following:
+please see the documents [Contributing guide](https://github.com/gita/BhagavadGita/blob/master/CONTRIBUTING.md) and [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute), which covers the following:
 
-* [The development workflow](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#debugging)
 * [Coding guidelines](https://github.com/gita/BhagavadGita/wiki/Coding-Guidelines)
 * [Submitting pull requests](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#pull-requests)
 * [Finding an issue to work on](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#where-to-contribute)
