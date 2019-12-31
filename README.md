@@ -25,7 +25,7 @@ please see the documents [Contributing guide](https://github.com/gita/BhagavadGi
 * [Finding an issue to work on](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#where-to-contribute)
 
 ## Contributors needed -
-Please fill out this form if you interested in any of the roles listed below or have suggestions for any other roles.
+Please [fill out this form](https://docs.google.com/forms/d/1vs1C1Cyf8wie_SjxWfWCSZO9agjVo0-m_Xxd9n6VD5E) if you interested in any of the roles listed below or have suggestions for any other roles.
 
 ### Developer
 Backend, frontend, full-stack devs to build the web application. Android and iOS devs to build android and iOS apps.
