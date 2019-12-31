@@ -10,6 +10,13 @@ This document serves to outline the long term goals of `The Gita Initiative` and
 
 The core goal of `The Gita Initiative` is to build fast, stable, and user friendly web and mobile apps to spread the knowledge of Bhagavad Gita to the people around the world.
 
+### Project Goals
+
+-  completely revamp the design and architecture of the current Bhagavad Gita web app (accessible at BhagavadGita.io) in order to create a more efficient and user-friendly web application.
+- use a better and more detailed open-source Bhagavad Gita translation and commentary.
+- add translations and commentary for more languages.
+- create a v2 of the Bhagavad Gita API using the same technology to be used for backend.
+
 ## Collaboration & Community
 
 `The Gita Initiative` is an open-source project which means everyone in the community is as much of an owner and is responsible for it. We welcome everyone to become a collaborator on the project with whatever level of contribution you feel comfortable with.
