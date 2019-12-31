@@ -51,7 +51,7 @@ Suggestions are more than welcome.
 * [Request a new feature](CONTRIBUTING.md)
 * Up vote [popular feature requests](https://github.com/gita/BhagavadGita/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
 * [File an issue](https://github.com/gita/BhagavadGita/issues)
-* Follow [@TheGitaInitiative](https://twitter.com/TheGitaInitiative) and let us know what you think!
+* Follow [@GitaByKrishna](https://twitter.com/GitaByKrishna) and let us know what you think!
 
 ---
 ## OLD VERSION (v1)
