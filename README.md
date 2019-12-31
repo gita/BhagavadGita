@@ -18,8 +18,11 @@ There are many ways in which you can participate in the project, for example:
 * Review [source code changes](https://github.com/gita/BhagavadGita/pulls)
 
 If you are interested in fixing issues and contributing directly to the code base,
-please see the documents [Contributing guide](https://github.com/gita/BhagavadGita/blob/master/CONTRIBUTING.md) and [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute), which covers the following:
+please see the documents - 
 
+* [Contributing guide](https://github.com/gita/BhagavadGita/blob/master/CONTRIBUTING.md)
+* [Roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap)
+* [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute)
 * [Coding guidelines](https://github.com/gita/BhagavadGita/wiki/Coding-Guidelines)
 * [Submitting pull requests](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#pull-requests)
 * [Finding an issue to work on](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#where-to-contribute)
