@@ -19,8 +19,8 @@ There are many ways in which you can participate in the project, for example:
 
 If you are interested in, please see the following documents - 
 
-* [Roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap) **START HERE**
-* [Iteration Plan January 2020](https://github.com/gita/BhagavadGita/issues/394) **START HERE**
+* [Roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap)
+* [Iteration Plan January 2020](https://github.com/gita/BhagavadGita/issues/394) (**START HERE**)
 * [Contributing guide](https://github.com/gita/BhagavadGita/blob/master/CONTRIBUTING.md)
 * [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute)
 * [Coding guidelines](https://github.com/gita/BhagavadGita/wiki/Coding-Guidelines)
