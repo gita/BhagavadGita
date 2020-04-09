@@ -8,7 +8,12 @@
   A not-for-profit initiative to help spread the transcendental wisdom from the Bhagavad Gita to people around the world. Built for Gita readers by Gita readers.
 </p>
 
-## We are planning to completely redesign the app from scratch for v2 and are actively looking for contributors who would be interested in helping out. Please read the Contributing section below if you are interested.
+## ⚠️ We are in the process of redesigning the app from scratch for v2 and are actively looking for contributors who would be interested in helping out. Please read the Contributing section below if you are interested.
+
+## ℹ️ Repositories for v2
+For v2 of BhagavadGita.io, we plan to separate the backend and frontend layers. Hence, the code for [backend will be hosted here](https://github.com/gita/bhagavad-gita-backend) and that for the [frontend will be hosted here](https://github.com/gita/bhagavad-gita-frontend).
+
+This repository will host general resources like roadmap, v2 plan, documentation etc for BhagavadGita.io.
 
 ## Contributing
 
