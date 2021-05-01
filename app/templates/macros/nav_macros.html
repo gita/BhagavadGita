@@ -154,10 +154,6 @@
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.verse_of_the_day' %}active{% endif %}"
           href="/verse-of-the-day/">{{ _('Verse of the day') }}</a>
       </li>
-      <li>
-        <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.bhagavad_gita_quotes' %}active{% endif %}"
-          href="/blog/">{{ _('Blog') }}</a>
-      </li>
       {% if current_user.is_authenticated %}
       <li>
         <a class="nav-item nav-link waves-effect waves-light {% if request.endpoint == 'main.badges' %}active{% endif %}"
