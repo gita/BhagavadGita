@@ -766,4 +766,14 @@ navigator.serviceWorker.register('radhakrishna.js', {
 });
 }
 </script>
+<script>
+  (function (d, id) {
+    if (d.getElementById(id)) return;
+    var sc, node = d.getElementsByTagName('script')[0];
+    sc = d.createElement('script'); sc.id = id;
+    sc.src = 'https://sdk.getsitekit.com/static/js/app.js#apiKey=52e1d2dcafd0220b76df44c6f9fc2ba1';
+    node.parentNode.insertBefore(sc, node);
+  }(document, 'sitekit-sdk'));
+</script>
+
 {% endblock %}
