@@ -19,7 +19,7 @@ This repository will host general resources like roadmap, v2 plan, documentation
 
 There are many ways in which you can participate in the project, for example:
 
-* [Submit bugs and feature requests](https://github.com/gita/BhagavadGita/issues), and help us verify as they are checked in
+* [Submit bugs](https://github.com/gita/BhagavadGita/issues/new?template=bug_report.md) and [feature requests](https://github.com/gita/BhagavadGita/issues/new?template=feature_request.md), and help us verify as they are checked in
 * Review [source code changes](https://github.com/gita/BhagavadGita/pulls)
 
 If you are interested in, please see the following documents - 
@@ -56,7 +56,7 @@ Suggestions are more than welcome.
 * [Request a new feature](CONTRIBUTING.md)
 * Up vote [popular feature requests](https://github.com/gita/BhagavadGita/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
 * [File an issue](https://github.com/gita/BhagavadGita/issues)
-* Follow [@GitaByKrishna](https://twitter.com/shrikrishna) and let us know what you think!
+* Follow [@shrikrishna](https://twitter.com/shrikrishna) and let us know what you think!
 
 ---
 ## OLD VERSION (v1)
