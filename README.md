@@ -8,55 +8,10 @@
   A not-for-profit initiative to help spread the transcendental wisdom from the Bhagavad Gita to people around the world. Built for Gita readers by Gita readers.
 </p>
 
-## ⚠️ We are in the process of redesigning the app from scratch for v2 and are actively looking for contributors who would be interested in helping out. Please read the Contributing section below if you are interested.
+## ⚠️ We are in the process of redesigning the app from scratch for v2 and are actively looking for contributors who would be interested in helping out. Please join our Discord server below if you are interested.
 
-## ℹ️ Repositories for v2
-For v2 of BhagavadGita.io, we plan to separate the backend and frontend layers. Hence, the code for [backend will be hosted here](https://github.com/gita/bhagavad-gita-backend) and that for the [frontend will be hosted here](https://github.com/gita/bhagavad-gita-frontend).
+[<img src="https://snrclan.com/wp-content/uploads/2020/02/join-discord-png-13.png">](https://discord.gg/4V3VrqHyZx)
 
-This repository will host general resources like roadmap, v2 plan, documentation etc for BhagavadGita.io.
-
-## Contributing
-
-There are many ways in which you can participate in the project, for example:
-
-* [Submit bugs and feature requests](https://github.com/gita/BhagavadGita/issues), and help us verify as they are checked in
-* Review [source code changes](https://github.com/gita/BhagavadGita/pulls)
-
-If you are interested in, please see the following documents - 
-
-* [Roadmap](https://github.com/gita/BhagavadGita/wiki/Roadmap)
-* [BhagavadGita.io v2 Plan](https://github.com/gita/BhagavadGita/wiki/BhagavadGita.io-v2-Plan) (**START HERE**)
-* [Contributing guide](https://github.com/gita/BhagavadGita/blob/master/CONTRIBUTING.md)
-* [How to Contribute](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute)
-* [Coding guidelines](https://github.com/gita/BhagavadGita/wiki/Coding-Guidelines)
-* [Submitting pull requests](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#pull-requests)
-* [Finding an issue to work on](https://github.com/gita/BhagavadGita/wiki/How-to-Contribute#where-to-contribute)
-
-## Contributors needed -
-Please [fill out this form](https://docs.google.com/forms/d/1vs1C1Cyf8wie_SjxWfWCSZO9agjVo0-m_Xxd9n6VD5E) if you interested in any of the roles listed below or have suggestions for any other roles.
-
-### Developer
-Backend, frontend, full-stack devs to build the web application. Android and iOS devs to build android and iOS apps.
-
-### Designer
-UI and UX designers needed to design the web and mobile apps in order to provide the best possible experience to the user, helping them in reading.
-
-### Product manager
-to manage the cross-functional team.
-
-### SEO expert
-to optimize the apps for search engine and app store discovery.
-
-### Everyone else interested in contributing.
-Suggestions are more than welcome.
-
-## Feedback
-
-* Ask a question on [Slack](https://join.slack.com/t/thegitainitiative/shared_invite/zt-dclsan2f-gL2s3oj1P3UQsc5v2fKpDQ)
-* [Request a new feature](CONTRIBUTING.md)
-* Up vote [popular feature requests](https://github.com/gita/BhagavadGita/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
-* [File an issue](https://github.com/gita/BhagavadGita/issues)
-* Follow [@ShriKrishna](https://twitter.com/shrikrishna) and let us know what you think!
 
 ---
 ## OLD VERSION (v1)
