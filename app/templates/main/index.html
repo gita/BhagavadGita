@@ -34,7 +34,7 @@
           "url":"https://bhagavadgita.io",
           "sameAs": ["https://www.facebook.com/iiRadhaKrishnaii/", "https://instagram.com/iiradhakrishnaii/",
             "https://www.linkedin.com/company/bhagavadgita/", "https://www.youtube.com/c/krsna",
-            "https://www.pinterest.com/iiradhakrishnaii/", "https://twitter.com/GitaByKrishna"
+            "https://www.pinterest.com/iiradhakrishnaii/", "https://twitter.com/ShriKrishna"
           ],
           "logo":"https://bhagavadgita.io/static/images/radhakrishna.png"
         }
@@ -766,4 +766,14 @@ navigator.serviceWorker.register('radhakrishna.js', {
 });
 }
 </script>
+<script>
+  (function (d, id) {
+    if (d.getElementById(id)) return;
+    var sc, node = d.getElementsByTagName('script')[0];
+    sc = d.createElement('script'); sc.id = id;
+    sc.src = 'https://sdk.getsitekit.com/static/js/app.js#apiKey=52e1d2dcafd0220b76df44c6f9fc2ba1';
+    node.parentNode.insertBefore(sc, node);
+  }(document, 'sitekit-sdk'));
+</script>
+
 {% endblock %}
