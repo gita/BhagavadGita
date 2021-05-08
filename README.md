@@ -10,7 +10,7 @@
 
 ## ⚠️ We are in the process of redesigning the app from scratch for v2 and are actively looking for contributors who would be interested in helping out. Please join our Discord server below if you are interested.
 
-[<img src="https://snrclan.com/wp-content/uploads/2020/02/join-discord-png-13.png">](https://discord.gg/4V3VrqHyZx)
+[<img src="https://snrclan.com/wp-content/uploads/2020/02/join-discord-png-13.png" width="200">](https://discord.gg/4V3VrqHyZx)
 
 
 ---
