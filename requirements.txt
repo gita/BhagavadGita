@@ -20,7 +20,7 @@ Flask-APScheduler==1.11.0
 Flask-Assets==0.12
 Flask-Babel==0.12.2
 Flask-Compress==1.4.0
-Flask-Cors==3.0.7
+Flask-Cors==3.0.9
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
 Flask-Migrate==2.2.1
