@@ -12,7 +12,7 @@ Click==7.0
 click-conf==0.0.1
 click-stream==0.0.10
 docutils==0.14
-elasticsearch==6.3.1
+elasticsearch==7.1.0
 elasticsearch-loader==0.2.12
 flasgger==0.9.0
 Flask==1.0.2
