@@ -12,6 +12,10 @@
 
 [<img src="https://snrclan.com/wp-content/uploads/2020/02/join-discord-png-13.png" width="200">](https://discord.gg/4V3VrqHyZx)
 
+## New Repositories 👇
+- **Backend**: https://github.com/gita/bhagavad-gita-api
+- **Frontend**: https://github.com/gita/bhagavad-gita-frontend
+
 
 ---
 ## OLD VERSION (v1)
