@@ -1904,7 +1904,7 @@ def set_cookie():
         settings['language'] = 'en'
         settings['font_size'] = '10'
         response = make_response("RadhaKrishna")
-        response.set_cookie('settings', json.dumps(settings))
+        response.set_cookie('settings', json.dumps(settings), secure=True, httponly=True, samesite='Lax')
 
     return response
 
