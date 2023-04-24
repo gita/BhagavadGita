@@ -67,4 +67,4 @@ urllib3==1.26.5
 webassets==0.12.1
 webencodings==0.5.1
 Werkzeug==0.16.0
-WTForms==2.1
+WTForms==2.2.1
